@@ -17,8 +17,8 @@ Client::Client(QTcpSocket *s)
     _socket = s;
     // dans ce cas là, comme la connexion a été demandée par le socket
     // on sait que c'est à 1 hop
-    _dest = socket()->peerAddress();
-    _nextHop = socket()->peerAddress();
+    _dest = Socket()->peerAddress();
+    _nextHop = Socket()->peerAddress();
     _hopNumber = 1;
 
     qDebug() << "New client - Dest :" << _dest.toString() << "- nextHop :" << _nextHop.toString();
@@ -26,7 +26,7 @@ Client::Client(QTcpSocket *s)
 //    qDebug() << "nextHop" << _nextHop << "  dest" << _dest;
 
 
-    ConfigClient();
+    configClient();
     emit Connected();
 }
 
@@ -42,7 +42,7 @@ Client::Client(QTcpSocket *s, QHostAddress dest, QHostAddress nextHop, quint8 ho
 
    qDebug() << "New client - Dest :" << _dest.toString() << "- nextHop :" << _nextHop.toString();
 
-    ConfigClient();
+    configClient();
 }
 
 
@@ -52,7 +52,7 @@ Client::Client(QTcpSocket *s, QHostAddress dest, QHostAddress nextHop, quint8 ho
 Client::Client(QHostAddress address)
 {
     _socket = new QTcpSocket(this);
-    ConfigClient();
+    configClient();
     _nextHop = address;
     _dest = address;
 
@@ -65,7 +65,7 @@ Client::Client(QHostAddress address)
 }
 
 
-void Client::ConfigClient()
+void Client::configClient()
 {
     connect(_socket, SIGNAL(connected()),         this, SIGNAL(Connected()));
     connect(_socket, SIGNAL(error(QAbstractSocket::SocketError)),         this, SIGNAL(SocketError()));
@@ -237,7 +237,7 @@ void Client::receivedFileData()
     in >> data;
     _bytesReceived += data.length();
     _fileToReceive->write(data);
-    emit BytesReceivedUpdate(_bytesReceived*100/_filesize);
+    emit DownloadProgressUpdate(_bytesReceived*100/_filesize);
 
     if (_bytesReceived == _filesize)
     {
@@ -260,7 +260,7 @@ void Client::receivedFileList()
  * le découper et de le passer par la socket. (envoi au préalable d'un message : FILE_REQUEST_INIT pour
  * annoncer la venue du fichier
 */
-void Client::sendMessage()
+void Client::SendMessage()
 {
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
@@ -368,7 +368,7 @@ void Client::newBytesWritten(qint64 bytes)
 
         QByteArray data = _fileToSend->read(BLOCK_SIZE);
         _bytesSent += data.size();
-        emit BytesSentUpdate(_bytesSent*100/filesize);
+        emit UploadProgressUpdate(_bytesSent*100/filesize);
         if (data.length() > 0)
         {
             out << (quint16) 0;
@@ -398,18 +398,32 @@ void Client::newBytesWritten(qint64 bytes)
     }
 }
 
+QString Client::ReceivingFileName()
+{
+    if (_fileToReceive != NULL)
+        return _fileToReceive->fileName();
 
-QHostAddress Client::address()
+    return QString();
+}
+
+
+quint64 Client::ReceivingFileSize()
+{
+    return _filesize;
+}
+
+
+QHostAddress Client::Address()
 {
     return _dest;
 }
 
-quint8 Client::hopNumber()
+quint8 Client::HopNumber()
 {
     return _hopNumber;
 }
 
-QTcpSocket *Client::socket()
+QTcpSocket *Client::Socket()
 {
     return _socket;
 }
@@ -424,7 +438,7 @@ void Client::UpdateRoute(QTcpSocket *s,QHostAddress nextHop, quint8 newHopNumber
     _hopNumber = newHopNumber;
 }
 
-void Client::connectSocket()
+void Client::ConnectSocket()
 {
     _socket->connectToHost(_nextHop,PORT_SERVEUR);
 }

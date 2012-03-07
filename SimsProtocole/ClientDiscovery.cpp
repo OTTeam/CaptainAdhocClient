@@ -107,8 +107,8 @@ void ClientDiscovery::sendNewDatagram(QList<Client *> routesList )
 //    qDebug()<< "routesList Count : " << routesList.count();
     foreach(Client *client, routesList)
     {
-        out << client->address().toString();
-        out << client->hopNumber();
+        out << client->Address().toString();
+        out << client->HopNumber();
 //        qDebug() << "Address :" << client->address().toString() << " -- hop :" << client->hopNumber();
     }
 //    qDebug()<< "---------------------------------------BS" ;

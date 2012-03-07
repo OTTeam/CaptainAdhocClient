@@ -27,6 +27,8 @@ signals:
 
     void ClientNumberChanged(int);
 
+public slots:
+    void DownloadPathUpdate(QString);
 private slots:
     void clientBytesAvailable();
     void clientBytesWritten(qint64);

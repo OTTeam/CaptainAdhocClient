@@ -52,12 +52,12 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
     bool broadCasterExists = false;
     foreach (Client *client, _clients)
     {
-        if (client->address() == broadcasterAddress)
+        if (client->Address() == broadcasterAddress)
         {
             broadCasterExists = true;
 
             broadcasterClient = client;
-            if (broadcasterClient->hopNumber()>1)
+            if (broadcasterClient->HopNumber()>1)
             {
                 _clients.removeOne(broadcasterClient);
                 broadcasterClient->deleteLater();
@@ -92,14 +92,14 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
         foreach (Client *client, _clients)
         {
             // si la nouvele route est connue
-            if (client->address() == newRoute.destAddr)
+            if (client->Address() == newRoute.destAddr)
             {
                 routeExists = true;
                 // si la nouvelle route est meilleure, on change celle du client
-                if (client->hopNumber() > newRoute.hopNumber)
+                if (client->HopNumber() > newRoute.hopNumber)
                 {
                     //qDebug() << "updateRoute";
-                    client->UpdateRoute(broadcasterClient->socket(), broadcasterAddress, newRoute.hopNumber);
+                    client->UpdateRoute(broadcasterClient->Socket(), broadcasterAddress, newRoute.hopNumber);
                 }
                 break;
             }
@@ -111,7 +111,7 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
         {
             qDebug() << "Client discovered - Broadcaster's client";
 
-            Client *client = new Client(broadcasterClient->socket(),newRoute.destAddr,broadcasterAddress, newRoute.hopNumber);
+            Client *client = new Client(broadcasterClient->Socket(),newRoute.destAddr,broadcasterAddress, newRoute.hopNumber);
             connect(client, SIGNAL(Connected()), this, SLOT(clientConnected()));
             connect(client, SIGNAL(SocketError()), this, SLOT(clientConnectionFailed()));
 
@@ -121,7 +121,7 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
     }
     // si on a créé un nouveau broadcaster, on doit connecter son socket.
     if ( broadCasterExists == false )
-        broadcasterClient->connectSocket();
+        broadcasterClient->ConnectSocket();
 
 
     //    qDebug()<< "********************************************" ;
@@ -134,10 +134,10 @@ void GestionClients::newConnectionDone(QTcpSocket *socket)
     foreach (Client *client, _clients)
     {
         // si la nouvele route est connue
-        if (client->address() == socket->peerAddress())
+        if (client->Address() == socket->peerAddress())
         {
             // si la nouvelle route est meilleure, on change celle du client
-            if (client->hopNumber() > 1)
+            if (client->HopNumber() > 1)
             {
                 qDebug() << "Client updated - TCP connect";;
                 client->UpdateRoute(socket, socket->peerAddress(), 1);
@@ -174,19 +174,19 @@ void GestionClients::NewClientConfig(Client *client)
     connect(client,SIGNAL(BytesReceivedUpdate(int)), this, SLOT(clientReceived(int)));
     connect(client,SIGNAL(BytesSentUpdate(int))    , this, SLOT(clientSent(int)));
 
-    if (client->hopNumber() == 1 )
+    if (client->HopNumber() == 1 )
     {
-        connect(client->socket(),SIGNAL(readyRead()),this,SLOT(clientBytesAvailable()));
-        connect(client->socket(),SIGNAL(bytesWritten(qint64)),this,SLOT(clientBytesWritten(qint64)));
+        connect(client->Socket(),SIGNAL(readyRead()),this,SLOT(clientBytesAvailable()));
+        connect(client->Socket(),SIGNAL(bytesWritten(qint64)),this,SLOT(clientBytesWritten(qint64)));
     }
 
     _clients.push_back(client);
 
     // si c'est un nouveau socket, on le rajoute dans notre table de référence.
-    if (findSocketHandler(client->socket()) == NULL)
+    if (findSocketHandler(client->Socket()) == NULL)
     {
         SocketsHandlers *newSocketHandler  = new SocketsHandlers;
-        newSocketHandler->socket = client->socket();
+        newSocketHandler->socket = client->Socket();
         newSocketHandler->paquetSize = 0;
         _socketsHandlers.push_back(newSocketHandler);
     }
@@ -229,7 +229,7 @@ void GestionClients::clientDisconnect()
 {
     Client *client = (Client *)sender();
 
-    SocketsHandlers *socketHandler = findSocketHandler(client->socket());
+    SocketsHandlers *socketHandler = findSocketHandler(client->Socket());
     if ( socketHandler != NULL)
         _socketsHandlers.removeOne(socketHandler);
 
@@ -245,8 +245,14 @@ void GestionClients::sendToAll()
 {
     foreach (Client *client, _clients)
     {
-        client->sendMessage();
+        client->SendMessage();
     }
+}
+
+void GestionClients::DownloadPathUpdate(QString newPath)
+{
+
+
 }
 
 
@@ -342,7 +348,7 @@ Client *GestionClients::findClientByDest(QHostAddress destAddress)
 {
     foreach(Client *client, _clients)
     {
-        if (client->address() == destAddress)
+        if (client->Address() == destAddress)
             return client;
     }
     return NULL;

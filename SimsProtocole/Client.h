@@ -17,20 +17,22 @@ class Client : public QObject
 {
     Q_OBJECT
 public:
-    Client(QTcpSocket *socket);
-    Client(QHostAddress address);
-    Client(QTcpSocket *socket, QHostAddress dest, QHostAddress nextHop, quint8 hopNumber);
+    Client(QTcpSocket *Socket);
+    Client(QHostAddress Address);
+    Client(QTcpSocket *Socket, QHostAddress dest, QHostAddress nextHop, quint8 HopNumber);
     ~Client();
-    QHostAddress address();
-    quint8 hopNumber();
-    QTcpSocket *socket();
+    QString ReceivingFileName();
+    quint64 ReceivingFileSize();
+    QHostAddress Address();
+    quint8 HopNumber();
+    QTcpSocket *Socket();
     void UpdateRoute(QTcpSocket *s,QHostAddress nextHop, quint8 newHopNumber);
-    void connectSocket();
-    void sendMessage();
+    void ConnectSocket();
+    void SendMessage();
 
     void ForwardMessage(QHostAddress senderAdd,QHostAddress destAdd, QByteArray data);
 private:
-    void ConfigClient();
+    void configClient();
 
     void receivedFileRequest();     // demande de fichier de la part du client
     void receivedFileRequestInit(); // réponse du serveur lors de la demande (confirmation nom, taille)
@@ -40,8 +42,8 @@ private:
 
 signals:
     void NewData(int);
-    void BytesSentUpdate(int);
-    void BytesReceivedUpdate(int);
+    void UploadProgressUpdate(int);
+    void DownloadProgressUpdate(int);
 
     void DownloadSpeedUpdate(int);
     void UploadSpeedUpdate(int);
@@ -78,7 +80,7 @@ private:
     quint64 _bytesSent;
     quint64 _previousBytesSent;
 
-    ETAT_CLIENT _etat;
+    CLIENT_STATE _etat;
 
     QTimer *_timerDlSpeed;
     QTimer *_timerUlSpeed;
