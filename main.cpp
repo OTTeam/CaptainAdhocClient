@@ -7,7 +7,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.setMainQmlFile(QLatin1String("qml/CaptainAdhocClient/main.qml"));
+    viewer.setMainQmlFile(QLatin1String("qml/UI/CaptainAdhocUI.qml"));
     viewer.showExpanded();
 
     return app->exec();
