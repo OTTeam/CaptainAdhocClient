@@ -1,3 +1,4 @@
 *.user
 SimsProtocole-build-desktop
 qml/UI/*
+*-build*

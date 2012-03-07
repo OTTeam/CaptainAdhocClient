@@ -13,28 +13,28 @@ ListModel {
         authorName: "nhan"
         size: "618 MB"
         type: "avi"
-        completion:17
+        completion: 17
     }
     ListElement {
         fileName: "TC_rapport.docx"
         authorName: "balazs"
         size: "171 KB"
         type: "docx"
-        completion:-1
+        completion: -1
     }
     ListElement {
         fileName: "photo_groupe_SIMS.jpg"
         authorName: "nhan"
         size: "257 KB"
         type: "jpg"
-        completion:98
+        completion: 28
     }
     ListElement {
         fileName: "loremipsum.jpg"
         authorName: "gaetan"
         size: "1.2 MB"
         type: "jpg"
-        completion:101
+        completion: 101
     }
     ListElement {
         fileName: "IF_annale.rar"
@@ -55,7 +55,7 @@ ListModel {
         authorName: "nhan"
         size: "212 KB"
         type: "jpg"
-        completion:-1
+        completion: 27
     }
     ListElement {
         fileName: "photo_groupe_SIMS.jpg"

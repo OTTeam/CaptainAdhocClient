@@ -6,14 +6,14 @@ ListModel {
         authorName: "clement"
         size: "272 KB"
         type: "doc"
-        completion:42
+        completion: 100
     }
     ListElement {
         fileName: "OT_sims.pdf"
         authorName: "clement"
         size: "2.2 MB"
         type: "pdf"
-        completion:56
+        completion:72
     }
     ListElement {
         fileName: "sherlock.avi"
@@ -27,14 +27,14 @@ ListModel {
         authorName: "balazs"
         size: "171 KB"
         type: "docx"
-        completion:-1
+        completion:99
     }
     ListElement {
         fileName: "photo_groupe_SIMS.jpg"
         authorName: "nhan"
         size: "257 KB"
         type: "jpg"
-        completion:98
+        completion:100
     }
     ListElement {
         fileName: "loremipsum.jpg"
@@ -48,27 +48,27 @@ ListModel {
         authorName: "kevin"
         size: "7.82 MB"
         type: "rar"
-        completion:-1
+        completion:52
     }
     ListElement {
         fileName: "captainAdhocFinal.qml"
         authorName: "sebastien"
         size: "11 MB"
         type: "qml"
-        completion:-1
+        completion:17
     }
     ListElement {
         fileName: "photo_groupe_SIMS.jpg"
         authorName: "nhan"
         size: "212 KB"
         type: "jpg"
-        completion:-1
+        completion:100
     }
     ListElement {
         fileName: "photo_groupe_SIMS.jpg"
         authorName: "nhan"
         size: "212 KB"
         type: "jpg"
-        completion:-1
+        completion:100
     }
  }

@@ -2,6 +2,14 @@ import QtQuick 1.1
 
 Rectangle {
 
+    function updateDownSpeed( newSpeed){
+        vitesse.downSpeed = newSpeed;
+    }
+
+    function updateUpSpeed( newSpeed ){
+        vitesse.upSpeed = newSpeed;
+    }
+
     width: 640
     height: 550
 
@@ -49,15 +57,17 @@ Rectangle {
 
         Item {
             id: vitesse
+            property int downSpeed: 0
+            property int upSpeed: 0
             Column {
                 Text {
-                    text: " Download : Kb/s "
+                    text: " Download : " + vitesse.downSpeed + " Kb/s "
                     color: "#999999";
                     style: Text.Raised;
                     styleColor: "black";
                 }
                 Text {
-                    text: " Upload : Kb/s "
+                    text: " Upload : " + vitesse.upSpeed + " Kb/s "
                     color: "#999999";
                     style: Text.Raised;
                     styleColor: "black";

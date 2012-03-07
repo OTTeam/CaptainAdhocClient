@@ -32,7 +32,6 @@ Item{
             GradientStop { id: gradient1; position: 0.0 }
             GradientStop { id: gradient2; position: 1.0 }
         }
-
     }
 
     Text {
