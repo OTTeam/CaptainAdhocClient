@@ -1,0 +1,3 @@
+[submodule "qml/UI"]
+	path = qml/UI
+	url = git@github.com:OTTeam/CaptainAdhocUI
