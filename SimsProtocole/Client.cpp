@@ -238,6 +238,7 @@ void Client::receivedFileData()
         _bytesReceived = 0;
         _fileToReceive->close();
         delete _fileToReceive;
+        _fileToReceive = NULL;
         _timerDlSpeed->stop();
     }
 }
