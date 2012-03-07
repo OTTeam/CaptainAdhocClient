@@ -30,8 +30,21 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # CONFIG += qt-components
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    SimsProtocole/ServeurTCP.cpp \
+    SimsProtocole/GestionClients.cpp \
+    SimsProtocole/ClientDiscovery.cpp \
+    SimsProtocole/Client.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
+
+HEADERS += \
+    SimsProtocole/utils.h \
+    SimsProtocole/ServeurTCP.h \
+    SimsProtocole/GestionClients.h \
+    SimsProtocole/ClientDiscovery.h \
+    SimsProtocole/Client.h
+
+QT += network

@@ -1,6 +1,8 @@
 #include <QtGui/QApplication>
 #include "qmlapplicationviewer.h"
 
+#include "SimsProtocole/GestionClients.h"
+
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QScopedPointer<QApplication> app(createApplication(argc, argv));
@@ -9,6 +11,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.setMainQmlFile(QLatin1String("qml/UI/CaptainAdhocUI.qml"));
     viewer.showExpanded();
+
+
+    GestionClients gestionClient(0);
+
 
     return app->exec();
 }
