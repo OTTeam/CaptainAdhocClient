@@ -1,14 +1,14 @@
-#include "ui_signalinterface.h"
+#include "downloadfoldermodel.h"
 
 #include <QFileDialog>
 #include <QVariant>
 
-UISignalInterface::UISignalInterface( QObject * ui ) :
+DownloadFolderModel::DownloadFolderModel( QObject * ui ) :
     ui( ui )
 {
 }
 
-void UISignalInterface::PickDownloadFolder()
+void DownloadFolderModel::PickDownloadFolder()
 {
     QString newFolder = QFileDialog::getExistingDirectory( 0, "Choose the downloads folder" );
 

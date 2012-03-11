@@ -3,13 +3,13 @@
 
 #include <QObject>
 
-class UISignalInterface : public QObject
+class DownloadFolderModel : public QObject
 {
     Q_OBJECT
 
 public:
 
-    UISignalInterface( QObject * ui );
+    DownloadFolderModel( QObject * ui );
 
 public slots:
 

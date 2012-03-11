@@ -37,7 +37,8 @@ SOURCES += main.cpp \
     SimsProtocole/Client.cpp \
     FileReceivedModel.cpp \
     downloadlistmodel.cpp \
-    ui_signalinterface.cpp
+    sharedfolderslistmodel.cpp \
+    downloadfoldermodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -51,6 +52,7 @@ HEADERS += \
     SimsProtocole/Client.h \
     FileReceivedModel.h \
     downloadlistmodel.h \
-    ui_signalinterface.h
+    sharedfolderslistmodel.h \
+    downloadfoldermodel.h
 
 QT += network
