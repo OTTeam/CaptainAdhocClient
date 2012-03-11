@@ -21,8 +21,8 @@ public:
     Client(QHostAddress Address);
     Client(QTcpSocket *Socket, QHostAddress dest, QHostAddress nextHop, quint8 HopNumber);
     ~Client();
-    QString ReceivingFileName();
-    quint64 ReceivingFileSize();
+    QString ReceivingFileName() const;
+    quint64 ReceivingFileSize() const;
     QHostAddress Address();
     quint8 HopNumber();
     QTcpSocket *Socket();

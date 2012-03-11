@@ -398,7 +398,7 @@ void Client::newBytesWritten(qint64 bytes)
     }
 }
 
-QString Client::ReceivingFileName()
+QString Client::ReceivingFileName() const
 {
     if (_fileToReceive != NULL)
         return _fileToReceive->fileName();
@@ -407,7 +407,7 @@ QString Client::ReceivingFileName()
 }
 
 
-quint64 Client::ReceivingFileSize()
+quint64 Client::ReceivingFileSize() const
 {
     return _filesize;
 }
