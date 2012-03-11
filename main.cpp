@@ -29,7 +29,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.setMainQmlFile(QLatin1String("qml/UI/CaptainAdhocUI.qml"));
     viewer.showExpanded();
 
-    QGraphicsObject     * qmlRootObject = viewer.rootObject();
+    QDeclarativeContext * rootContext   = viewer.rootContext();
 
     rootContext->setContextProperty( "downloadsModel", QVariant::fromValue( downloads ) );
 
