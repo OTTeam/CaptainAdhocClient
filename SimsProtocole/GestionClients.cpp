@@ -327,7 +327,7 @@ QList<Client*> * GestionClients::findClientsByNextHop(QHostAddress nextHopAdress
     QList<Client*> * lstClients = new QList<Client*>();
     foreach(Client * client, _clients)
     {
-        if (client->nextHopAdress() == nextHopAdress)
+        if (client->nextHopAdress() == nextHopAdress && client->HopNumber()>1)
             lstClients->push_back(client);
     }
 

@@ -77,12 +77,12 @@ Client::~Client()
 
     while (!_filesUploading.isEmpty())
     {
-        FileStreamer* fs = _filesUploading.first();
+        FileStreamer* fs = _filesUploading.takeFirst();
         delete fs;
     }
     while (!_filesDownloading.isEmpty())
     {
-        FileStreamer* fs = _filesDownloading.first();
+        FileStreamer* fs = _filesDownloading.takeFirst();
         delete fs;
     }
 
