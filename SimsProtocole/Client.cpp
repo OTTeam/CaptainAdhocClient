@@ -77,12 +77,12 @@ Client::~Client()
 
     while (!_filesUploading.isEmpty())
     {
-        FileStreamer* fs = _filesUploading.first();
+        FileStreamer* fs = _filesUploading.takeFirst();
         delete fs;
     }
     while (!_filesDownloading.isEmpty())
     {
-        FileStreamer* fs = _filesDownloading.first();
+        FileStreamer* fs = _filesDownloading.takeFirst();
         delete fs;
     }
 
@@ -195,7 +195,7 @@ void Client::receivedFileRequestInit(QDataStream &in)
     out << (quint16) 0;                                 // taillePaquet globale que l'on changera après écriture du paquet
     out << _peerAddr.toString();                        //la destination du paquet
     out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
-    out << (quint16) (sizeof(type) + fileStreamer->id().size()); // taille du data, ici c'est juste type, du coup pas de traitement
+    out << (quint16) (sizeof(type)+ fileStreamer->id().size()); // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
     out << fileStreamer->id();                           //id du fichier
 
@@ -209,6 +209,7 @@ void Client::receivedFileRequestInit(QDataStream &in)
 
 
     _socketHandler->SendPacket(paquet); // On envoie le paquet
+
 }
 
 
@@ -347,6 +348,10 @@ void Client::ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress 
     _socketHandler->SendPacket(packetToSend); // On envoie le paquet
 }
 
+QHostAddress Client::nextHopAdress()
+{
+    return _nextHop;
+}
 
 QHostAddress Client::peerAddress()
 {

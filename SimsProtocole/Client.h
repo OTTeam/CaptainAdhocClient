@@ -28,6 +28,7 @@ public:
 
     ~Client();
     QHostAddress peerAddress();
+    QHostAddress nextHopAdress();
     quint8 HopNumber();
     SocketHandler *socketHandler();
 

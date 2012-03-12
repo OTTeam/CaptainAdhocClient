@@ -25,7 +25,7 @@ SocketHandler::~SocketHandler()
 {
     while(!_filesInLine.isEmpty())
     {
-        FileStreamer* fs = _filesInLine.first();
+        FileStreamer* fs = _filesInLine.takeFirst();
         delete fs;
     }
 

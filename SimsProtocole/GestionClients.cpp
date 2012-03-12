@@ -61,7 +61,35 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
         _pendingConnections.push_back(newPendingConnection);
 
         newClientSocket->connectToHost(broadcasterAddress,PORT_SERVEUR);
+
+        return;
     }
+
+    //Récupération des clients connus via cette passerelle
+    QList<Client*> * clientsToDelete = findClientsByNextHop(broadcasterAddress);
+
+    //Comparaison clients connus/ clients broadcastés
+    foreach (RoutesTableElt route,routes)
+    {
+        foreach(Client * client, *clientsToDelete)
+
+        if (route.destAddr==client->peerAddress())
+        {
+            clientsToDelete->removeOne(client);
+            break;
+        }
+    }
+
+    //La liste contient les clients qui n'ont pas été rebroadcastés
+    foreach(Client * client, *clientsToDelete)
+    {
+        _clients.removeOne(client);
+        client->deleteLater();
+    }
+
+    delete clientsToDelete;
+
+    addClients(broadcasterClient,routes);
 
 }
 
@@ -256,80 +284,7 @@ void GestionClients::DownloadPathUpdate(QString newPath)
 }
 
 
-//void GestionClients::clientBytesAvailable()
-//{
-//    // on lit l'en-tête du paquet afin de savoir pour quel client il est destiné :
-//    QTcpSocket *senderSocket = (QTcpSocket *) sender();
 
-//    SocketsHandlers *socketHandler = findSocketHandler(senderSocket);
-
-////    QDataStream in(senderSocket);
-
-////    QHostAddress destAdd;
-////    QHostAddress senderAdd;
-
-////    while (senderSocket->bytesAvailable() > 0)
-////    {
-////        if (socketHandler->paquetSize == 0)
-////        {
-////            if (senderSocket->bytesAvailable() < sizeof(quint16))
-////                return;
-
-////            in >> socketHandler->paquetSize;
-////        }
-////        // si le paquet n'est pas entier, on passe
-////        if (senderSocket->bytesAvailable() < socketHandler->paquetSize)
-////            return;
-
-////        // sinon, on lit les adresses de source et Destination pour savoir ce qu'il faut en faire
-////        QString destAddStr;
-////        QString senderAddStr;
-
-////        in >> destAddStr;
-////        in >> senderAddStr;
-
-////        destAdd = destAddStr;
-////        senderAdd = senderAddStr;
-
-////        qDebug() << "RECEIVED packet size" << socketHandler->paquetSize << "from" << senderAddStr << "to" << destAddStr;
-
-////        //        qDebug() << destAddStr;
-
-////        //        qDebug() << senderAddStr;
-
-////        //        qDebug() << senderSocket->localAddress();
-
-////        socketHandler->paquetSize = 0;
-//        // si nous sommes l'objectif, on appelle le bon client pour qu'il lise le paquet
-//        if (destAdd == senderSocket->localAddress())
-//        {
-//            // on trouve le client connecté à l'adresse de l'envoyeur.
-//            Client *client = findClientByDest(senderAdd);
-//            // on appelle son slot de réception de données.
-//            client->newBytesReceived();
-
-//        }
-//        else
-//        {
-//            // le paquet ne nous est pas destiné. on récupère donc la passerelle et on lui demande de faire suivre
-//            Client *client = findClientByDest(destAdd);
-
-//            quint16 dataSize;
-//            QByteArray data;
-
-//            in >> dataSize;
-//            data.resize(dataSize);
-//            in.readRawData(data.data(),dataSize);
-
-
-//            client->ForwardMessage(senderAdd, destAdd, data);
-//        }
-
-
-
-//    }
-
-//}
 
 void GestionClients::PacketReceived(QByteArray packet, QHostAddress destAddr, QHostAddress senderAddr, bool destJoined)
 {
@@ -364,4 +319,17 @@ Client *GestionClients::findClientByPeer(QHostAddress destAddress)
             return client;
     }
     return NULL;
+}
+
+
+QList<Client*> * GestionClients::findClientsByNextHop(QHostAddress nextHopAdress)
+{
+    QList<Client*> * lstClients = new QList<Client*>();
+    foreach(Client * client, _clients)
+    {
+        if (client->nextHopAdress() == nextHopAdress && client->HopNumber()>1)
+            lstClients->push_back(client);
+    }
+
+    return lstClients;
 }
