@@ -37,6 +37,13 @@ SOURCES += main.cpp \
     SimsProtocole/ClientDiscovery.cpp \
     SimsProtocole/SocketHandler.cpp \
     SimsProtocole/FileStreamer.cpp \
+    FileIndexing/FileIndexDao.cpp \
+    FileIndexing/FileModel.cpp \
+    FileIndexing/FileIndexer.cpp \
+    FileIndexing/FileUtils.cpp \
+    FileIndexing/SimpleFileModel.cpp \
+    FileIndexing/FolderDao.cpp \
+    FileIndexing/FolderModel.cpp \
     FileReceivedModel.cpp \
     downloadlistmodel.cpp \
     sharedfolderslistmodel.cpp \
@@ -53,9 +60,16 @@ HEADERS += SimsProtocole/ServeurTCP.h \
     SimsProtocole/ClientDiscovery.h \
     SimsProtocole/SocketHandler.h \
     SimsProtocole/FileStreamer.h \
+    FileIndexing/FileIndexDao.h \
+    FileIndexing/FileModel.h \
+    FileIndexing/FileIndexer.h \
+    FileIndexing/FileUtils.h \
+    FileIndexing/SimpleFileModel.h \
+    FileIndexing/FolderDao.h \
+    FileIndexing/FolderModel.h \
     FileReceivedModel.h \
     downloadlistmodel.h \
     sharedfolderslistmodel.h \
     downloadfoldermodel.h
 
-QT += network
+QT += network sql

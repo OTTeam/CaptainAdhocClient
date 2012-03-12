@@ -1,14 +1,17 @@
 #ifndef FILEINDEXER_H
 #define FILEINDEXER_H
 
+#include <QObject>
 #include <QDir>
 #include <QList>
 #include "FileIndexDao.h"
 #include "FolderDao.h"
 
 
-class FileIndexer
+class FileIndexer : public QObject
 {
+    Q_OBJECT
+
 public:
     FileIndexer(bool computeHash = false);
     FileIndexer(QSqlDatabase db, bool computeHash = false);
