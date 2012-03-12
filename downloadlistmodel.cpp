@@ -1,6 +1,6 @@
 #include "downloadlistmodel.h"
 
-#include "SimsProtocole/Client.h"
+#include "SimsProtocole/FileStreamer.h"
 #include "FileReceivedModel.h"
 
 DownloadListModel::DownloadListModel( QObject * parent )
@@ -17,9 +17,9 @@ DownloadListModel::DownloadListModel( QObject * parent )
     setRoleNames( roles );
 }
 
-void DownloadListModel::AddDownload( Client const * client )
+void DownloadListModel::AddDownload( FileStreamer const * fileStreamer )
 {
-    FileReceivedModel * newFile = new FileReceivedModel( client );
+    FileReceivedModel * newFile = new FileReceivedModel( fileStreamer );
 
     connect( newFile, SIGNAL( progressChanged() ),
              this, SLOT( fileChanged() ) );
