@@ -113,24 +113,27 @@ void Client::PacketReceived(QByteArray packet)
     // Si ces lignes s'exécutent, c'est qu'on a reçu tout le message : on peut le récupérer !
     quint16 type;
     in >> type;
+    QByteArray packetdata;
+    packetdata.resize(packet.size() - sizeof(type));
+    in.readRawData(packetdata.data(),packetdata.size());
 
     switch (type)
     {
     case FILE_REQUEST_INIT:
         qDebug() << "PACKET is FILE_REQUEST_INIT";
-        receivedFileRequestInit(in);
+        receivedFileRequestInit(packetdata);
         break;
     case FILE_DATA:
         qDebug() << "PACKET is FILE_DATA";
-        receivedFileData(in);
+        receivedFileData(packetdata);
         break;
     case FILE_REQUEST_ACK:
         qDebug() << "PACKET is FILE_REQUEST_ACK";
-        receivedFileRequestAck(in);
+        receivedFileRequestAck(packetdata);
         break;
     case LIST_REQUEST:
         qDebug() << "PACKET is LIST_REQUEST";
-        receivedFileList(in);
+        receivedFileList(packetdata);
         break;
     default:
         break;
@@ -156,14 +159,15 @@ void Client::fileDownloadingComplete()
     filestreamer->deleteLater();
 }
 
-void Client::receivedFileRequest(QDataStream &in)
+void Client::receivedFileRequest(QByteArray packet)
 {
 
 }
 
 
-void Client::receivedFileRequestInit(QDataStream &in)
+void Client::receivedFileRequestInit(QByteArray packet)
 {
+    QDataStream in(&packet,QIODevice::ReadOnly);
     // ici on a juste envoyé le filename, on le récupère donc
     QString fileRequested;
     quint16 fileSize;
@@ -197,8 +201,10 @@ void Client::receivedFileRequestInit(QDataStream &in)
     out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
     out << (quint16) (sizeof(type)+ fileStreamer->id().size()); // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
-    out << fileStreamer->id();                           //id du fichier
+    out.writeRawData(fileStreamer->id().data(),fileStreamer->id().size());                           //id du fichier
 
+    qDebug() << fileStreamer->id();
+    qDebug() << paquet;
     // mise à jour de taillePaquet
     out.device()->seek(0);
     out << (quint16) (paquet.size() - sizeof(quint16));
@@ -213,8 +219,9 @@ void Client::receivedFileRequestInit(QDataStream &in)
 }
 
 
-void Client::receivedFileRequestAck(QDataStream &in)
+void Client::receivedFileRequestAck(QByteArray packet)
 {
+    QDataStream in(&packet,QIODevice::ReadOnly);
     _etat = SENDING_FILE;
     QByteArray id;
     in >> id;
@@ -231,8 +238,9 @@ void Client::receivedFileRequestAck(QDataStream &in)
 }
 
 
-void Client::receivedFileData(QDataStream &in)
+void Client::receivedFileData(QByteArray packet)
 {
+    QDataStream in(&packet,QIODevice::ReadOnly);
     QByteArray fileId;
     QByteArray data;
 
@@ -252,7 +260,7 @@ void Client::receivedFileData(QDataStream &in)
 
 }
 
-void Client::receivedFileList(QDataStream &in)
+void Client::receivedFileList(QByteArray packet)
 {
 
 
