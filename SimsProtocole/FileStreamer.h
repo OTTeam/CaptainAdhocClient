@@ -20,20 +20,22 @@ public:
 
     QByteArray nextPacket();
     void writeNext(QByteArray Packet);
-    quint64 bytesSent();
+
+    quint64 fileSize();
 
     QByteArray id();
     
 signals:
     void EndOfFile();
     void progressUpdate(quint64, float);
+
 private slots:
     void timerProgressTimeout();
 
 private:
     QByteArray _id;
     QFile*  _fileToStream;
-
+    QString _fileName;
     quint64 _fileSize;
 
     quint64 _bytesWritten;

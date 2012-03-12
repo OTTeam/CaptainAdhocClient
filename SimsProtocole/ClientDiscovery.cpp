@@ -82,7 +82,7 @@ void ClientDiscovery::newDatagramAvailable()
 //        qDebug() << "***********************************";
 //        qDebug()<< ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" ;
 
-        if (localSent == false && senderAddress != QHostAddress("169.254.197.192"))
+        if (localSent == false )
             emit DatagramReceived(senderAddress,routesReceived);
 
     }

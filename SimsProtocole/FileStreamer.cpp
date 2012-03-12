@@ -37,9 +37,11 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     if (_fileToStream->atEnd())
         emit EndOfFile();
 
+    _fileName = fileInfo.fileName();
     // on génère un hash du nom du fichier afin de pouvoir le reconnaitre simplement par la suite.
     // ici, on ne cherche pas la sécurité, juste un moyen d'indexation, on peut donc utiliser du Md5 peu sécure
-    _id = QCryptographicHash::hash(fileInfo.fileName().toUtf8(), QCryptographicHash::Md5);
+    _id = QCryptographicHash::hash(_fileName.toUtf8(), QCryptographicHash::Md5);
+
 
     _bytesWritten = 0;
     _PreviousBytesWritten = 0;
@@ -149,4 +151,12 @@ void FileStreamer::timerProgressTimeout()
 QByteArray FileStreamer::id()
 {
     return _id;
+}
+
+
+
+
+quint64 FileStreamer::fileSize()
+{
+    return _fileSize;
 }

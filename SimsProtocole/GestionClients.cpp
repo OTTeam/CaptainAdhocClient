@@ -51,10 +51,16 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
     if (broadCasterExists == false)
     {
         qDebug() << "Client discovered - Broadcaster";
-        broadcasterClient = new Client(broadcasterAddress);
+        //broadcasterClient = new Client(broadcasterAddress);
         QTcpSocket *newClientSocket = new QTcpSocket(this);
         connect(newClientSocket, SIGNAL(connected()), this, SLOT(clientConnected()));
         connect(newClientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(clientConnectionFailed()));
+        PendingConnectionStruct *newPendingConnection = new PendingConnectionStruct;
+        newPendingConnection->socket = newClientSocket;
+        newPendingConnection->routes = routes;
+        _pendingConnections.push_back(PendingConnectionStruct);
+
+        newClientSocket->connectToHost(broadcasterAddress,PORT_SERVEUR);
     }
 
 }

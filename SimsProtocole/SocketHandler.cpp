@@ -6,8 +6,7 @@ SocketHandler::SocketHandler(QObject *parent) :
 }
 
 
-SocketHandler::SocketHandler(QTcpSocket *socket, QObject *parent):
-    QObject(parent)
+SocketHandler::SocketHandler(QTcpSocket *socket)
 {
     _socket = socket;
     _currentPacketSize = 0;
@@ -16,7 +15,7 @@ SocketHandler::SocketHandler(QTcpSocket *socket, QObject *parent):
 
 
     connect(_socket, SIGNAL(readyRead()), this, SLOT(SocketReceivedData()));
-    connect(_socket, SIGNAL(bytesWritten(qint64)), this, SLOT(SocketBytesWritten(quint64)));
+    connect(_socket, SIGNAL(bytesWritten(qint64)), this, SLOT(SocketBytesWritten(qint64)));
 
     connect(_socket, SIGNAL(disconnected()), this, SIGNAL(Disconnected()));
 }
@@ -125,7 +124,7 @@ void SocketHandler::SocketReceivedData()
 
 
 
-void SocketHandler::SocketBytesWritten(quint64 bytesWritten)
+void SocketHandler::SocketBytesWritten(qint64 bytesWritten)
 {
     Q_UNUSED(bytesWritten)
 

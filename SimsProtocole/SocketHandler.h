@@ -13,7 +13,7 @@ class SocketHandler : public QObject
     Q_OBJECT
 public:
     explicit SocketHandler(QObject *parent = 0);
-    SocketHandler(QTcpSocket *socket, QObject *parent);
+    SocketHandler(QTcpSocket *socket);
     ~SocketHandler();
     void SendPacket(QByteArray packet);
     void SendFile(FileStreamer *file);
@@ -25,7 +25,7 @@ signals:
 
 private slots:
     void SocketReceivedData();
-    void SocketBytesWritten(quint64);
+    void SocketBytesWritten(qint64);
 
     void fileSendingComplete();
 

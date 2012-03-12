@@ -66,25 +66,9 @@ Client::Client(QHostAddress address)
 
 void Client::configClient()
 {
-    connect(_socketHandler, SIGNAL(disconnected()),      this, SIGNAL(Disconnected()));
+    connect(_socketHandler, SIGNAL(Disconnected()),      this, SIGNAL(Disconnected()));
 
     _etat = IDLE;
-
-
-    _bytesReceived = 0;
-    _previousBytesReceived = 0;
-    _bytesSent = 0;
-
-    _timerDlSpeed = new QTimer(this);
-    connect(_timerDlSpeed,SIGNAL(timeout()),this,SLOT(dlSpeedMeasure()));
-    _timerDlSpeed->setInterval(500);
-    _timerDlSpeed->setSingleShot(false);
-
-    _timerUlSpeed = new QTimer(this);
-    connect(_timerUlSpeed,SIGNAL(timeout()),this,SLOT(ulSpeedMeasure()));
-    _timerUlSpeed->setInterval(500);    
-    _timerUlSpeed->setSingleShot(false);
-
 }
 
 
