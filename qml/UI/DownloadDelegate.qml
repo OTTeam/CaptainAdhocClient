@@ -48,17 +48,17 @@ Component {
                 id: imageTypeFile;
                 x:10
                 source: {
-                    if (type === "avi")
+                    if (model.modelData.type === "avi")
                         return "images/film.png";
-                    else if (type === "doc" || type === "docx")
+                    else if (model.modelData.type === "doc" || model.modelData.type === "docx")
                         return "images/doc.png"
-                    else if (type === "pdf")
+                    else if (model.modelData.type === "pdf")
                         return "images/pdf.png"
-                    else if (type === "jpg" || type === "jpeg" || type === "png")
+                    else if (model.modelData.type === "jpg" || model.modelData.type === "jpeg" || model.modelData.type === "png")
                         return "images/photo.png"
-                    else if (type === "mp3")
+                    else if (model.modelData.type === "mp3")
                         return "images/music.png"
-                    else if (type === "rar")
+                    else if (model.modelData.type === "rar")
                         return "images/rar.png"
                     else
                         return "images/incon.png"
@@ -75,7 +75,7 @@ Component {
                 Column {
 
                             Text {
-                                    text: '<b>File Name:</b> ' + fileName
+                                    text: '<b>File Name:</b> ' + model.modelData.name
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -93,7 +93,7 @@ Component {
                                     wrapMode: Text.WordWrap
                             }
                             Text {
-                                    text: '<b>Size :</b> ' + size
+                                    text: '<b>Size :</b> ' + model.modelData.size
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -102,7 +102,7 @@ Component {
                                     wrapMode: Text.WordWrap
                             }
                             Text {
-                                    text: '<b>Type :</b> ' + type
+                                    text: '<b>Type :</b> ' + model.modelData.type
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -115,17 +115,31 @@ Component {
 
             Item{
                 id : status
-                visible: ( completion >= 0 && completion <= 100 )
+                visible: ( model.modelData.progress >= 0 && model.modelData.progress <= 100 )
                 ProgressBar{
                     id: downBar
                     x: 300
                     y: 28
-                    value: completion
+                    value: model.modelData.progress
                 }
             }
 
 
+            ImageButton{
+                id: delButton
 
+                visible: ( model.modelData.progress >= 0 && model.modelData.progress <= 100 )
+
+                imgSource: "images/delete.png"
+                imgHooverSource: "images/delete_hover.png"
+                imgClickedSource: "images/delete_clicked.png"
+                imgHeight: parent.height - 5
+                imgWidth: imgHeight
+
+                x: parent.width - imgHeight - 3.5
+                y: 2.5
+            }
+/*
             Image {
                 id: imDownload;
                 x: 600
@@ -146,6 +160,7 @@ Component {
                     onExited: { parent.source = "images/down_arrow.png"}
                 }
             }
+            */
         }
     }
 }

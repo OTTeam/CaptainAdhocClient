@@ -113,29 +113,29 @@ Component {
                 }
             }
 
-            Item{
-                id : status
-                x: 350
-                y: 28
-                Text {  text:
-                            if ( completion === 100)
-                                return "COMPLETED"
-                            else
-                                return completion + "%"
-                        textFormat: Qt.RichText
-                        font.pointSize: 10
-                        color: "#cccccc";
-                        style: Text.Raised;
-                        styleColor: "black";
-                }
-            }
+//            Item{
+//                id : status
+//                x: 350
+//                y: 28
+//                Text {  text:
+//                            if ( completion === 100)
+//                                return "COMPLETED"
+//                            else
+//                                return completion + "%"
+//                        textFormat: Qt.RichText
+//                        font.pointSize: 10
+//                        color: "#cccccc";
+//                        style: Text.Raised;
+//                        styleColor: "black";
+//                }
+//            }
 
 
 
             Image {
                 id: imDownload;
                 x: 600
-                visible: ( completion >= 0 && completion < 100 )
+                //visible: ( completion >= 0 && completion < 100 )
                 source: {
                         return "images/down_arrow.png"
                 }

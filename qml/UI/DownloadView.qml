@@ -5,6 +5,8 @@ Item {
     width: 640;
     height: 400
 
+    Component.onCompleted: console.log( theList.count + " items" )
+
     Rectangle {
         id: background
         anchors.fill: parent;
@@ -17,8 +19,9 @@ Item {
         }
 
         ListView {
+            id: theList
             anchors.fill: parent
-            model: DownloadModel {}
+            model: mainUI.downloadsList
             delegate: listDelegate
             focus: true
             clip: true

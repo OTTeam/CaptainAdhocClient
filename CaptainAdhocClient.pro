@@ -34,7 +34,11 @@ SOURCES += main.cpp \
     SimsProtocole/ServeurTCP.cpp \
     SimsProtocole/GestionClients.cpp \
     SimsProtocole/ClientDiscovery.cpp \
-    SimsProtocole/Client.cpp
+    SimsProtocole/Client.cpp \
+    FileReceivedModel.cpp \
+    downloadlistmodel.cpp \
+    sharedfolderslistmodel.cpp \
+    downloadfoldermodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -45,6 +49,10 @@ HEADERS += \
     SimsProtocole/ServeurTCP.h \
     SimsProtocole/GestionClients.h \
     SimsProtocole/ClientDiscovery.h \
-    SimsProtocole/Client.h
+    SimsProtocole/Client.h \
+    FileReceivedModel.h \
+    downloadlistmodel.h \
+    sharedfolderslistmodel.h \
+    downloadfoldermodel.h
 
 QT += network

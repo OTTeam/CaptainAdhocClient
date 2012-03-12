@@ -1,6 +1,12 @@
 import QtQuick 1.1
 
 Rectangle {
+    id: mainUI
+
+    property string downloadFolder: "/C/Users/Public/Downloads"
+
+    signal pickDownloadFolder()
+    signal pickSharedDir()
 
     function updateDownSpeed( newSpeed){
         vitesse.downSpeed = newSpeed;
@@ -23,6 +29,7 @@ Rectangle {
         mainDisplay.slideChanged.connect( updateLabels )
     }
 
+    // ribbon
     Rectangle{
         id:ribbon
         Image { source: "images/bg.png";
@@ -38,7 +45,7 @@ Rectangle {
         }
     }
 
-
+    // taskbar
     Rectangle{
         id:taskbar
         Image { source: "images/bg.png";
@@ -93,6 +100,7 @@ Rectangle {
         }
     }
 
+    // separator
     Rectangle{
         id: separator
         gradient: Gradient{
@@ -120,8 +128,9 @@ Rectangle {
             bottom: taskbar.top
         }
 
-        current: 2
+        current: 0
 
+        // configuration slide
         Rectangle{
             id: configurationSlide
             color: "black";
@@ -146,7 +155,6 @@ Rectangle {
 
             Item{
                 id: downloadFolderConfig
-                width: parent.width
                 height: 64
 
                 anchors{
@@ -166,16 +174,19 @@ Rectangle {
                     imgWidth: 64
                     imgHeight: 64
 
+                    onClicked: { mainUI.pickDownloadFolder() }
                 }
 
                 Text {
+                    Component.onCompleted: console.log( width )
                     id: label
-                    text: "<b>Download folder : </b>" + " D:/Users/Documents/SharedDownloads "
+                    text: "<b>Download folder : </b>"
                     textFormat: Qt.RichText
                     font.pointSize: 9
                     color: "#cccccc";
                     style: Text.Raised;
                     styleColor: "black";
+                    width: paintedWidth
                     anchors{
                         verticalCenter: parent.verticalCenter
                         left: buttonAdd.right
@@ -183,9 +194,25 @@ Rectangle {
                     }
                     font.pixelSize: 16
                 }
+                Text{
+                    id: daFolder
+                    text : downloadFolder
+                    elide: Text.ElideMiddle
+                    font : label.font
+                    color : label.color
+                    style: label.style
+                    styleColor: label.styleColor
+                    anchors{
+                        verticalCenter: parent.verticalCenter
+                        left: label.right
+                        right: parent.right
+                        margins: 10
+                    }
+                }
             }
         }
 
+        // downloads
         Rectangle{
             id: downloads
             color:"darkgray"
@@ -197,13 +224,13 @@ Rectangle {
 
             DownloadView{
                 id: downloadFileView
-
                 anchors.fill: parent
             }
         }
 
+        // available files
         Rectangle{
-            id: thirdSlide
+            id: availableFilesView
             color:"darkgray"
 
             property string title: "  Home  "
@@ -213,7 +240,6 @@ Rectangle {
 
             FileView{
                 id: availableFileView
-
                 anchors.fill: parent
             }
         }
