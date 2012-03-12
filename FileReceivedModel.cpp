@@ -6,10 +6,10 @@
 
 FileReceivedModel::FileReceivedModel( Client const * client )
 {
-    m_size = client->ReceivingFileSize();
+    //m_size = client->ReceivingFileSize();
 
     // extracting name and type
-    m_name = client->ReceivingFileName();
+    //m_name = client->ReceivingFileName();
     m_type = m_name.split( '.' )[ 1 ];
 
     m_progress = 0;

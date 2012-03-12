@@ -33,8 +33,10 @@ symbian:TARGET.CAPABILITY += NetworkServices
 SOURCES += main.cpp \
     SimsProtocole/ServeurTCP.cpp \
     SimsProtocole/GestionClients.cpp \
-    SimsProtocole/ClientDiscovery.cpp \
     SimsProtocole/Client.cpp \
+    SimsProtocole/ClientDiscovery.cpp \
+    SimsProtocole/SocketHandler.cpp \
+    SimsProtocole/FileStreamer.cpp \
     FileReceivedModel.cpp \
     downloadlistmodel.cpp \
     sharedfolderslistmodel.cpp \
@@ -44,12 +46,13 @@ SOURCES += main.cpp \
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-HEADERS += \
+HEADERS += SimsProtocole/ServeurTCP.h \
     SimsProtocole/utils.h \
-    SimsProtocole/ServeurTCP.h \
     SimsProtocole/GestionClients.h \
-    SimsProtocole/ClientDiscovery.h \
     SimsProtocole/Client.h \
+    SimsProtocole/ClientDiscovery.h \
+    SimsProtocole/SocketHandler.h \
+    SimsProtocole/FileStreamer.h \
     FileReceivedModel.h \
     downloadlistmodel.h \
     sharedfolderslistmodel.h \
