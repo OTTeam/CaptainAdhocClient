@@ -5,6 +5,10 @@
 
 static const char * COLUMN_LIST = "name, type, base_dir, dir_path, path, index_time, size, hash";
 
+FileIndexDao::FileIndexDao()
+{
+}
+
 FileIndexDao::FileIndexDao(QSqlDatabase database) : _database(database)
 {
 }

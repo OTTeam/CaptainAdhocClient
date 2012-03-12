@@ -10,6 +10,7 @@ class FileIndexDao
 {
 public:
 
+    FileIndexDao();
     FileIndexDao(QSqlDatabase database);
 
     bool insertFile(FileModel& model);

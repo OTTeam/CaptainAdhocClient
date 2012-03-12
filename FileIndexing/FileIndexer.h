@@ -16,8 +16,11 @@ public:
     FileIndexer(bool computeHash = false);
     FileIndexer(QSqlDatabase db, bool computeHash = false);
 
-    bool addDirectory(QDir dir);
-    bool addDirectory(const QString& path);
+    void addDirectory(QDir dir);
+
+    void removeDirectory(QDir dir);
+
+    bool createDatabase();
 
     qint32 updateDatabase();
 
@@ -33,6 +36,10 @@ public:
 
     bool isComputeHash() const { return _computeHash; }
     void setComputeHash(bool computeHash) { _computeHash = computeHash; }
+
+public slots:
+    void addDirectory(const QString& path);
+    void removeDirectory(const QString& path);
 
 private:
     FileIndexDao _dao;

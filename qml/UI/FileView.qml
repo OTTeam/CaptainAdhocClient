@@ -17,11 +17,17 @@ Item {
         }
 
         ListView {
+            id: listView
             anchors.fill: parent
             model: FileModel {}
             delegate: listDelegate
             focus: true
             clip: true
+
+            ScrollBar {
+                 flickable: listView
+                 vertical: true
+             }
         }
     }
 }

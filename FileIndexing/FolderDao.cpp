@@ -5,6 +5,10 @@
 
 static const char * COLUMN_LIST = "path";
 
+FolderDao::FolderDao()
+{
+}
+
 FolderDao::FolderDao(QSqlDatabase database) : _database(database)
 {
 }

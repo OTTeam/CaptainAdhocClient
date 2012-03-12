@@ -1,29 +1,67 @@
 #include <QDebug>
 #include <QDirIterator>
+#include <QSqlDatabase>
+#include <QSqlError>
 
 #include "FileIndexer.h"
 #include "FileUtils.h"
 
-FileIndexer::FileIndexer(bool computeHash) : _dao(QSqlDatabase::database()), _folderDao(QSqlDatabase::database()), _computeHash(computeHash)
+FileIndexer::FileIndexer(bool computeHash) : _computeHash(computeHash)
 {
+    qDebug() << "createDatabase result : " << createDatabase();
+
+    _dao = FileIndexDao(QSqlDatabase::database());
+    _folderDao = FolderDao(QSqlDatabase::database());
 }
 
 FileIndexer::FileIndexer(QSqlDatabase db, bool computeHash) : _dao(db), _folderDao(db), _computeHash(computeHash)
 {
 }
 
-bool FileIndexer::addDirectory(QDir dir)
+void FileIndexer::addDirectory(QDir dir)
 {
-    if (_directories.contains(dir))
-        return false;
-
+    if (!_directories.contains(dir)) {
         _directories << dir;
+        qDebug() << "Directory " << dir.absolutePath() << " added";
+    }
+}
+
+void FileIndexer::removeDirectory(QDir dir)
+{
+    _directories.removeAll(dir);
+}
+
+bool FileIndexer::createDatabase()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "fileDb");
+    db.setDatabaseName("files.sqlite");
+    if (!db.open()) {
+        qCritical(qPrintable(db.lastError().text()));
+        return false;
+    }
+
+    if (!FileIndexDao::createTable(db, true)) {
+        qCritical(qPrintable(db.lastError().text()));
+        return false;
+    }
+
+    if (!FolderDao::createTable(db, true)) {
+        qCritical(qPrintable(db.lastError().text()));
+        return false;
+    }
+
     return true;
 }
 
-bool FileIndexer::addDirectory(const QString& path)
+void FileIndexer::addDirectory(const QString& path)
 {
-    return addDirectory(QDir(path));
+    addDirectory(QDir(path));
+}
+
+void FileIndexer::removeDirectory(const QString &path)
+{
+    qDebug() << "Directory " << path << " removed";
+    removeDirectory(QDir(path));
 }
 
 qint32 FileIndexer::updateDatabase()
