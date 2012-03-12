@@ -6,6 +6,7 @@
 #include "FileReceivedModel.h"
 #include "downloadlistmodel.h"
 #include "downloadfoldermodel.h"
+#include "sharedfolderslistmodel.h"
 
 #include <QObject>
 #include <QDeclarativeContext>
@@ -34,17 +35,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject * qmlRootObject = viewer.rootObject();
 
     DownloadFolderModel downloadFolder( qmlRootObject );
+    SharedFoldersListModel sharedFoldersList( rootContext );
+    sharedFoldersList.AddFolder( "C:\\" );
 
     rootContext->setContextProperty( "downloadsList", &downloads );
-
-    //rootContext->setProperty( "downloadingFilesList", QVariant::fromValue( downloadingFilesList) );
 
     // CONNECT ALL THE SIGNALS
     QObject::connect( qmlRootObject, SIGNAL( pickDownloadFolder() ),
                       &downloadFolder, SLOT( PickDownloadFolder() ) );
-//    QObject::connect( &gestionClient,
-//                      SIGNAL( ClientDownloadSpeedUpdate( Client*,int ) ),
-//                      )
+    QObject::connect( qmlRootObject, SIGNAL( pickSharedDir() ),
+                      &sharedFoldersList, SLOT( AddFolder() ) );
 
     return app->exec();
 }
