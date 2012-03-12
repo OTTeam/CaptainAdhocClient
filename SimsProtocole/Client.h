@@ -39,11 +39,11 @@ public:
 private:
     void configClient();
 
-    void receivedFileRequest(QDataStream &in);     // demande de fichier de la part du client
-    void receivedFileRequestInit(QDataStream &in); // réponse du serveur lors de la demande (confirmation nom, taille)
-    void receivedFileRequestAck(QDataStream &in);  // confirmation du client
-    void receivedFileData(QDataStream &in);        // réception d'un fichier par le client
-    void receivedFileList(QDataStream &in);
+    void receivedFileRequest(QByteArray packet);     // demande de fichier de la part du client
+    void receivedFileRequestInit(QByteArray packet); // réponse du serveur lors de la demande (confirmation nom, taille)
+    void receivedFileRequestAck(QByteArray packet);  // confirmation du client
+    void receivedFileData(QByteArray packet);        // réception d'un fichier par le client
+    void receivedFileList(QByteArray packet);
 
 signals:
     void NewData(int);
