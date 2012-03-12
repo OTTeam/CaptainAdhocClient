@@ -45,14 +45,14 @@ MainWindow::MainWindow(QWidget *parent)
 */
     _gestionnaire = new GestionClients(this);
 
-    connect(this, SIGNAL(InitiateConnection(QHostAddress)), _gestionnaire, SLOT(newConnectionRequest(QHostAddress)));
+    //connect(this, SIGNAL(InitiateConnection(QHostAddress)), _gestionnaire, SLOT(newConnectionRequest(QHostAddress)));
     connect(_gestionnaire, SIGNAL(ClientNumberChanged(int)), this, SLOT(UpdateClientsNumber(int)));
+    connect(_gestionnaire, SIGNAL(newFileToDownload(FileStreamer*)), this, SLOT(newFileToDownLoad(FileStreamer*)));
+//    connect(_gestionnaire, SIGNAL(ClientDownloadUpdate(Client *, int)) , this, SLOT(UpdateClientProgress(Client *, int)));
+//    connect(_gestionnaire, SIGNAL(ClientUploadUpdate(Client *, int)) , this, SLOT(UpdateClientProgress(Client *, int)));
 
-    connect(_gestionnaire, SIGNAL(ClientDownloadUpdate(Client *, int)) , this, SLOT(UpdateClientProgress(Client *, int)));
-    connect(_gestionnaire, SIGNAL(ClientUploadUpdate(Client *, int)) , this, SLOT(UpdateClientProgress(Client *, int)));
-
-    connect(_gestionnaire, SIGNAL(ClientDownloadSpeedUpdate(Client *, int)) , this, SLOT(UpdateDlSpeed(Client*, int)));
-    connect(_gestionnaire, SIGNAL(ClientUploadSpeedUpdate(Client *, int)) , this, SLOT(UpdateDlSpeed(Client*, int)));
+//    connect(_gestionnaire, SIGNAL(ClientDownloadSpeedUpdate(Client *, int)) , this, SLOT(UpdateDlSpeed(Client*, int)));
+//    connect(_gestionnaire, SIGNAL(ClientUploadSpeedUpdate(Client *, int)) , this, SLOT(UpdateDlSpeed(Client*, int)));
 
 
 }
@@ -62,6 +62,28 @@ MainWindow::~MainWindow()
     
 }
 
+
+void MainWindow::progressBarUpdate(quint64 bytes, float bytesPerSec)
+{
+    QString text;
+    if (bytesPerSec > 1000000)
+    {
+        double dbytesPerSec = bytesPerSec;
+        text = QString::number(dbytesPerSec/1000000,'f',1) + " Mo/s";
+    }else  if (bytesPerSec > 10000)
+    {
+        text = QString::number(bytesPerSec/1000) + " Ko/s";
+    }
+    else
+    {
+        text = QString::number(bytesPerSec) + " o/s";
+    }
+
+    _lbDlSpeed->setText(text);
+
+
+    _progressBar->setValue(bytes);
+}
 
 
 
@@ -94,19 +116,11 @@ void MainWindow::UpdateClientProgress(Client *client, int Progress)
 void MainWindow::UpdateDlSpeed(Client *client, int bytesPerSec)
 {
     Q_UNUSED(client)
-    QString text;
-    if (bytesPerSec > 1000000)
-    {
-        double dbytesPerSec = bytesPerSec;
-        text = QString::number(dbytesPerSec/1000000,'f',1) + " Mo/s";
-    }else  if (bytesPerSec > 10000)
-    {
-        text = QString::number(bytesPerSec/1000) + " Ko/s";
-    }
-    else
-    {
-        text = QString::number(bytesPerSec) + " o/s";
-    }
+    Q_UNUSED(bytesPerSec)
+}
 
-    _lbDlSpeed->setText(text);
+
+void MainWindow::newFileToDownLoad(FileStreamer*filestreamer)
+{
+    connect(filestreamer, SIGNAL(progressUpdate(quint64,float)), this, SLOT(progressBarUpdate(quint64,float)));
 }

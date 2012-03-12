@@ -30,16 +30,16 @@ struct RemoteFiles
 };
 
 
-struct SocketsHandlers
-{
-    QTcpSocket *socket;
-    quint16 paquetSize;
-};
-
 struct RoutesTableElt
 {
     QHostAddress destAddr;
     quint8 hopNumber;
+};
+
+struct PendingConnectionStruct
+{
+    QTcpSocket *socket;
+    QList<RoutesTableElt> routes;
 };
 
 
@@ -47,4 +47,5 @@ enum TYPE_PAQUET { FILE_REQUEST, FILE_REQUEST_INIT, FILE_DATA, FILE_REQUEST_ACK,
 
 
 enum CLIENT_STATE { IDLE, SENDING_FILE, WAITING_ACK};
+
 #endif // UTILS_H

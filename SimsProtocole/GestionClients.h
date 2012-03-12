@@ -2,12 +2,14 @@
 #define GESTIONCLIENTS_H
 
 #include <QObject>
+
 #include <QTcpSocket>
 #include <QList>
 
 #include "Client.h"
 #include "ServeurTCP.h"
 #include "ClientDiscovery.h"
+#include "SocketHandler.h"
 
 
 class GestionClients : public QObject
@@ -27,16 +29,15 @@ signals:
 
     void ClientNumberChanged(int);
 
+    void newFileToDownload(FileStreamer*);
+
 public slots:
     void DownloadPathUpdate(QString);
 private slots:
-    void clientBytesAvailable();
-    void clientBytesWritten(qint64);
-
-    void clientReceived(int);
-    void clientSent(int);
+    void PacketReceived(QByteArray packet, QHostAddress destAddr, QHostAddress senderAddr, bool destJoined);
 
     void newConnectionRequest(QHostAddress broadcasterAddress,QList<RoutesTableElt> routes);
+    void addClients(Client *nextHopClient, QList<RoutesTableElt> routes);
     void newConnectionDone(QTcpSocket *);
 
     void clientDisconnect();
@@ -44,21 +45,21 @@ private slots:
     void clientConnected();
     void NewClientConfig(Client *client);
 
-    void uploadSpeedUpdate(int);
-    void downloadSpeedUpdate(int);
-
     void broadCastTrigger();
 private:
-    Client *findClientByDest(QHostAddress);
-    SocketsHandlers *findSocketHandler(QTcpSocket *);
+    Client *findClientByPeer(QHostAddress);
 
 private:
     QList<Client*> _clients;
-    QList<SocketsHandlers *> _socketsHandlers;
+    QList<SocketHandler*> _socketsHandlers;
+    QList<PendingConnectionStruct*> _pendingConnections;
+
     TCPServer *_listeningServer;
     ClientDiscovery *_clientDiscoveryModule;
+
     QList<LocalFiles> _localFiles;
     QList<RemoteFiles> _remoteFiles;
+
 
     QTimer *_timerBroadcast;
 };

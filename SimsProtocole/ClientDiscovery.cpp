@@ -82,7 +82,7 @@ void ClientDiscovery::newDatagramAvailable()
 //        qDebug() << "***********************************";
 //        qDebug()<< ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" ;
 
-        if (localSent == false)
+        if (localSent == false && senderAddress != QHostAddress("169.254.197.192"))
             emit DatagramReceived(senderAddress,routesReceived);
 
     }
@@ -107,7 +107,7 @@ void ClientDiscovery::sendNewDatagram(QList<Client *> routesList )
 //    qDebug()<< "routesList Count : " << routesList.count();
     foreach(Client *client, routesList)
     {
-        out << client->Address().toString();
+        out << client->peerAddress().toString();
         out << client->HopNumber();
 //        qDebug() << "Address :" << client->address().toString() << " -- hop :" << client->hopNumber();
     }

@@ -8,6 +8,9 @@
 #include <QList>
 #include <QFile>
 #include <QTimer>
+
+#include "FileStreamer.h"
+#include "SocketHandler.h"
 #include "utils.h"
 
 
@@ -17,65 +20,58 @@ class Client : public QObject
 {
     Q_OBJECT
 public:
-    Client(QTcpSocket *Socket);
-    Client(QHostAddress Address);
-    Client(QTcpSocket *Socket, QHostAddress dest, QHostAddress nextHop, quint8 HopNumber);
+    Client(SocketHandler *Socket);
+    Client(SocketHandler *Socket, QHostAddress dest, QHostAddress nextHop, quint8 HopNumber);
+
+
+    Client(QHostAddress Address);      // a retirer, constructeur de debug
+
     ~Client();
-    QString ReceivingFileName();
-    quint64 ReceivingFileSize();
-    QHostAddress Address();
+    QHostAddress peerAddress();
     quint8 HopNumber();
-    QTcpSocket *Socket();
-    void UpdateRoute(QTcpSocket *s,QHostAddress nextHop, quint8 newHopNumber);
-    void ConnectSocket();
+    SocketHandler *socketHandler();
+
+    void UpdateRoute(SocketHandler *s,QHostAddress nextHop, quint8 newHopNumber);
     void SendMessage();
 
-    void ForwardMessage(QHostAddress senderAdd,QHostAddress destAdd, QByteArray data);
+    void ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress senderAdd);
 private:
     void configClient();
 
-    void receivedFileRequest();     // demande de fichier de la part du client
-    void receivedFileRequestInit(); // réponse du serveur lors de la demande (confirmation nom, taille)
-    void receivedFileRequestAck();  // confirmation du client
-    void receivedFileData();        // réception d'un fichier par le client
-    void receivedFileList();
+    void receivedFileRequest(QDataStream &in);     // demande de fichier de la part du client
+    void receivedFileRequestInit(QDataStream &in); // réponse du serveur lors de la demande (confirmation nom, taille)
+    void receivedFileRequestAck(QDataStream &in);  // confirmation du client
+    void receivedFileData(QDataStream &in);        // réception d'un fichier par le client
+    void receivedFileList(QDataStream &in);
 
 signals:
     void NewData(int);
-    void UploadProgressUpdate(int);
-    void DownloadProgressUpdate(int);
 
-    void DownloadSpeedUpdate(int);
-    void UploadSpeedUpdate(int);
-
-    void Connected();
-    void SocketError();
     void Disconnected();
 
+     void newFileToDownload(FileStreamer*);
+
 public slots:
-    void newBytesReceived();
-    void newBytesWritten(qint64);
+    void PacketReceived(QByteArray packet);
+
 
 private slots:
-    void dlSpeedMeasure();
-    void ulSpeedMeasure();
+    void fileUploadingComplete();
+    void fileDownloadingComplete();
 
 private:
-    QTcpSocket *_socket;
+    SocketHandler* _socketHandler;
     quint8 _hopNumber;
 
-    QHostAddress _dest;
+    QHostAddress _peerAddr;
     QHostAddress _nextHop;
 
-    quint16 _messageLength;
+
+    QList<FileStreamer*> _filesUploading;
+    QList<FileStreamer*> _filesDownloading;
 
     quint64 _bytesReceived;
     quint64 _previousBytesReceived;
-
-    quint64 _filesize;
-
-    QFile *_fileToReceive;
-    QFile *_fileToSend;
 
     quint64 _bytesSent;
     quint64 _previousBytesSent;

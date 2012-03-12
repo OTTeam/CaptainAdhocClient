@@ -24,9 +24,13 @@ private slots:
     void HelloClicked();
     void UpdateClientsNumber(int);
 
+    void progressBarUpdate(quint64, float);
+
     void UpdateClientProgress(Client *, int);
 
     void UpdateDlSpeed(Client *, int);
+
+    void newFileToDownLoad(FileStreamer*);
 private:
     QLineEdit *_address;
     QPushButton *_btconnect;

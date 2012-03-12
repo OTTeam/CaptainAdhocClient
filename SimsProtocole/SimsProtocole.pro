@@ -15,11 +15,15 @@ SOURCES += main.cpp\
     ServeurTCP.cpp \
     GestionClients.cpp \
     Client.cpp \
-    ClientDiscovery.cpp
+    ClientDiscovery.cpp \
+    SocketHandler.cpp \
+    FileStreamer.cpp
 
 HEADERS  += MainWindow.h \
     ServeurTCP.h \
     utils.h \
     GestionClients.h \
     Client.h \
-    ClientDiscovery.h
+    ClientDiscovery.h \
+    SocketHandler.h \
+    FileStreamer.h
