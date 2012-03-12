@@ -109,6 +109,17 @@ bool FileIndexDao::getFile(int id, FileModel& model)
     return true;
 }
 
+qint32 FileIndexDao::deleteWholeFolder(const QString &baseDirPath)
+{
+    QSqlQuery query(_database);
+    query.prepare("DELETE FROM FILES WHERE base_dir = :baseDir");
+    query.bindValue(":baseDir", baseDirPath);
+    if (query.exec()) {
+        return query.numRowsAffected();
+    }
+    return -1;
+}
+
 bool FileIndexDao::createTable(QSqlDatabase database, bool dropIfExists)
 {
     QSqlQuery query(database);

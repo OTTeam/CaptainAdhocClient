@@ -3,9 +3,11 @@
 
 #include <QObject>
 #include <QDir>
-#include <QList>
+#include <QQueue>
 #include "FileIndexDao.h"
 #include "FolderDao.h"
+#include <QFuture>
+#include <QFutureWatcher>
 
 
 class FileIndexer : public QObject
@@ -16,13 +18,13 @@ public:
     FileIndexer(bool computeHash = false);
     FileIndexer(QSqlDatabase db, bool computeHash = false);
 
-    void addDirectory(QDir dir);
+    qint32 indexDirectory(const QDir& dir);
 
-    void removeDirectory(QDir dir);
+    void deleteDirectory(const QDir& dir);
 
     bool createDatabase();
 
-    qint32 updateDatabase();
+//    qint32 updateDatabase();
 
     QList<FileModel> getAllIndexedFiles();
 
@@ -40,17 +42,38 @@ public:
 public slots:
     void addDirectory(const QString& path);
     void removeDirectory(const QString& path);
+    void indexingFinished();
+    void removingFinished();
 
 private:
     FileIndexDao _dao;
     FolderDao _folderDao;
-    QList<QDir> _directories;
+    QQueue<QDir> _pendingDirs;
+    QQueue<QDir> _pendingDeleteDirs;
+    QDir _currentFolder;
     QStringList _nameFilters;
+
     bool _computeHash;
 
-    qint32 indexDirectory(const QDir& dir);
+    bool _stopIndexation;
+
+    QFuture<void> _indexingResult;
+    QFutureWatcher<void> _indexingWatcher;
+
+    QFuture<void> _removingResult;
+    QFutureWatcher<void> _removingWatcher;
+
+    bool _indexing;
 
     bool indexFile(const QFileInfo& fileInfo, const QDir& dir);
+
+    void startIndexingDirectory(const QDir& dir);
+    void startRemovingDirectory(const QDir& dir);
+
+    void indexNextDirectory();
+    void removeNextDirectory();
+
+    void cancelIndexation();
 };
 
 #endif // FILEINDEXER_H

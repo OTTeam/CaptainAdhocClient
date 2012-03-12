@@ -16,6 +16,8 @@ public:
     bool insertFile(FileModel& model);
     bool getFile(int id, FileModel& model);
 
+    qint32 deleteWholeFolder(const QString& baseDirPath);
+
     QList<FileModel> getAllFiles();
 
     QList<FileModel> searchFiles(const QString& keyword, bool wildcard);
