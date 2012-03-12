@@ -28,7 +28,7 @@ public:
     
 signals:
     void EndOfFile();
-    void progressUpdate(quint64, float);
+    void progressUpdate( quint64 currentSize, float speed );
 
 private slots:
     void timerProgressTimeout();
