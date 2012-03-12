@@ -2,3 +2,8 @@
 SimsProtocole-build-desktop
 qml/UI/*
 *-build*
+release/*
+debug/*
+Makefile*
+object_script*
+

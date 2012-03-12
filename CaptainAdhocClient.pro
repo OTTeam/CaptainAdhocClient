@@ -32,11 +32,11 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     SimsProtocole/ServeurTCP.cpp \
-    SimsProtocole/GestionClients.cpp \
-    SimsProtocole/Client.cpp \
-    SimsProtocole/ClientDiscovery.cpp \
     SimsProtocole/SocketHandler.cpp \
+    SimsProtocole/GestionClients.cpp \
+    SimsProtocole/ClientDiscovery.cpp \
     SimsProtocole/FileStreamer.cpp \
+    SimsProtocole/Client.cpp \
     FileIndexing/FileIndexDao.cpp \
     FileIndexing/FileModel.cpp \
     FileIndexing/FileIndexer.cpp \
@@ -54,12 +54,12 @@ include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
 HEADERS += SimsProtocole/ServeurTCP.h \
-    SimsProtocole/utils.h \
     SimsProtocole/GestionClients.h \
     SimsProtocole/Client.h \
     SimsProtocole/ClientDiscovery.h \
     SimsProtocole/SocketHandler.h \
     SimsProtocole/FileStreamer.h \
+    SimsProtocole/utils.h \
     FileIndexing/FileIndexDao.h \
     FileIndexing/FileModel.h \
     FileIndexing/FileIndexer.h \
@@ -73,3 +73,5 @@ HEADERS += SimsProtocole/ServeurTCP.h \
     downloadfoldermodel.h
 
 QT += network sql
+
+TEMPLATE = app
