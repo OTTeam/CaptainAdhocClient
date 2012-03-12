@@ -45,6 +45,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                       &downloadFolder, SLOT( PickDownloadFolder() ) );
     QObject::connect( qmlRootObject, SIGNAL( pickSharedDir() ),
                       &sharedFoldersList, SLOT( AddFolder() ) );
+    QObject::connect( qmlRootObject, SIGNAL( delSharedDir( int ) ),
+                      &sharedFoldersList, SLOT( RemoveFolder( int ) ) );
 
     return app->exec();
 }

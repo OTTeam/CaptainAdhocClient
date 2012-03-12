@@ -14,15 +14,13 @@ public:
 
     SharedFoldersListModel( QDeclarativeContext * qmlRootContext );
 
-    void AddFolder( QString const & folderPath );
-
-    void RemoveFolder( int index );
-
     QStringList FoldersList() const;
 
 public slots:
 
     void AddFolder();
+    void AddFolder( QString const & folderPath );
+    void RemoveFolder( int index );
 
 signals:
 
