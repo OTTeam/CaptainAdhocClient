@@ -3,7 +3,7 @@
 
 #include <QAbstractListModel>
 
-class Client;
+class FileStreamer;
 class FileReceivedModel;
 
 class DownloadListModel : public QAbstractListModel
@@ -30,7 +30,7 @@ public:
 
 public slots:
 
-    void AddDownload( Client const * client );
+    void AddDownload( FileStreamer const * fileStreamer );
 
 private slots:
 

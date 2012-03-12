@@ -21,8 +21,8 @@ public:
     QByteArray nextPacket();
     void writeNext(QByteArray Packet);
 
-    quint64 fileSize();
-    QString fileName();
+    quint64 fileSize() const;
+    QString fileName() const;
 
     QByteArray id();
     
