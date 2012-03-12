@@ -116,7 +116,7 @@ void SocketHandler::SocketReceivedData()
 
         _currentPacketSize = 0;
 
-        emit PacketReceived(packet, senderAddr, destAddr, (_socket->localAddress() == destAddr) );
+        emit PacketReceived(packet, destAddr, senderAddr, (_socket->localAddress() == destAddr) );
 
     }
 

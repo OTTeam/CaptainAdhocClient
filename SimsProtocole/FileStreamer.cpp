@@ -16,12 +16,13 @@ FileStreamer::FileStreamer(QObject *parent) :
 FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAddr, quint64 fileSize, FILESTREAMER_TYPE type)
 {
     _fileToStream = new QFile(filePath);
+
     QFileInfo fileInfo(filePath);
     _type = type;
     if (_type == UPLOAD_STREAMER)
     {
         _fileToStream->open(QIODevice::ReadOnly);
-        _fileSize = fileInfo.size();
+        _fileToStream->size();
     }
     else
     {
@@ -40,7 +41,7 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     _fileName = fileInfo.fileName();
     // on génère un hash du nom du fichier afin de pouvoir le reconnaitre simplement par la suite.
     // ici, on ne cherche pas la sécurité, juste un moyen d'indexation, on peut donc utiliser du Md5 peu sécure
-    _id = QCryptographicHash::hash(_fileName.toUtf8(), QCryptographicHash::Md5);
+    _id = _fileName.toAscii();//QCryptographicHash::hash(_fileName.toUtf8(), QCryptographicHash::Md5);
 
 
     _bytesWritten = 0;
@@ -71,10 +72,7 @@ QByteArray FileStreamer::nextPacket()
 
     if (_type == UPLOAD_STREAMER)
     {
-
-
         quint16 typePacket = FILE_DATA;
-
 
         QDataStream out(&paquet, QIODevice::WriteOnly);
 
@@ -159,4 +157,9 @@ QByteArray FileStreamer::id()
 quint64 FileStreamer::fileSize()
 {
     return _fileSize;
+}
+
+QString FileStreamer::fileName()
+{
+    return _fileName;
 }

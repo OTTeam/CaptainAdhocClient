@@ -228,9 +228,6 @@ void Client::receivedFileRequestAck(QDataStream &in)
 
     if (fileStreamerAck != NULL)
         _socketHandler->SendFile(fileStreamerAck);
-
-
-
 }
 
 
@@ -257,6 +254,7 @@ void Client::receivedFileData(QDataStream &in)
 
 void Client::receivedFileList(QDataStream &in)
 {
+
 
 }
 
@@ -291,11 +289,8 @@ void Client::SendMessage()
     _etat = WAITING_ACK;
     _bytesSent=0;
 
-
-
-    QFileInfo fileInfo(filePath);
-    QString SendFilename = fileInfo.fileName();
-    quint64 SendFilesize = fileInfo.size();
+    QString SendFilename = fileStreamer->fileName();
+    quint64 SendFilesize = fileStreamer->fileSize();
     quint64 posData;
     quint16 headerSize;
 

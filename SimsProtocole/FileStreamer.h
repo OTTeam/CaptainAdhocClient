@@ -22,12 +22,13 @@ public:
     void writeNext(QByteArray Packet);
 
     quint64 fileSize();
+    QString fileName();
 
     QByteArray id();
     
 signals:
     void EndOfFile();
-    void progressUpdate(quint64, float);
+    void progressUpdate( quint64 currentSize, float speed );
 
 private slots:
     void timerProgressTimeout();
