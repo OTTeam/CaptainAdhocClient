@@ -154,12 +154,12 @@ QByteArray FileStreamer::id()
 
 
 
-quint64 FileStreamer::fileSize()
+quint64 FileStreamer::fileSize() const
 {
     return _fileSize;
 }
 
-QString FileStreamer::fileName()
+QString FileStreamer::fileName() const
 {
     return _fileName;
 }
