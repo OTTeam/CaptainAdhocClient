@@ -78,9 +78,6 @@ private:
 
     CLIENT_STATE _etat;
 
-    QTimer *_timerDlSpeed;
-    QTimer *_timerUlSpeed;
-
 };
 
 #endif // CLIENT_H

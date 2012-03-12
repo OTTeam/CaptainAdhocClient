@@ -195,7 +195,7 @@ void Client::receivedFileRequestInit(QDataStream &in)
     out << (quint16) 0;                                 // taillePaquet globale que l'on changera après écriture du paquet
     out << _peerAddr.toString();                        //la destination du paquet
     out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
-    out << (quint16) sizeof(type);                      // taille du data, ici c'est juste type, du coup pas de traitement
+    out << (quint16) (sizeof(type) + fileStreamer->id().size()); // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
     out << fileStreamer->id();                           //id du fichier
 
@@ -209,8 +209,6 @@ void Client::receivedFileRequestInit(QDataStream &in)
 
 
     _socketHandler->SendPacket(paquet); // On envoie le paquet
-    if ( !_timerDlSpeed->isActive())
-        _timerDlSpeed->start();
 }
 
 
@@ -229,10 +227,6 @@ void Client::receivedFileRequestAck(QDataStream &in)
 
     if (fileStreamerAck != NULL)
         _socketHandler->SendFile(fileStreamerAck);
-
-    _timerUlSpeed->start();
-
-
 }
 
 
@@ -259,6 +253,7 @@ void Client::receivedFileData(QDataStream &in)
 
 void Client::receivedFileList(QDataStream &in)
 {
+
 
 }
 
@@ -293,11 +288,8 @@ void Client::SendMessage()
     _etat = WAITING_ACK;
     _bytesSent=0;
 
-
-
-    QFileInfo fileInfo(filePath);
-    QString SendFilename = fileInfo.fileName();
-    quint64 SendFilesize = fileInfo.size();
+    QString SendFilename = fileStreamer->fileName();
+    quint64 SendFilesize = fileStreamer->fileSize();
     quint64 posData;
     quint16 headerSize;
 

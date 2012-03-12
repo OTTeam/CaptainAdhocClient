@@ -22,6 +22,7 @@ public:
     void writeNext(QByteArray Packet);
 
     quint64 fileSize();
+    QString fileName();
 
     QByteArray id();
     

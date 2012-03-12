@@ -58,7 +58,7 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
         PendingConnectionStruct *newPendingConnection = new PendingConnectionStruct;
         newPendingConnection->socket = newClientSocket;
         newPendingConnection->routes = routes;
-        _pendingConnections.push_back(PendingConnectionStruct);
+        _pendingConnections.push_back(newPendingConnection);
 
         newClientSocket->connectToHost(broadcasterAddress,PORT_SERVEUR);
     }
