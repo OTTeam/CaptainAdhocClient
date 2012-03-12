@@ -58,10 +58,38 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
         PendingConnectionStruct *newPendingConnection = new PendingConnectionStruct;
         newPendingConnection->socket = newClientSocket;
         newPendingConnection->routes = routes;
-        _pendingConnections.push_back(PendingConnectionStruct);
+        _pendingConnections.push_back(newPendingConnection);
 
         newClientSocket->connectToHost(broadcasterAddress,PORT_SERVEUR);
+
+        return;
     }
+
+    //Récupération des clients connus via cette passerelle
+    QList<Client*> * clientsToDelete = findClientsByNextHop(broadcasterAddress);
+
+    //Comparaison clients connus/ clients broadcastés
+    foreach (RoutesTableElt route,routes)
+    {
+        foreach(Client * client, *clientsToDelete)
+
+        if (route.destAddr==client->peerAddress())
+        {
+            clientsToDelete->removeOne(client);
+            break;
+        }
+    }
+
+    //La liste contient les clients qui n'ont pas été rebroadcastés
+    foreach(Client * client, *clientsToDelete)
+    {
+        _clients.removeOne(client);
+        client->deleteLater();
+    }
+
+    delete clientsToDelete;
+
+    addClients(broadcasterClient,routes);
 
 }
 
@@ -364,4 +392,17 @@ Client *GestionClients::findClientByPeer(QHostAddress destAddress)
             return client;
     }
     return NULL;
+}
+
+
+QList<Client*> * GestionClients::findClientsByNextHop(QHostAddress nextHopAdress)
+{
+    QList<Client*> * lstClients = new QList<Client*>();
+    foreach(Client * client, _clients)
+    {
+        if (client->nextHopAdress() == nextHopAdress)
+            lstClients->push_back(client);
+    }
+
+    return lstClients;
 }

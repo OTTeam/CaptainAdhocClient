@@ -48,6 +48,7 @@ private slots:
     void broadCastTrigger();
 private:
     Client *findClientByPeer(QHostAddress);
+    QList<Client*> * findClientsByNextHop(QHostAddress nextHopAdress);
 
 private:
     QList<Client*> _clients;

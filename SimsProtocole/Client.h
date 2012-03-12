@@ -28,6 +28,7 @@ public:
 
     ~Client();
     QHostAddress peerAddress();
+    QHostAddress nextHopAdress();
     quint8 HopNumber();
     SocketHandler *socketHandler();
 
@@ -77,9 +78,6 @@ private:
     quint64 _previousBytesSent;
 
     CLIENT_STATE _etat;
-
-    QTimer *_timerDlSpeed;
-    QTimer *_timerUlSpeed;
 
 };
 
