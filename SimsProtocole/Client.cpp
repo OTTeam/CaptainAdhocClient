@@ -124,7 +124,6 @@ void Client::PacketReceived(QByteArray packet)
         receivedFileRequestInit(packetdata);
         break;
     case FILE_DATA:
-        qDebug() << "PACKET is FILE_DATA";
         receivedFileData(packetdata);
         break;
     case FILE_REQUEST_ACK:
@@ -136,6 +135,7 @@ void Client::PacketReceived(QByteArray packet)
         receivedFileList(packetdata);
         break;
     default:
+        qDebug() << "Unknown packet type " << type;
         break;
     }
 }
@@ -170,9 +170,11 @@ void Client::receivedFileRequestInit(QByteArray packet)
     QDataStream in(&packet,QIODevice::ReadOnly);
     // ici on a juste envoyé le filename, on le récupère donc
     QString fileRequested;
-    quint16 fileSize;
+    quint64 fileSize;
     in >> fileRequested;
     in >> fileSize;
+
+    qDebug() << "Starting to download file" << fileRequested << "of size" << fileSize;
 
     QString path = QFileDialog::getExistingDirectory(0,"Enregistrer le fichier sous...");
     path += "\\" + fileRequested;
@@ -190,31 +192,33 @@ void Client::receivedFileRequestInit(QByteArray packet)
 
 
     // on envoie alors le Ack pour confirmer au serveur l'envoi du fichier
-    QByteArray paquet;
+    QByteArray paquetToSend;
 
-    QDataStream out(&paquet, QIODevice::WriteOnly);
+    QDataStream out(&paquetToSend, QIODevice::WriteOnly);
 
     // On prépare le paquet à envoyer
     quint16 type = FILE_REQUEST_ACK;
     out << (quint16) 0;                                 // taillePaquet globale que l'on changera après écriture du paquet
     out << _peerAddr.toString();                        //la destination du paquet
     out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
-    out << (quint16) (sizeof(type)+ fileStreamer->id().size()); // taille du data, ici c'est juste type, du coup pas de traitement
+    qint64 headerPos = out.device()->pos();
+    out << (quint16) 0; // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
-    out.writeRawData(fileStreamer->id().data(),fileStreamer->id().size());                           //id du fichier
-
+    out << fileStreamer->id();
     qDebug() << fileStreamer->id();
-    qDebug() << paquet;
+    out.device()->seek(headerPos);
+    out << (quint16) (paquetToSend.size() - headerPos - sizeof(quint16));
+
     // mise à jour de taillePaquet
     out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
+    out << (quint16) (paquetToSend.size() - sizeof(quint16));
 
 
 
-    qDebug() << "SENDING ACK to" << _peerAddr.toString() << "from" <<  _socketHandler->localAddress().toString() << "- packet size :" << (quint16) (paquet.size() - sizeof(quint16));
+    qDebug() << "SENDING ACK to" << _peerAddr.toString() << "from" <<  _socketHandler->localAddress().toString() << "- packet size :" << (quint16) (paquetToSend.size() - sizeof(quint16));
 
 
-    _socketHandler->SendPacket(paquet); // On envoie le paquet
+    _socketHandler->SendPacket(paquetToSend); // On envoie le paquet
 
 }
 
@@ -223,8 +227,11 @@ void Client::receivedFileRequestAck(QByteArray packet)
 {
     QDataStream in(&packet,QIODevice::ReadOnly);
     _etat = SENDING_FILE;
-    QByteArray id;
+    QString id;
     in >> id;
+
+    qDebug() << id;
+
     FileStreamer* fileStreamerAck = NULL;
     //on retrouve le bon fileHandler
     foreach(FileStreamer* filestreamer, _filesUploading)
@@ -240,12 +247,19 @@ void Client::receivedFileRequestAck(QByteArray packet)
 
 void Client::receivedFileData(QByteArray packet)
 {
+
+
     QDataStream in(&packet,QIODevice::ReadOnly);
-    QByteArray fileId;
+    QString fileId;
     QByteArray data;
 
     in >> fileId;
-    in >> data;
+    data.resize(packet.size() - in.device()->pos());
+    in.readRawData(data.data(), data.size());
+
+
+    qDebug() << "PACKET is FILE_DATA - Id :" << fileId << "dataSize :" << data.size();
+
 
     bool fileFound = false;
     foreach (FileStreamer* fileStreamer, _filesDownloading)
@@ -253,6 +267,7 @@ void Client::receivedFileData(QByteArray packet)
         if (fileStreamer->id() == fileId)
         {
             fileStreamer->writeNext(data);
+            qDebug() << "ReceivedFileData  Written"<< fileId;
             fileFound = true;
             break;
         }

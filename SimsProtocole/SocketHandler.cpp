@@ -97,7 +97,6 @@ void SocketHandler::SocketReceivedData()
         destAddr = destAddStr;
         senderAddr = senderAddStr;
 
-        qDebug() << "RECEIVED packet size" << _currentPacketSize << "from" << senderAddStr << "to" << destAddStr;
 
         //        qDebug() << destAddStr;
 
@@ -112,6 +111,8 @@ void SocketHandler::SocketReceivedData()
         QByteArray packet;
         packet.resize(dataSize);
         in.readRawData(packet.data(),dataSize);
+
+        qDebug() << "RECEIVED packet total size" << _currentPacketSize << "data size" << dataSize << "from" << senderAddStr << "to" << destAddStr;
 
 
         _currentPacketSize = 0;
