@@ -41,6 +41,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject * qmlRootObject = viewer.rootObject();
 
     DownloadFolderModel downloadFolder( qmlRootObject );
+    gestionClient.DownloadPathUpdate( downloadFolder.folderPath() );
 
     SharedFoldersListModel sharedFoldersList( rootContext );
     sharedFoldersList.AddFolder( "C:\\" ); // as default. Should be read from saved settings.
@@ -49,8 +50,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //rootContext->setContextProperty( "availableFilesList", &availableFiles );
 
     // CONNECT ALL THE SIGNALS
-    QObject::connect( &gestionClient, SIGNAL( newFileToDownload( FileStreamer const *) ),
-                      &downloads, SLOT(AddDownload( FileStreamer const * ) ) );
+    QObject::connect( &gestionClient, SIGNAL( newFileToDownload( FileStreamer const * ) ),
+                      &downloads, SLOT( AddFile( const FileStreamer*) ) );
+    QObject::connect( &downloadFolder, SIGNAL( DownloadFolderChoosed( QString ) ),
+                      &gestionClient, SLOT( DownloadPathUpdate( QString ) ) );
 
     QObject::connect( qmlRootObject, SIGNAL( pickDownloadFolder() ),
                       &downloadFolder, SLOT( PickDownloadFolder() ) );
