@@ -53,6 +53,11 @@ void SocketHandler::SendFile(FileStreamer *file)
     }
 }
 
+void SocketHandler::stopSending(FileStreamer *file)
+{
+    _filesInLine.removeOne(file);
+}
+
 
 QHostAddress SocketHandler::peerAddress()
 {

@@ -17,6 +17,7 @@ class GestionClients : public QObject
     Q_OBJECT
 public:
     explicit GestionClients(QObject *parent = 0);
+    ~GestionClients();
     void sendToAll();
 
     
