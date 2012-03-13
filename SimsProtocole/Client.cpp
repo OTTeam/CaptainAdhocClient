@@ -368,7 +368,7 @@ void Client::ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress 
     out << destAdd.toString();
     out << senderAdd.toString();
     out << dataSize;
-    out << data;
+    out.writeRawData(data.data(),dataSize);
 
     out.device()->seek(0);
     out << (quint16) (packetToSend.size() - sizeof(quint16));
