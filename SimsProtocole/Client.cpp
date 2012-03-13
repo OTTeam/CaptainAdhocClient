@@ -199,12 +199,18 @@ void Client::receivedFileRequestInit(QByteArray packet)
     out << (quint16) 0;                                 // taillePaquet globale que l'on changera après écriture du paquet
     out << _peerAddr.toString();                        //la destination du paquet
     out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
-    out << (quint16) (sizeof(type)+ fileStreamer->id().size()); // taille du data, ici c'est juste type, du coup pas de traitement
+    quint16 headerSize = packet.size() + sizeof(quint16);
+    qint64 headerPos = out.device()->pos();
+    out << (quint16) 0; // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
     out << fileStreamer->id();
 
     qDebug() << fileStreamer->id();
     qDebug() << paquet;
+
+    out.device()->seek(headerPos);
+    out << (quint16) (paquet.size() - headerSize);
+
     // mise à jour de taillePaquet
     out.device()->seek(0);
     out << (quint16) (paquet.size() - sizeof(quint16));
@@ -225,6 +231,8 @@ void Client::receivedFileRequestAck(QByteArray packet)
     _etat = SENDING_FILE;
     QString id;
     in >> id;
+
+    qDebug() << id;
 
     FileStreamer* fileStreamerAck = NULL;
     //on retrouve le bon fileHandler
