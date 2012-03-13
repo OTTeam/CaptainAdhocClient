@@ -16,6 +16,7 @@ GestionClients::GestionClients(QObject *parent) :
     _timerBroadcast->setSingleShot(false);
     connect(_timerBroadcast,SIGNAL(timeout()),this,SLOT(broadCastTrigger()));
     _timerBroadcast->start();
+    broadCastTrigger();
 
 
     _clients.clear();
