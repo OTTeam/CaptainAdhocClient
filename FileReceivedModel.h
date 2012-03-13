@@ -3,9 +3,9 @@
 
 #include <QObject>
 
-class FileStreamer;
+#include "SimsProtocole/utils.h"
 
-typedef QString HashType;
+class FileStreamer;
 
 class FileReceivedModel : public QObject
 {
@@ -19,6 +19,7 @@ class FileReceivedModel : public QObject
 
 public:
     FileReceivedModel( FileStreamer const * fileStreamer );
+    FileReceivedModel( QString name, quint64 size, HashType hash );
 
     QString name() const { return m_name; }
     QString type() const { return m_type; }
