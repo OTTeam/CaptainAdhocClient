@@ -3,8 +3,8 @@
 
 #include "SimsProtocole/GestionClients.h"
 
-#include "FileReceivedModel.h"
 #include "downloadlistmodel.h"
+#include "availablefileslistmodel.h"
 #include "downloadfoldermodel.h"
 #include "sharedfolderslistmodel.h"
 
@@ -19,6 +19,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // VARIABLES
     DownloadListModel downloads;
+    AvailableFilesListModel availableFiles;
 
 
     // INIT PROTOCOL PART
@@ -35,10 +36,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject * qmlRootObject = viewer.rootObject();
 
     DownloadFolderModel downloadFolder( qmlRootObject );
+
     SharedFoldersListModel sharedFoldersList( rootContext );
     sharedFoldersList.AddFolder( "C:\\" );
 
     rootContext->setContextProperty( "downloadsList", &downloads );
+    //rootContext->setContextProperty( "availableFilesList", &availableFiles );
 
     // CONNECT ALL THE SIGNALS
     QObject::connect( qmlRootObject, SIGNAL( pickDownloadFolder() ),

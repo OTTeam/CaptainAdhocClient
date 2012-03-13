@@ -40,7 +40,8 @@ SOURCES += main.cpp \
     FileReceivedModel.cpp \
     downloadlistmodel.cpp \
     sharedfolderslistmodel.cpp \
-    downloadfoldermodel.cpp
+    downloadfoldermodel.cpp \
+    availablefileslistmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -57,7 +58,8 @@ HEADERS += \
     FileReceivedModel.h \
     downloadlistmodel.h \
     sharedfolderslistmodel.h \
-    downloadfoldermodel.h
+    downloadfoldermodel.h \
+    availablefileslistmodel.h
 
 QT += network
 
