@@ -1,9 +1,9 @@
-#include "downloadlistmodel.h"
+#include "filelistmodel.h"
 
 #include "SimsProtocole/FileStreamer.h"
 #include "FileReceivedModel.h"
 
-DownloadListModel::DownloadListModel( QObject * parent )
+FileListModel::FileListModel( QObject * parent )
     : QAbstractListModel( parent )
 {
     QHash< int, QByteArray > roles;
@@ -17,7 +17,7 @@ DownloadListModel::DownloadListModel( QObject * parent )
     setRoleNames( roles );
 }
 
-void DownloadListModel::AddDownload( FileStreamer const * fileStreamer )
+void FileListModel::AddFile( FileStreamer const * fileStreamer )
 {
     FileReceivedModel * newFile = new FileReceivedModel( fileStreamer );
 
@@ -31,12 +31,28 @@ void DownloadListModel::AddDownload( FileStreamer const * fileStreamer )
     endInsertRows();
 }
 
-int DownloadListModel::rowCount( const QModelIndex & parent ) const
+void FileListModel::RemoveFile( HashType hash )
+{
+    int fileIdx = hashToIndex( hash );
+
+    beginRemoveRows( QModelIndex(), fileIdx, fileIdx );
+    m_files.removeAt( fileIdx );
+    endRemoveRows();
+}
+
+void FileListModel::DownloadFile( HashType hash )
+{
+    emit DownloadRequested();
+
+    RemoveFile( hash );
+}
+
+int FileListModel::rowCount( const QModelIndex & parent ) const
 {
     return m_files.count();
 }
 
-QVariant DownloadListModel::data(const QModelIndex & index, int role) const
+QVariant FileListModel::data(const QModelIndex & index, int role) const
 {
     if ( index.row() < 0 || index.row() > m_files.count() )
         return QVariant();
@@ -69,11 +85,25 @@ QVariant DownloadListModel::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-void DownloadListModel::fileChanged()
+void FileListModel::fileChanged()
 {
     // retrieve signal sender
     // send dataChanged for this file only
 
     // for now : redraw everything (dirty)
     reset();
+}
+
+int FileListModel::hashToIndex( HashType hash )
+{
+    // look the list of files to find the right hash
+    for( int i = 0 ; i < m_files.count() ; i++ )
+    {
+        if( m_files[ i ]->hash() == hash )
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }

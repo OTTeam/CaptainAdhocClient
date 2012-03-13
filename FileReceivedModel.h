@@ -5,6 +5,8 @@
 
 class FileStreamer;
 
+typedef QString HashType;
+
 class FileReceivedModel : public QObject
 {
     Q_OBJECT
@@ -13,6 +15,7 @@ class FileReceivedModel : public QObject
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(int progress READ progress WRITE setProgress NOTIFY progressChanged)
     Q_PROPERTY(float speed READ speed WRITE setSpeed NOTIFY speedChanged)
+    Q_PROPERTY(HashType hash READ hash)
 
 public:
     FileReceivedModel( FileStreamer const * fileStreamer );
@@ -22,6 +25,7 @@ public:
     quint64 size() const { return m_size; }
     int progress() const { return m_progress; }
     float speed() const { return m_speed; }
+    HashType hash() const { return m_hash; }
 
 public slots:
     void setName( QString const & name )
@@ -57,6 +61,7 @@ private:
     quint64 m_size;
     int m_progress;
     float m_speed;
+    HashType m_hash;
 
 };
 
