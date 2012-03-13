@@ -21,7 +21,7 @@ Item {
         ListView {
             id: theList
             anchors.fill: parent
-            model: mainUI.downloadsList
+            model: downloadsList
             delegate: listDelegate
             focus: true
             clip: true

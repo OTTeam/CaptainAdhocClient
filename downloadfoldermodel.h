@@ -21,6 +21,8 @@ signals:
 
 private:
 
+    // TODO rajouter un champ pour mettre un truc par defaut
+
     QObject * ui;
 };
 

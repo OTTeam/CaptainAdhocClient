@@ -32,16 +32,10 @@ Item {
                    }
             }
 
-
-//            MouseArea{
-//                anchors.fill: parent
-//                //onClicked: dirDelegate.state = "selected"
-//            }
-
             Text {
                 id: folder
-                text: folderPath
-                textFormat: Qt.RichText
+                text: model.modelData
+                elide: Text.ElideMiddle
                 color: "#cccccc";
                 style: Text.Raised;
 
@@ -50,8 +44,6 @@ Item {
                     left: parent.left
                     right: delButton.left
                 }
-
-                elide: Text.ElideRight
 
                 font{
                     pointSize: 12
@@ -69,40 +61,20 @@ Item {
 
                 x: parent.width - imgHeight - 3.5
                 y: 2.5
+
+                onClicked: { mainUI.delSharedDir( index ) }
             }
         }
     }
-
-//    Component{
-//        id: dirHighlight
-
-//        Rectangle {
-//            color: "lightsteelblue"
-
-//            border{
-//                color: "steelblue"
-//                width: 1
-//            }
-
-//            radius: 3
-
-//            y: theDirView.currentItem.y
-
-//            Behavior on y {
-//                SmoothedAnimation { velocity: 200 }
-//            }
-//        }
-//    }
 
     ListView{
         id: theDirView
 
         anchors.fill: parent
 
-        //highlight: dirHighlight
         delegate: dirDelegate
 
-        model: DirModel{}
+        model: sharedFoldersListModel
 
         footer: Item {
             id: listFooter
@@ -123,6 +95,8 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                     bottom: parent.bottom
                 }
+
+                onClicked: { mainUI.pickSharedDir() }
             }
 
         }
