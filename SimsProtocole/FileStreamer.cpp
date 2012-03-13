@@ -146,7 +146,7 @@ void FileStreamer::timerProgressTimeout()
 }
 
 
-QByteArray FileStreamer::id()
+QString FileStreamer::id()
 {
     return _id;
 }

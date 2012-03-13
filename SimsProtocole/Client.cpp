@@ -201,7 +201,7 @@ void Client::receivedFileRequestInit(QByteArray packet)
     out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
     out << (quint16) (sizeof(type)+ fileStreamer->id().size()); // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
-    out.writeRawData(fileStreamer->id().data(),fileStreamer->id().size());                           //id du fichier
+    out << fileStreamer->id();
 
     qDebug() << fileStreamer->id();
     qDebug() << paquet;
@@ -223,8 +223,9 @@ void Client::receivedFileRequestAck(QByteArray packet)
 {
     QDataStream in(&packet,QIODevice::ReadOnly);
     _etat = SENDING_FILE;
-    QByteArray id;
+    QString id;
     in >> id;
+
     FileStreamer* fileStreamerAck = NULL;
     //on retrouve le bon fileHandler
     foreach(FileStreamer* filestreamer, _filesUploading)
@@ -241,7 +242,7 @@ void Client::receivedFileRequestAck(QByteArray packet)
 void Client::receivedFileData(QByteArray packet)
 {
     QDataStream in(&packet,QIODevice::ReadOnly);
-    QByteArray fileId;
+    QString fileId;
     QByteArray data;
 
     in >> fileId;

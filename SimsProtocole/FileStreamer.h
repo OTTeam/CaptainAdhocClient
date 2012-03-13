@@ -24,7 +24,7 @@ public:
     quint64 fileSize() const;
     QString fileName() const;
 
-    QByteArray id();
+    QString id();
     
 signals:
     void EndOfFile();
@@ -34,7 +34,7 @@ private slots:
     void timerProgressTimeout();
 
 private:
-    QByteArray _id;
+    QString _id;
     QFile*  _fileToStream;
     QString _fileName;
     quint64 _fileSize;
