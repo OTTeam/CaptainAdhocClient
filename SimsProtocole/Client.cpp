@@ -203,10 +203,7 @@ void Client::receivedFileRequestInit(QByteArray packet)
     out << (quint16) 0; // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
     out << fileStreamer->id();
-
     qDebug() << fileStreamer->id();
-    qDebug() << paquetToSend;
-
     out.device()->seek(headerPos);
     out << (quint16) (paquetToSend.size() - headerPos);
 
@@ -256,7 +253,7 @@ void Client::receivedFileData(QByteArray packet)
 
     in >> fileId;
     data.resize(packet.size() - in.device()->pos());
-    in >> data;
+    in.readRawData(data.data(), data.size());
 
 
     qDebug() << "PACKET is FILE_DATA - Id :" << fileId;
