@@ -13,6 +13,8 @@ SocketHandler::SocketHandler(QTcpSocket *socket)
 
     _packetsInLine.clear();
 
+    _lastFS = NULL;
+
 
     connect(_socket, SIGNAL(readyRead()), this, SLOT(SocketReceivedData()));
     connect(_socket, SIGNAL(bytesWritten(qint64)), this, SLOT(SocketBytesWritten(qint64)));
@@ -137,10 +139,22 @@ void SocketHandler::SocketBytesWritten(qint64 bytesWritten)
 
         if ( !_filesInLine.isEmpty() )
         {
-            FileStreamer *fileStreamer = (FileStreamer*) _filesInLine.first();
+            FileStreamer *fileStreamer = NULL;
+            if (_lastFS ==NULL || _lastFS == _filesInLine.last() || !_filesInLine.contains(_lastFS))
+            {
+                fileStreamer = (FileStreamer*) _filesInLine.first();
+            }
+            else
+            {
+                fileStreamer = (FileStreamer*) _filesInLine.at(_filesInLine.indexOf(_lastFS)+1);
+            }
+
             QByteArray packet = fileStreamer->nextPacket();
+
             if (! packet.isEmpty())
                 _socket->write(packet);
+
+            _lastFS = fileStreamer;
         }
 
     }

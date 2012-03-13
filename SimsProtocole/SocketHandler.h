@@ -32,8 +32,10 @@ private slots:
 private:
     QTcpSocket* _socket;
     QList<QByteArray> _packetsInLine;
-    QList<FileStreamer *> _filesInLine;
+    QList<FileStreamer*> _filesInLine;
     quint16 _currentPacketSize;
+
+    FileStreamer * _lastFS;
     
 };
 
