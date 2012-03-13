@@ -256,7 +256,9 @@ void Client::receivedFileData(QByteArray packet)
     QByteArray data;
 
     in >> fileId;
+    data.resize(packet.size() - in.device()->pos());
     in >> data;
+
 
     qDebug() << "PACKET is FILE_DATA - Id :" << fileId;
 
@@ -267,6 +269,7 @@ void Client::receivedFileData(QByteArray packet)
         if (fileStreamer->id() == fileId)
         {
             fileStreamer->writeNext(data);
+            qDebug() << "ReceivedFileData  Written"<< fileId;
             fileFound = true;
             break;
         }
