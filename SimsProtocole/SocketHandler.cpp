@@ -23,11 +23,7 @@ SocketHandler::SocketHandler(QTcpSocket *socket)
 
 SocketHandler::~SocketHandler()
 {
-    while(!_filesInLine.isEmpty())
-    {
-        FileStreamer* fs = _filesInLine.takeFirst();
-        delete fs;
-    }
+    _socket->deleteLater();
 
 }
 

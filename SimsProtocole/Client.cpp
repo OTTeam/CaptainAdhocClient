@@ -74,6 +74,9 @@ void Client::configClient()
 
 Client::~Client()
 {
+    // on détruit le socket seulement si on est le next hop (pas si c'est une passerelle)
+    if (_peerAddr == _nextHop)
+        delete _socketHandler;
 
     while (!_filesUploading.isEmpty())
     {
@@ -88,9 +91,7 @@ Client::~Client()
 
     qDebug() << "Deleted client - Dest :" << _peerAddr.toString() << "- nextHop :" << _nextHop.toString();
 
-    // on détruit le socket seulement si on est le next hop (pas si c'est une passerelle)
-    if (_peerAddr == _nextHop)
-        delete _socketHandler;
+
 }
 
 /*

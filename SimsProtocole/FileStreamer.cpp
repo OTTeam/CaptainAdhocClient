@@ -35,9 +35,6 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     _destAddr = destAddr;
     _senderAddr = senderAddr;
 
-    if (_fileToStream->atEnd())
-        emit EndOfFile();
-
     _fileName = fileInfo.fileName();
     // on génère un hash du nom du fichier afin de pouvoir le reconnaitre simplement par la suite.
     // ici, on ne cherche pas la sécurité, juste un moyen d'indexation, on peut donc utiliser du Md5 peu sécure
@@ -60,6 +57,10 @@ FileStreamer::~FileStreamer()
     if (_fileToStream!= NULL && _fileToStream->isOpen())
     {
         _fileToStream->close();
+        if (_type==DOWNLOAD_STREAMER && _bytesWritten< _fileSize)
+        {
+            _fileToStream->remove();
+        }
         delete _fileToStream;
         _fileToStream = NULL;
     }

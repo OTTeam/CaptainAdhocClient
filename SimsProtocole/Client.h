@@ -50,8 +50,8 @@ signals:
 
     void Disconnected();
 
-     void newFileToDownload(FileStreamer*);
-     void newFileToUpload(FileStreamer*);
+     void newFileToDownload(const FileStreamer*);
+     void newFileToUpload(const FileStreamer*);
 
 public slots:
     void PacketReceived(QByteArray packet);

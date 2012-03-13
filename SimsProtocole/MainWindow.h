@@ -30,7 +30,7 @@ private slots:
 
     void UpdateDlSpeed(Client *, int);
 
-    void newFileToDownLoad(FileStreamer*);
+    void newFileToDownLoad(FileStreamer const *);
 private:
     QLineEdit *_address;
     QPushButton *_btconnect;
