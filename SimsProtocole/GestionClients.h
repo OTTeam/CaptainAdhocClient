@@ -29,7 +29,7 @@ signals:
 
     void ClientNumberChanged(int);
 
-    void newFileToDownload(FileStreamer*);
+    void newFileToDownload(FileStreamer const * fs);
 
 public slots:
     void DownloadPathUpdate(QString);
