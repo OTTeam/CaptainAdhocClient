@@ -35,9 +35,6 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     _destAddr = destAddr;
     _senderAddr = senderAddr;
 
-    if (_fileToStream->atEnd())
-        emit EndOfFile();
-
     _fileName = fileInfo.fileName();
     // on génère un hash du nom du fichier afin de pouvoir le reconnaitre simplement par la suite.
     // ici, on ne cherche pas la sécurité, juste un moyen d'indexation, on peut donc utiliser du Md5 peu sécure
@@ -50,6 +47,7 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     _progressTimer = new QTimer(this);
     _progressTimer->setInterval(500);
     _progressTimer->start();
+    connect(_progressTimer,SIGNAL(timeout()),this,SLOT(timerProgressTimeout()));
 
 }
 
@@ -59,6 +57,10 @@ FileStreamer::~FileStreamer()
     if (_fileToStream!= NULL && _fileToStream->isOpen())
     {
         _fileToStream->close();
+        if (_type==DOWNLOAD_STREAMER && _bytesWritten< _fileSize)
+        {
+            _fileToStream->remove();
+        }
         delete _fileToStream;
         _fileToStream = NULL;
     }
@@ -142,11 +144,13 @@ void FileStreamer::writeNext(QByteArray Packet)
 
 void FileStreamer::timerProgressTimeout()
 {
-    quint64 bytesDiff = (100* _bytesWritten)/_fileSize;
+    quint64 percCompletion = (100* _bytesWritten)/_fileSize;
 
-    float newSpeed = bytesDiff*_progressTimer->interval()*0.001;
+    quint64 bytesDiff = _bytesWritten - _PreviousBytesWritten;
 
-    emit progressUpdate(bytesDiff, newSpeed);
+    float newSpeed = (bytesDiff*1000.0)/_progressTimer->interval();
+
+    emit progressUpdate(percCompletion, newSpeed);
 
     _PreviousBytesWritten = _bytesWritten;
 }

@@ -78,6 +78,7 @@ Client::~Client()
     while (!_filesUploading.isEmpty())
     {
         FileStreamer* fs = _filesUploading.takeFirst();
+        _socketHandler->stopSending(fs);
         delete fs;
     }
     while (!_filesDownloading.isEmpty())
@@ -86,11 +87,15 @@ Client::~Client()
         delete fs;
     }
 
-    qDebug() << "Deleted client - Dest :" << _peerAddr.toString() << "- nextHop :" << _nextHop.toString();
-
     // on détruit le socket seulement si on est le next hop (pas si c'est une passerelle)
     if (_peerAddr == _nextHop)
         delete _socketHandler;
+
+
+
+    qDebug() << "Deleted client - Dest :" << _peerAddr.toString() << "- nextHop :" << _nextHop.toString();
+
+
 }
 
 /*
@@ -240,6 +245,8 @@ void Client::receivedFileRequestAck(QByteArray packet)
                 fileStreamerAck = filestreamer;
     }
 
+    emit newFileToUpload(fileStreamerAck);
+
     if (fileStreamerAck != NULL)
         _socketHandler->SendFile(fileStreamerAck);
 }
@@ -299,8 +306,8 @@ void Client::SendMessage()
     QString filePath = QFileDialog::getOpenFileName(0,"Sélectionnez le fichier à envoyer");
 
     // création du filestreamer pour l'envoi du fichier (celui ci sera supprimé si le ack n'arrive pas)
-    FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);
-    connect(fileStreamer, SIGNAL(EndOfFile()), this, SLOT(fileDownloadingComplete()));
+    FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);    
+    connect(fileStreamer, SIGNAL(EndOfFile()), this, SLOT(fileUploadingComplete()));
     _filesUploading.push_back(fileStreamer);
 
 

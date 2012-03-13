@@ -17,6 +17,8 @@ public:
     ~SocketHandler();
     void SendPacket(QByteArray packet);
     void SendFile(FileStreamer *file);
+    void stopSending(FileStreamer *file);
+
     QHostAddress peerAddress();
     QHostAddress localAddress();
 signals:
@@ -32,8 +34,10 @@ private slots:
 private:
     QTcpSocket* _socket;
     QList<QByteArray> _packetsInLine;
-    QList<FileStreamer *> _filesInLine;
+    QList<FileStreamer*> _filesInLine;
     quint16 _currentPacketSize;
+
+    FileStreamer * _lastFS;
     
 };
 

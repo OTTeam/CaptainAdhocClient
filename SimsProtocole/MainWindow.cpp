@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //connect(this, SIGNAL(InitiateConnection(QHostAddress)), _gestionnaire, SLOT(newConnectionRequest(QHostAddress)));
     connect(_gestionnaire, SIGNAL(ClientNumberChanged(int)), this, SLOT(UpdateClientsNumber(int)));
-    connect(_gestionnaire, SIGNAL(newFileToDownload(FileStreamer*)), this, SLOT(newFileToDownLoad(FileStreamer*)));
+    connect(_gestionnaire, SIGNAL(newFileToDownload(FileStreamer const *)), this, SLOT(newFileToDownLoad(FileStreamer const *)));
 //    connect(_gestionnaire, SIGNAL(ClientDownloadUpdate(Client *, int)) , this, SLOT(UpdateClientProgress(Client *, int)));
 //    connect(_gestionnaire, SIGNAL(ClientUploadUpdate(Client *, int)) , this, SLOT(UpdateClientProgress(Client *, int)));
 
@@ -120,7 +120,7 @@ void MainWindow::UpdateDlSpeed(Client *client, int bytesPerSec)
 }
 
 
-void MainWindow::newFileToDownLoad(FileStreamer*filestreamer)
+void MainWindow::newFileToDownLoad(const FileStreamer *filestreamer)
 {
     connect(filestreamer, SIGNAL(progressUpdate(quint64,float)), this, SLOT(progressBarUpdate(quint64,float)));
 }

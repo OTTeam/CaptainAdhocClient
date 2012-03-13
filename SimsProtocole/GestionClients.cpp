@@ -16,10 +16,23 @@ GestionClients::GestionClients(QObject *parent) :
     _timerBroadcast->setSingleShot(false);
     connect(_timerBroadcast,SIGNAL(timeout()),this,SLOT(broadCastTrigger()));
     _timerBroadcast->start();
+    broadCastTrigger();
 
 
     _clients.clear();
 }
+
+
+
+GestionClients::~GestionClients()
+{
+    qDebug() << "Delete GestionClients";
+    foreach(Client *client, _clients)
+    {
+        delete client;
+    }
+}
+
 
 void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<RoutesTableElt> routes)
 {
@@ -210,7 +223,8 @@ void GestionClients::clientConnected()
 void GestionClients::NewClientConfig(Client *client)
 {
     connect(client,     SIGNAL(Disconnected()),           this, SLOT(clientDisconnect()));
-    connect(client,     SIGNAL(newFileToDownload(FileStreamer*)),           this, SIGNAL(newFileToDownload(FileStreamer*)));
+    connect(client,     SIGNAL(newFileToDownload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));
+    connect(client,     SIGNAL(newFileToUpload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));
     _clients.push_back(client);
 
 

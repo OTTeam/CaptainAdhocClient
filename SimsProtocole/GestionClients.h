@@ -17,6 +17,7 @@ class GestionClients : public QObject
     Q_OBJECT
 public:
     explicit GestionClients(QObject *parent = 0);
+    ~GestionClients();
     void sendToAll();
 
     
@@ -29,7 +30,11 @@ signals:
 
     void ClientNumberChanged(int);
 
+
+
+    void newFileToUpload(FileStreamer const * fs);
     void newFileToDownload(FileStreamer const * fs);
+
 
 public slots:
     void DownloadPathUpdate(QString);
