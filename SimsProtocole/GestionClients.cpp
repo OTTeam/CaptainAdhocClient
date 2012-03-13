@@ -22,6 +22,18 @@ GestionClients::GestionClients(QObject *parent) :
     _clients.clear();
 }
 
+
+
+GestionClients::~GestionClients()
+{
+    qDebug() << "Delete GestionClients";
+    foreach(Client *client, _clients)
+    {
+        delete client;
+    }
+}
+
+
 void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<RoutesTableElt> routes)
 {
     qDebug() << "BroadCasted by" << broadcasterAddress.toString() << "(" << routes.size() << "hosts)";

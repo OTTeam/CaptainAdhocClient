@@ -17,6 +17,8 @@ public:
     ~SocketHandler();
     void SendPacket(QByteArray packet);
     void SendFile(FileStreamer *file);
+    void stopSending(FileStreamer *file);
+
     QHostAddress peerAddress();
     QHostAddress localAddress();
 signals:

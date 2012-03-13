@@ -74,13 +74,11 @@ void Client::configClient()
 
 Client::~Client()
 {
-    // on détruit le socket seulement si on est le next hop (pas si c'est une passerelle)
-    if (_peerAddr == _nextHop)
-        delete _socketHandler;
 
     while (!_filesUploading.isEmpty())
     {
         FileStreamer* fs = _filesUploading.takeFirst();
+        _socketHandler->stopSending(fs);
         delete fs;
     }
     while (!_filesDownloading.isEmpty())
@@ -88,6 +86,12 @@ Client::~Client()
         FileStreamer* fs = _filesDownloading.takeFirst();
         delete fs;
     }
+
+    // on détruit le socket seulement si on est le next hop (pas si c'est une passerelle)
+    if (_peerAddr == _nextHop)
+        delete _socketHandler;
+
+
 
     qDebug() << "Deleted client - Dest :" << _peerAddr.toString() << "- nextHop :" << _nextHop.toString();
 
