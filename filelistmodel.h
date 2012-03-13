@@ -3,6 +3,7 @@
 
 #include <QAbstractListModel>
 
+#include "SimsProtocole/utils.h"
 #include "FileReceivedModel.h"
 
 class FileStreamer;
