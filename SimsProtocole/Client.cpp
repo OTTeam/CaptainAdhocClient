@@ -190,37 +190,36 @@ void Client::receivedFileRequestInit(QByteArray packet)
 
 
     // on envoie alors le Ack pour confirmer au serveur l'envoi du fichier
-    QByteArray paquet;
+    QByteArray paquetToSend;
 
-    QDataStream out(&paquet, QIODevice::WriteOnly);
+    QDataStream out(&paquetToSend, QIODevice::WriteOnly);
 
     // On prépare le paquet à envoyer
     quint16 type = FILE_REQUEST_ACK;
     out << (quint16) 0;                                 // taillePaquet globale que l'on changera après écriture du paquet
     out << _peerAddr.toString();                        //la destination du paquet
     out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
-    quint16 headerSize = packet.size() + sizeof(quint16);
     qint64 headerPos = out.device()->pos();
     out << (quint16) 0; // taille du data, ici c'est juste type, du coup pas de traitement
     out << type;                                        // typePaquet
     out << fileStreamer->id();
 
     qDebug() << fileStreamer->id();
-    qDebug() << paquet;
+    qDebug() << paquetToSend;
 
     out.device()->seek(headerPos);
-    out << (quint16) (paquet.size() - headerSize);
+    out << (quint16) (paquetToSend.size() - headerPos);
 
     // mise à jour de taillePaquet
     out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
+    out << (quint16) (paquetToSend.size() - sizeof(quint16));
 
 
 
-    qDebug() << "SENDING ACK to" << _peerAddr.toString() << "from" <<  _socketHandler->localAddress().toString() << "- packet size :" << (quint16) (paquet.size() - sizeof(quint16));
+    qDebug() << "SENDING ACK to" << _peerAddr.toString() << "from" <<  _socketHandler->localAddress().toString() << "- packet size :" << (quint16) (paquetToSend.size() - sizeof(quint16));
 
 
-    _socketHandler->SendPacket(paquet); // On envoie le paquet
+    _socketHandler->SendPacket(paquetToSend); // On envoie le paquet
 
 }
 
