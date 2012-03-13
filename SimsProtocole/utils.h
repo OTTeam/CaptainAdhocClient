@@ -35,6 +35,7 @@ struct RemoteFiles
 struct RoutesTableElt
 {
     QHostAddress destAddr;
+    QHostAddress nextHopAddr;
     quint8 hopNumber;
 };
 
