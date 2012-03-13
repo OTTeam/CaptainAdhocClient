@@ -170,7 +170,7 @@ void Client::receivedFileRequestInit(QByteArray packet)
     QDataStream in(&packet,QIODevice::ReadOnly);
     // ici on a juste envoyé le filename, on le récupère donc
     QString fileRequested;
-    quint16 fileSize;
+    quint64 fileSize;
     in >> fileRequested;
     in >> fileSize;
 
