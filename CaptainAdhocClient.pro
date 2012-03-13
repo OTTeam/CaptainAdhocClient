@@ -45,10 +45,10 @@ SOURCES += main.cpp \
     FileIndexing/FolderDao.cpp \
     FileIndexing/FolderModel.cpp \
     FileReceivedModel.cpp \
-    downloadlistmodel.cpp \
     sharedfolderslistmodel.cpp \
     downloadfoldermodel.cpp \
-    availablefileslistmodel.cpp
+    filelistmodel.cpp
+    #availablefileslistmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -69,10 +69,10 @@ HEADERS += SimsProtocole/ServeurTCP.h \
     FileIndexing/FolderDao.h \
     FileIndexing/FolderModel.h \
     FileReceivedModel.h \
-    downloadlistmodel.h \
     sharedfolderslistmodel.h \
     downloadfoldermodel.h \
-    availablefileslistmodel.h
+    filelistmodel.h
+    #availablefileslistmodel.h
 
 QT += network sql
 
