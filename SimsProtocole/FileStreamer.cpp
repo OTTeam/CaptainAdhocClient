@@ -22,7 +22,7 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     if (_type == UPLOAD_STREAMER)
     {
         _fileToStream->open(QIODevice::ReadOnly);
-        _fileToStream->size();
+        _fileSize = _fileToStream->size();
     }
     else
     {
