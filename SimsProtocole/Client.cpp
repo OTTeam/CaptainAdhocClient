@@ -124,7 +124,6 @@ void Client::PacketReceived(QByteArray packet)
         receivedFileRequestInit(packetdata);
         break;
     case FILE_DATA:
-        qDebug() << "PACKET is FILE_DATA";
         receivedFileData(packetdata);
         break;
     case FILE_REQUEST_ACK:
@@ -136,6 +135,7 @@ void Client::PacketReceived(QByteArray packet)
         receivedFileList(packetdata);
         break;
     default:
+        qDebug() << "Unknown packet type " << type;
         break;
     }
 }
@@ -249,6 +249,8 @@ void Client::receivedFileRequestAck(QByteArray packet)
 
 void Client::receivedFileData(QByteArray packet)
 {
+
+
     QDataStream in(&packet,QIODevice::ReadOnly);
     QString fileId;
     QByteArray data;
@@ -257,7 +259,10 @@ void Client::receivedFileData(QByteArray packet)
     data.resize(packet.size() - in.device()->pos());
     in.readRawData(data.data(), data.size());
 
-    qDebug() << "ReceivedFileData  id="<< fileId;
+
+    qDebug() << "PACKET is FILE_DATA - Id :" << fileId;
+
+
     bool fileFound = false;
     foreach (FileStreamer* fileStreamer, _filesDownloading)
     {
