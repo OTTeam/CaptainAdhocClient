@@ -174,6 +174,8 @@ void Client::receivedFileRequestInit(QByteArray packet)
     in >> fileRequested;
     in >> fileSize;
 
+    qDebug() << "Starting to download file" << fileRequested << "of size" << fileSize;
+
     QString path = QFileDialog::getExistingDirectory(0,"Enregistrer le fichier sous...");
     path += "\\" + fileRequested;
 
@@ -256,7 +258,7 @@ void Client::receivedFileData(QByteArray packet)
     in.readRawData(data.data(), data.size());
 
 
-    qDebug() << "PACKET is FILE_DATA - Id :" << fileId;
+    qDebug() << "PACKET is FILE_DATA - Id :" << fileId << "dataSize :" << data.size();
 
 
     bool fileFound = false;
