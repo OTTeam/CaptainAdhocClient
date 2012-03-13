@@ -240,6 +240,8 @@ void Client::receivedFileRequestAck(QByteArray packet)
                 fileStreamerAck = filestreamer;
     }
 
+    emit newFileToUpload(fileStreamerAck);
+
     if (fileStreamerAck != NULL)
         _socketHandler->SendFile(fileStreamerAck);
 }
@@ -299,8 +301,8 @@ void Client::SendMessage()
     QString filePath = QFileDialog::getOpenFileName(0,"Sélectionnez le fichier à envoyer");
 
     // création du filestreamer pour l'envoi du fichier (celui ci sera supprimé si le ack n'arrive pas)
-    FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);
-    connect(fileStreamer, SIGNAL(EndOfFile()), this, SLOT(fileDownloadingComplete()));
+    FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);    
+    connect(fileStreamer, SIGNAL(EndOfFile()), this, SLOT(fileUploadingComplete()));
     _filesUploading.push_back(fileStreamer);
 
 

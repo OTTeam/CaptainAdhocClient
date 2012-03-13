@@ -47,6 +47,7 @@ void SocketHandler::SendPacket(QByteArray packet)
 void SocketHandler::SendFile(FileStreamer *file)
 {
     _filesInLine.push_back(file);
+    connect(file,SIGNAL(EndOfFile()),this,SLOT(fileSendingComplete()));
     // on force le prochain envoi
     if (_socket->bytesToWrite() == 0)
     {
@@ -154,4 +155,5 @@ void SocketHandler::fileSendingComplete()
     FileStreamer* filestreamer = (FileStreamer*) sender();
 
     _filesInLine.removeOne(filestreamer);
+    SocketBytesWritten(0);
 }

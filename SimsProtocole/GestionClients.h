@@ -30,6 +30,7 @@ signals:
     void ClientNumberChanged(int);
 
     void newFileToDownload(FileStreamer*);
+    void newFileToUpload(FileStreamer*);
 
 public slots:
     void DownloadPathUpdate(QString);
