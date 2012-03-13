@@ -85,7 +85,8 @@ QByteArray FileStreamer::nextPacket()
             out << (quint16) 0;
             out << _destAddr;
             out << _senderAddr;
-            out << (quint16) (sizeof(typePacket) + _id.size() + data.size());
+            qint64 headerPos = out.device()->pos();
+            out << (quint16) 0;
             out << typePacket;
             out << _id;
             out << data;
@@ -93,7 +94,12 @@ QByteArray FileStreamer::nextPacket()
             out.device()->seek(0);
             out << (quint16) (paquet.size() - sizeof(quint16));
 
-            qDebug() << "SENDING to" << _destAddr << "- packet size :" << (quint16) (paquet.size() - sizeof(quint16));
+            out.device()->seek(headerPos);
+            out << (quint16) (paquet.size() - headerPos - sizeof(quint16));
+
+
+            qDebug() << "SENDING to" << _destAddr << "- total size :" << (quint16) (paquet.size() - sizeof(quint16))
+                     << "data size" << sizeof(typePacket) + _id.size() + data.size();
 
         } else
         {

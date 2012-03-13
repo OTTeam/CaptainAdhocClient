@@ -205,7 +205,7 @@ void Client::receivedFileRequestInit(QByteArray packet)
     out << fileStreamer->id();
     qDebug() << fileStreamer->id();
     out.device()->seek(headerPos);
-    out << (quint16) (paquetToSend.size() - headerPos);
+    out << (quint16) (paquetToSend.size() - headerPos - sizeof(quint16));
 
     // mise à jour de taillePaquet
     out.device()->seek(0);
