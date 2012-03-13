@@ -254,14 +254,17 @@ void Client::receivedFileData(QByteArray packet)
     QByteArray data;
 
     in >> fileId;
+    data.resize(packet.size() - in.device()->pos());
     in >> data;
 
+    qDebug() << "ReceivedFileData  id="<< fileId;
     bool fileFound = false;
     foreach (FileStreamer* fileStreamer, _filesDownloading)
     {
         if (fileStreamer->id() == fileId)
         {
             fileStreamer->writeNext(data);
+            qDebug() << "ReceivedFileData  Written"<< fileId;
             fileFound = true;
             break;
         }
