@@ -10,6 +10,7 @@ FileReceivedModel::FileReceivedModel( FileStreamer const * fileStreamer )
 
     // extracting name and type
     m_name = fileStreamer->fileName();
+
     m_type = m_name.split( '.' )[ 1 ];
 
     m_progress = 0;

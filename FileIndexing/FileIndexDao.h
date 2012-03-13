@@ -10,10 +10,13 @@ class FileIndexDao
 {
 public:
 
+    FileIndexDao();
     FileIndexDao(QSqlDatabase database);
 
     bool insertFile(FileModel& model);
     bool getFile(int id, FileModel& model);
+
+    qint32 deleteWholeFolder(const QString& baseDirPath);
 
     QList<FileModel> getAllFiles();
 

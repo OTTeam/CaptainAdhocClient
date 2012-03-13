@@ -12,7 +12,9 @@ void DownloadFolderModel::PickDownloadFolder()
 {
     QString newFolder = QFileDialog::getExistingDirectory( 0, "Choose the downloads folder" );
 
-    emit DownloadFolderChoosed( newFolder );
+    if (newFolder != "") {
+        emit DownloadFolderChoosed( newFolder );
 
-    ui->setProperty( "downloadFolder", QVariant( newFolder ) );
+        ui->setProperty( "downloadFolder", QVariant( newFolder ) );
+    }
 }

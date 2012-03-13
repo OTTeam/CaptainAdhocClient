@@ -8,6 +8,8 @@
 #include "downloadfoldermodel.h"
 #include "sharedfolderslistmodel.h"
 
+#include "FileIndexing/FileIndexer.h"
+
 #include <QObject>
 #include <QDeclarativeContext>
 #include <QGraphicsObject>
@@ -26,6 +28,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     GestionClients gestionClient(0);
 
 
+    // INIT INDEXING
+    FileIndexer fileIndexer;
+
     // INIT QML PART
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
@@ -38,7 +43,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     DownloadFolderModel downloadFolder( qmlRootObject );
 
     SharedFoldersListModel sharedFoldersList( rootContext );
-    sharedFoldersList.AddFolder( "C:\\" );
+    sharedFoldersList.AddFolder( "C:\\" ); // as default. Should be read from saved settings.
 
     rootContext->setContextProperty( "downloadsList", &downloads );
     //rootContext->setContextProperty( "availableFilesList", &availableFiles );
@@ -50,6 +55,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                       &sharedFoldersList, SLOT( AddFolder() ) );
     QObject::connect( qmlRootObject, SIGNAL( delSharedDir( int ) ),
                       &sharedFoldersList, SLOT( RemoveFolder( int ) ) );
+
+    QObject::connect(&sharedFoldersList, SIGNAL(folderAdded(QString)), &fileIndexer, SLOT(addDirectory(QString)));
+    QObject::connect(&sharedFoldersList, SIGNAL(folderRemoved(QString)), &fileIndexer, SLOT(removeDirectory(QString)));
 
     return app->exec();
 }

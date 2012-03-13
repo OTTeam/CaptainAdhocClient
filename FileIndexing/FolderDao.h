@@ -7,6 +7,7 @@
 class FolderDao
 {
 public:
+    FolderDao();
     FolderDao(QSqlDatabase database);
 
     bool insertFolder(FolderModel& folder);

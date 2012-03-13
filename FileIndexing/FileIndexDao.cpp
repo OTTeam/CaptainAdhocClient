@@ -5,6 +5,10 @@
 
 static const char * COLUMN_LIST = "name, type, base_dir, dir_path, path, index_time, size, hash";
 
+FileIndexDao::FileIndexDao()
+{
+}
+
 FileIndexDao::FileIndexDao(QSqlDatabase database) : _database(database)
 {
 }
@@ -103,6 +107,17 @@ bool FileIndexDao::getFile(int id, FileModel& model)
     model.setSize(query.value(7).toInt(NULL));
     model.setHash(query.value(8).toString());
     return true;
+}
+
+qint32 FileIndexDao::deleteWholeFolder(const QString &baseDirPath)
+{
+    QSqlQuery query(_database);
+    query.prepare("DELETE FROM FILES WHERE base_dir = :baseDir");
+    query.bindValue(":baseDir", baseDirPath);
+    if (query.exec()) {
+        return query.numRowsAffected();
+    }
+    return -1;
 }
 
 bool FileIndexDao::createTable(QSqlDatabase database, bool dropIfExists)

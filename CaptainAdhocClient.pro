@@ -34,9 +34,16 @@ SOURCES += main.cpp \
     SimsProtocole/ServeurTCP.cpp \
     SimsProtocole/SocketHandler.cpp \
     SimsProtocole/GestionClients.cpp \
-    SimsProtocole/FileStreamer.cpp \
     SimsProtocole/ClientDiscovery.cpp \
+    SimsProtocole/FileStreamer.cpp \
     SimsProtocole/Client.cpp \
+    FileIndexing/FileIndexDao.cpp \
+    FileIndexing/FileModel.cpp \
+    FileIndexing/FileIndexer.cpp \
+    FileIndexing/FileUtils.cpp \
+    FileIndexing/SimpleFileModel.cpp \
+    FileIndexing/FolderDao.cpp \
+    FileIndexing/FolderModel.cpp \
     FileReceivedModel.cpp \
     downloadlistmodel.cpp \
     sharedfolderslistmodel.cpp \
@@ -47,20 +54,26 @@ SOURCES += main.cpp \
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-HEADERS += \
-    SimsProtocole/ServeurTCP.h \
+HEADERS += SimsProtocole/ServeurTCP.h \
     SimsProtocole/GestionClients.h \
-    SimsProtocole/ClientDiscovery.h \
     SimsProtocole/Client.h \
-    SimsProtocole/utils.h \
+    SimsProtocole/ClientDiscovery.h \
     SimsProtocole/SocketHandler.h \
     SimsProtocole/FileStreamer.h \
+    SimsProtocole/utils.h \
+    FileIndexing/FileIndexDao.h \
+    FileIndexing/FileModel.h \
+    FileIndexing/FileIndexer.h \
+    FileIndexing/FileUtils.h \
+    FileIndexing/SimpleFileModel.h \
+    FileIndexing/FolderDao.h \
+    FileIndexing/FolderModel.h \
     FileReceivedModel.h \
     downloadlistmodel.h \
     sharedfolderslistmodel.h \
     downloadfoldermodel.h \
     availablefileslistmodel.h
 
-QT += network
+QT += network sql
 
 TEMPLATE = app

@@ -7,7 +7,7 @@ TARGET = file_indexing
 CONFIG += console
 CONFIG -= app_bundle
 TEMPLATE = app
-SOURCES += main.cpp \
+SOURCES += main_.cpp \
     FileIndexDao.cpp \
     FileModel.cpp \
     FileIndexer.cpp \

@@ -12,7 +12,10 @@ SharedFoldersListModel::SharedFoldersListModel( QDeclarativeContext * qmlRootCon
 
 void SharedFoldersListModel::AddFolder()
 {
-    AddFolder( QFileDialog::getExistingDirectory( 0, "Choose a folder to share" ) );
+    QString folder = QFileDialog::getExistingDirectory( 0, "Choose a folder to share" );
+    if (folder != "") {
+        AddFolder( folder );
+    }
 }
 
 void SharedFoldersListModel::AddFolder( QString const & folderPath )
