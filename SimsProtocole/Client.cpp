@@ -167,14 +167,18 @@ void Client::fileDownloadingComplete()
     filestreamer->deleteLater();
 }
 
+
 void Client::receivedFileRequest(QByteArray packet)
 {
     QDataStream in(&packet,QIODevice::ReadOnly);
     // ici on a juste envoyé le filename, on le récupère donc
-    QString fileRequested;
-    quint64 fileSize;
-    in >> fileRequested;
-    in >> fileSize;
+    QString hash;
+    in >> hash;
+
+    // sendFileRequest Init.
+
+
+
 
 }
 
@@ -185,24 +189,21 @@ void Client::receivedFileRequestInit(QByteArray packet)
     // ici on a juste envoyé le filename, on le récupère donc
     QString fileRequested;
     quint64 fileSize;
+    HashType hash;
     in >> fileRequested;
     in >> fileSize;
+    in >> hash;
 
     qDebug() << "Starting to download file" << fileRequested << "of size" << fileSize;
 
-    QString path = QFileDialog::getExistingDirectory(0,"Enregistrer le fichier sous...");
-    path += "\\" + fileRequested;
+    //QString path = QFileDialog::getExistingDirectory(0,"Enregistrer le fichier sous...");
+    QString path = _downloadFolder + fileRequested;
 
     // création du fileStreamer
     FileStreamer *fileStreamer = new FileStreamer(path,_peerAddr.toString(), _socketHandler->localAddress().toString(), fileSize, DOWNLOAD_STREAMER);
     connect(fileStreamer, SIGNAL(EndOfFile()), this, SLOT(fileDownloadingComplete()));
     _filesDownloading.push_back(fileStreamer);
     emit newFileToDownload(fileStreamer);
-
-    //    _fileToReceive = new QFile(path);
-//    _fileToReceive->open(QIODevice::WriteOnly | QIODevice::Truncate);
-
-//    _bytesReceived = 0;
 
 
     // on envoie alors le Ack pour confirmer au serveur l'envoi du fichier
@@ -263,7 +264,6 @@ void Client::receivedFileRequestAck(QByteArray packet)
 
 void Client::receivedFileData(QByteArray packet)
 {
-
 
     QDataStream in(&packet,QIODevice::ReadOnly);
     QString fileId;
@@ -375,6 +375,7 @@ void Client::receivedListData(QByteArray packet)
         FileReceivedModel* newFile = new FileReceivedModel(fileName,fileSize, fileHash);
         _availableFiles.push_back(newFile);
     }
+    emit FileListUpdated(this);
 }
 
 
@@ -383,7 +384,7 @@ void Client::receivedListData(QByteArray packet)
  * le découper et de le passer par la socket. (envoi au préalable d'un message : FILE_REQUEST_INIT pour
  * annoncer la venue du fichier
 */
-void Client::SendMessage()
+void Client::SendFileRequestInit(HashType hash)
 {
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
@@ -392,7 +393,14 @@ void Client::SendMessage()
     quint16 type = FILE_REQUEST_INIT;
 
     // le fichier à envoyer, uniquement à des fins de test
-    QString filePath = QFileDialog::getOpenFileName(0,"Sélectionnez le fichier à envoyer");
+    //QString filePath = QFileDialog::getOpenFileName(0,"Sélectionnez le fichier à envoyer");
+
+    // Récupération du fichier en fonction du hash
+
+    QString filePath;
+
+
+
 
     // création du filestreamer pour l'envoi du fichier (celui ci sera supprimé si le ack n'arrive pas)
     FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);    
@@ -400,11 +408,6 @@ void Client::SendMessage()
     _filesUploading.push_back(fileStreamer);
 
 
-    // ouverture du fichier
-    //    _fileToSend = new QFile(filePath);
-    //    _fileToSend->open(QIODevice::ReadOnly);
-
-    // changement d'état pour pouvoir envoyer la suite lors de l'appel au slot "donneesEcrites"
     _etat = WAITING_ACK;
 
     QString SendFilename = fileStreamer->fileName();
@@ -469,6 +472,17 @@ void Client::ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress 
 QList< FileReceivedModel * > Client::FileReceivedList()
 {
     return _availableFiles;
+}
+
+void Client::RequestFile(HashType hash)
+{
+    //
+
+}
+
+void Client::UpdateDownloadFolder(QString newPath)
+{
+    _downloadFolder = newPath + "\\";
 }
 
 QHostAddress Client::nextHopAdress()
