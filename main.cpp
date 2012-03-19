@@ -70,13 +70,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Gestion connexion/deconnexion
     QObject::connect(&wifi, SIGNAL(Connected()), &gestionClient, SLOT(StartBroadcast()));
     QObject::connect(&wifi, SIGNAL(Disconnected()), &gestionClient, SLOT(StopBroadcast()));
-//    QObject::connect(&wifi, SIGNAL(Connected()), &bouton, SLOT(Connected()));
-//    QObject::connect(&wifi, SIGNAL(Disconnected()), &bouton, SLOT(Disconnected()));
-//    QObject::connect(&wifi, SIGNAL(ConectionFail()), &bouton, SLOT(ConectionFail()));
+//    QObject::connect(&wifi, SIGNAL(Connected()), &bouton, SLOT(Connected())); //Etat du bouton : 'Connexion'
+//    QObject::connect(&wifi, SIGNAL(Disconnected()), &bouton, SLOT(Disconnected())); //Etat du bouton : 'Deconnexion'
+//    QObject::connect(&wifi, SIGNAL(ConectionFail()), &bouton, SLOT(ConectionFail())); //Etat du bouton : 'Connexion'
 //    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &wifi, SLOT(Connect()));
 //    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &wifi, SLOT(Disconnect()));
-//    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &bouton, SLOT(Connecting()));
-//    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &bouton, SLOT(Disconnecting()));
+//    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &bouton, SLOT(Connecting())); //Etat du bouton : 'Connexion' grisé
+//    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &bouton, SLOT(Disconnecting())); //Etat du bouton : 'Deconnexion' grisé
 
 
     // Connexion au reseau WiFi AdHoc
