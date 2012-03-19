@@ -4,8 +4,8 @@ SimpleFileModel::SimpleFileModel()
 {
 }
 
-SimpleFileModel::SimpleFileModel(int id, const QString& name, const QString& type, int size) :
-        _id(id), _name(name), _type(type), _size(size)
+SimpleFileModel::SimpleFileModel(int id, const QString& name, const QString& type, int size, const QString &hash) :
+    _id(id), _name(name), _type(type), _size(size), _hash(hash)
 {
 }
 
