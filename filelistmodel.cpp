@@ -36,8 +36,10 @@ void FileListModel::RemoveFile( HashType hash )
     int fileIdx = hashToIndex( hash );
 
     beginRemoveRows( QModelIndex(), fileIdx, fileIdx );
-    m_files.removeAt( fileIdx );
+    FileReceivedModel * fileToDelete = m_files.takeAt( fileIdx );
     endRemoveRows();
+
+    delete fileToDelete;
 }
 
 void FileListModel::DownloadFile( HashType hash )

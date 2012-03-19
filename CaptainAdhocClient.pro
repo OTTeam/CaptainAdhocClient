@@ -47,7 +47,8 @@ SOURCES += main.cpp \
     FileReceivedModel.cpp \
     sharedfolderslistmodel.cpp \
     downloadfoldermodel.cpp \
-    filelistmodel.cpp
+    filelistmodel.cpp \
+    availablefileslistshandler.cpp
     #availablefileslistmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
@@ -71,7 +72,8 @@ HEADERS += SimsProtocole/ServeurTCP.h \
     FileReceivedModel.h \
     sharedfolderslistmodel.h \
     downloadfoldermodel.h \
-    filelistmodel.h
+    filelistmodel.h \
+    availablefileslistshandler.h
     #availablefileslistmodel.h
 
 QT += network sql

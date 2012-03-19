@@ -6,6 +6,8 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 
+typedef QString HashType;
+
 class Client;
 
 #define PORT_SERVEUR 50855
@@ -33,6 +35,7 @@ struct RemoteFiles
 struct RoutesTableElt
 {
     QHostAddress destAddr;
+    QHostAddress nextHopAddr;
     quint8 hopNumber;
 };
 
