@@ -68,7 +68,6 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
     if (broadCasterExists == false)
     {
         qDebug() << "Client discovered - Broadcaster";
-        //broadcasterClient = new Client(broadcasterAddress);
         QTcpSocket *newClientSocket = new QTcpSocket(this);
         connect(newClientSocket, SIGNAL(connected()), this, SLOT(clientConnected()));
         connect(newClientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(clientConnectionFailed()));
@@ -229,6 +228,7 @@ void GestionClients::clientConnected()
 
 void GestionClients::NewClientConfig(Client *client)
 {
+    client->setFileIndexer(_fileIndexer);
     connect(client,     SIGNAL(Disconnected()),           this, SLOT(clientDisconnect()));
     connect(client,     SIGNAL(newFileToDownload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));
     connect(client,     SIGNAL(newFileToUpload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));

@@ -176,7 +176,7 @@ void Client::receivedFileRequest(QByteArray packet)
     in >> hash;
 
     // sendFileRequest Init.
-
+    SendFileRequestInit(hash);
 
 
 
@@ -299,9 +299,9 @@ void Client::receivedListRequest(QByteArray packet)
     // il faut répondre à ce paquet, on commence donc par explorer notre liste de fichiers locaux
     // puis on l'envoie par tranche de 1000 fichiers
     // on envoie alors le Ack pour confirmer au serveur l'envoi du fichier
-    QList< FileReceivedModel *> localFileList;
 
-    QList< FileReceivedModel *>::const_iterator it = localFileList.begin();
+    QList< FileModel > localFileList =  _fileIndexer->getAllIndexedFiles();
+    QList< FileModel >::const_iterator it = localFileList.begin();
 
     quint16 packetNumber = 0;
     while(it != localFileList.end())
@@ -325,7 +325,7 @@ void Client::receivedListRequest(QByteArray packet)
 
         while (it != localFileList.end() && fileNumber < 1000)
         {
-            FileReceivedModel *model = *it;
+            const FileModel *model = &(*it);
             out << model->name();
             out << model->size();
             out << model->hash();
@@ -372,7 +372,7 @@ void Client::receivedListData(QByteArray packet)
         in >> fileName;
         in >> fileSize;
         in >> fileHash;
-        FileReceivedModel* newFile = new FileReceivedModel(fileName,fileSize, fileHash);
+        FileReceivedModel* newFile = new FileReceivedModel(fileName,fileSize, fileHash, this);
         _availableFiles.push_back(newFile);
     }
     emit FileListUpdated(this);
@@ -399,11 +399,13 @@ void Client::SendFileRequestInit(HashType hash)
 
     QString filePath;
 
+    // Trouver le fichier en fonction du Hash
 
 
 
     // création du filestreamer pour l'envoi du fichier (celui ci sera supprimé si le ack n'arrive pas)
-    FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);    
+    FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);
+
     connect(fileStreamer, SIGNAL(EndOfFile()), this, SLOT(fileUploadingComplete()));
     _filesUploading.push_back(fileStreamer);
 
@@ -513,5 +515,12 @@ void Client::UpdateRoute(SocketHandler *s,QHostAddress nextHop, quint8 newHopNum
     connect(_socketHandler,SIGNAL(Disconnected()),this,SIGNAL(Disconnected()));
     _nextHop = nextHop;
     _hopNumber = newHopNumber;
+
+}
+
+
+void Client::setFileIndexer(FileIndexer *fileIndexer)
+{
+    _fileIndexer = fileIndexer;
 
 }
