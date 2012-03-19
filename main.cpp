@@ -49,7 +49,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     SharedFoldersListModel sharedFoldersList( rootContext );
     sharedFoldersList.AddFolder( "C:\\" ); // as default. Should be read from saved settings.
 
-    AvailableFilesListsHandler availableFileLists( gestionClient, rootContext );
+    AvailableFilesListsHandler availableFileLists( &gestionClient, rootContext );
 
     rootContext->setContextProperty( "downloadsList", &downloads );
     //rootContext->setContextProperty( "availableFilesList", &availableFiles );
