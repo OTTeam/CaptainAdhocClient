@@ -24,8 +24,6 @@ public:
 
     bool createDatabase();
 
-//    qint32 updateDatabase();
-
     QList<FileModel> getAllIndexedFiles();
 
     QList<SimpleFileModel> getSharedFiles();
