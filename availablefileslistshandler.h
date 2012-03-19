@@ -33,6 +33,8 @@ private:
 
     GestionClients * clientsManager;
     QDeclarativeContext * uiRootContext;
+
+    QList< Client * > clients;
 };
 
 #endif // AVAILABLEFILESLISTSHANDLER_H

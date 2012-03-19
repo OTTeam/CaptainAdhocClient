@@ -12,11 +12,24 @@ AvailableFilesListsHandler::AvailableFilesListsHandler
 
 void AvailableFilesListsHandler::FileListUpdated( Client * client )
 {
+    int clientIdx = clients.indexOf( client );
+
+    if( clientIdx == -1 )
+    {
+        clients << client;
+    }
+    else
+    {
+        clients.replace( clientIdx, client );
+    }
+
     UpdateView();
 }
 
 void AvailableFilesListsHandler::FileListDeleted( Client * client )
 {
+    clients.removeOne( client );
+
     UpdateView();
 }
 
