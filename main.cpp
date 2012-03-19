@@ -15,6 +15,7 @@
 #include <QDeclarativeContext>
 #include <QGraphicsObject>
 #include <QList>
+#include <QSplashScreen>
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -92,6 +93,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Connexion au reseau WiFi AdHoc
     wifi.Connect();
+
+//    QPixmap splashPix(":/img/splashImg");
+//    QPixmap scaled = splashPix.scaled(QSize(600,400),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+
+//    QSplashScreen splashScreen(scaled);
+
+//    splashScreen.show();
+//    splashScreen.showMessage("test");
+
 
     return app->exec();
 }

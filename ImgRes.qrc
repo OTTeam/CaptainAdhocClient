@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/img">
+        <file alias="icon">adhoc_icon.png</file>
+        <file alias="splashImg">adhoc-bgWhite.png</file>
+    </qresource>
+</RCC>

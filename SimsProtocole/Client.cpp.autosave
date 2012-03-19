@@ -400,7 +400,9 @@ void Client::SendFileRequestInit(HashType hash)
     QString filePath;
 
     // Trouver le fichier en fonction du Hash
-    SimpleFileModel* getFile(const QString& hash);
+    SimpleFileModel*fileModel = getFile(hash);
+
+    fileModel->
 
 
     // création du filestreamer pour l'envoi du fichier (celui ci sera supprimé si le ack n'arrive pas)
