@@ -52,18 +52,26 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // CONNECT ALL THE SIGNALS
     QObject::connect( &gestionClient, SIGNAL( newFileToDownload( FileStreamer const * ) ),
                       &downloads, SLOT( AddFile( const FileStreamer*) ) );
+
     QObject::connect( &downloadFolder, SIGNAL( DownloadFolderChoosed( QString ) ),
                       &gestionClient, SLOT( DownloadPathUpdate( QString ) ) );
 
+
     QObject::connect( qmlRootObject, SIGNAL( pickDownloadFolder() ),
                       &downloadFolder, SLOT( PickDownloadFolder() ) );
+
     QObject::connect( qmlRootObject, SIGNAL( pickSharedDir() ),
                       &sharedFoldersList, SLOT( AddFolder() ) );
+
     QObject::connect( qmlRootObject, SIGNAL( delSharedDir( int ) ),
                       &sharedFoldersList, SLOT( RemoveFolder( int ) ) );
 
-    QObject::connect(&sharedFoldersList, SIGNAL(folderAdded(QString)), &fileIndexer, SLOT(addDirectory(QString)));
-    QObject::connect(&sharedFoldersList, SIGNAL(folderRemoved(QString)), &fileIndexer, SLOT(removeDirectory(QString)));
+
+    QObject::connect(&sharedFoldersList, SIGNAL(folderAdded(QString)),
+                     &fileIndexer, SLOT(addDirectory(QString)));
+
+    QObject::connect(&sharedFoldersList, SIGNAL(folderRemoved(QString)),
+                     &fileIndexer, SLOT(removeDirectory(QString)));
 
     return app->exec();
 }
