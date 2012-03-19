@@ -44,6 +44,13 @@ SOURCES += main.cpp \
     FileIndexing/SimpleFileModel.cpp \
     FileIndexing/FolderDao.cpp \
     FileIndexing/FolderModel.cpp \
+    Wifi/ManagerNotificationSink.cpp \
+    Wifi/NetworkNotificationSink.cpp \
+    Wifi/SecuritySettings.cpp \
+    Wifi/WifiConnection.cpp \
+    Wifi/WifiInterface.cpp \
+    Wifi/WifiManager.cpp \
+    Wifi/WifiNetwork.cpp \
     FileReceivedModel.cpp \
     sharedfolderslistmodel.cpp \
     downloadfoldermodel.cpp \
@@ -69,6 +76,13 @@ HEADERS += SimsProtocole/ServeurTCP.h \
     FileIndexing/SimpleFileModel.h \
     FileIndexing/FolderDao.h \
     FileIndexing/FolderModel.h \
+    Wifi/ManagerNotificationSink.h \
+    Wifi/NetworkNotificationSink.h \
+    Wifi/SecuritySettings.h \
+    Wifi/WifiConnection.h \
+    Wifi/WifiInterface.h \
+    Wifi/WifiManager.h \
+    Wifi/WifiNetwork.h \
     FileReceivedModel.h \
     sharedfolderslistmodel.h \
     downloadfoldermodel.h \
