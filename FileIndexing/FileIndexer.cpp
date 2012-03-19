@@ -23,6 +23,13 @@ FileIndexer::FileIndexer(QSqlDatabase db, bool computeHash) : _dao(db), _folderD
     connect(&_indexingWatcher, SIGNAL(finished()), this, SLOT(indexingFinished()));
 }
 
+FileIndexer::~FileIndexer()
+{
+    foreach(SimpleFileModel* m, _fileMap.values()) {
+        delete m;
+    }
+}
+
 bool FileIndexer::createDatabase()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "fileDb");
@@ -89,6 +96,15 @@ void FileIndexer::indexingFinished()
 {
     qDebug() << "Finished indexing dir " << _currentFolder.absolutePath();
 
+    //Test
+//    QList<SimpleFileModel*> list = getSharedFiles();
+//    foreach (SimpleFileModel* m, list) {
+//        qDebug() << *m;
+//    }
+//    foreach (const QString& key, _fileMap.keys()) {
+//        qDebug() << key << " : " << *(_fileMap.value(key));
+//    }
+
     _indexing = false;
     if (!_pendingDeleteDirs.isEmpty()) {
         qDebug() << "removing next directory...";
@@ -112,7 +128,7 @@ void FileIndexer::removingFinished()
     }
 }
 
-QList<FileModel> FileIndexer::searchFiles(QString keyword)
+QList<FileModel> FileIndexer::searchFiles(const QString& keyword)
 {
     QString kw = keyword;
     bool wildcard = (kw.indexOf('%') > -1 || kw.indexOf('*') > -1);
@@ -121,12 +137,12 @@ QList<FileModel> FileIndexer::searchFiles(QString keyword)
     return _dao.searchFiles(kw, wildcard);
 }
 
-QMap<QString, SimpleFileModel> FileIndexer::fileMap()
+QMap<QString, SimpleFileModel*> * FileIndexer::fileMap()
 {
     if (_fileMap.isEmpty()) {
         getSharedFiles();
     }
-    return _fileMap;
+    return &_fileMap;
 }
 
 /*!
@@ -163,16 +179,21 @@ QList<FileModel> FileIndexer::getAllIndexedFiles()
     return _dao.getAllFiles();
 }
 
-QList<SimpleFileModel> FileIndexer::getSharedFiles()
+QList<SimpleFileModel*> FileIndexer::getSharedFiles()
 {
-    QList<FileModel> list = getAllIndexedFiles();
-    QList<SimpleFileModel> files;
-    foreach (FileModel model, list) {
-        SimpleFileModel simpleModel = model.toSimpleFileModel();
+    _indexedFiles = getAllIndexedFiles();
+    QList<SimpleFileModel*> files;
+    foreach (FileModel model, _indexedFiles) {
+        SimpleFileModel * simpleModel = new SimpleFileModel(model.toSimpleFileModel());
         files << simpleModel;
-        _fileMap.insert(simpleModel.hash(), simpleModel);
+        _fileMap.insert(simpleModel->hash(), simpleModel);
     }
     return files;
+}
+
+SimpleFileModel *FileIndexer::getFile(const QString &hash)
+{
+    return _fileMap[hash];
 }
 
 bool FileIndexer::indexFile(const QFileInfo& fileInfo, const QDir& dir)

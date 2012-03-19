@@ -15,6 +15,7 @@
 
 // Gestion de la liste de fichiers partagée par ce client
 #include "../FileReceivedModel.h"
+#include "../FileIndexing/FileIndexer.h"
 
 
 
@@ -43,6 +44,7 @@ public:
 
     void RequestFile(HashType hash);
     void UpdateDownloadFolder(QString newPath);
+    void setFileIndexer(FileIndexer *fileIndexer);
 private:
     void configClient();
 
@@ -86,6 +88,7 @@ private:
     CLIENT_STATE _etat;
 
     QList< FileReceivedModel *> _availableFiles;
+    FileIndexer *_fileIndexer;
 };
 
 #endif // CLIENT_H

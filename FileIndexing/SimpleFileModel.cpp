@@ -11,8 +11,8 @@ SimpleFileModel::SimpleFileModel(int id, const QString& name, const QString& typ
 
 QString SimpleFileModel::toString() const
 {
-    QString str = QString("FileModel { id = %1, name = %2, type = %3, size = %4 }").
-                  arg(_id).arg(_name).arg(_type).arg(_size);
+    QString str = QString("SimpleFileModel { id = %1, name = %2, type = %3, size = %4, hash = %5 }").
+            arg(_id).arg(_name).arg(_type).arg(_size).arg(_hash);
     return str;
 }
 

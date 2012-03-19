@@ -18,6 +18,8 @@ public:
     FileIndexer(bool computeHash = false);
     FileIndexer(QSqlDatabase db, bool computeHash = false);
 
+    ~FileIndexer();
+
     qint32 indexDirectory(const QDir& dir);
 
     void deleteDirectory(const QDir& dir);
@@ -26,9 +28,11 @@ public:
 
     QList<FileModel> getAllIndexedFiles();
 
-    QList<SimpleFileModel> getSharedFiles();
+    QList<SimpleFileModel*> getSharedFiles();
 
-    QList<FileModel> searchFiles(QString keyword);
+    SimpleFileModel* getFile(const QString& hash);
+
+    QList<FileModel> searchFiles(const QString& keyword);
 
     void setDatabase(QSqlDatabase db) { _dao.setDatabase(db); _folderDao.setDatabase(db); }
 
@@ -37,7 +41,7 @@ public:
     bool isComputeHash() const { return _computeHash; }
     void setComputeHash(bool computeHash) { _computeHash = computeHash; }
 
-    QMap<QString, SimpleFileModel> fileMap();
+    QMap<QString, SimpleFileModel*> * fileMap();
 
 public slots:
     void addDirectory(const QString& path);
@@ -52,6 +56,7 @@ private:
     QQueue<QDir> _pendingDeleteDirs;
     QDir _currentFolder;
     QStringList _nameFilters;
+    QList<FileModel> _indexedFiles;
 
     bool _computeHash;
 
@@ -65,7 +70,7 @@ private:
 
     bool _indexing;
 
-    QMap<QString, SimpleFileModel> _fileMap;
+    QMap<QString, SimpleFileModel*> _fileMap;
 
     bool indexFile(const QFileInfo& fileInfo, const QDir& dir);
 
