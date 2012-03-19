@@ -4,8 +4,8 @@ SimpleFileModel::SimpleFileModel()
 {
 }
 
-SimpleFileModel::SimpleFileModel(int id, const QString& name, const QString& type, int size) :
-        _id(id), _name(name), _type(type), _size(size)
+SimpleFileModel::SimpleFileModel(int id, const QString& name, const QString& type, int size, const QString &hash) :
+    _id(id), _name(name), _type(type), _size(size), _hash(hash)
 {
 }
 
@@ -26,6 +26,8 @@ QDataStream& SimpleFileModel::readFromStream(QDataStream& in)
     in >> byteArray;
     _type = QString(byteArray);
     in >> _size;
+    in >> byteArray;
+    _hash = QString(byteArray);
     return in;
 }
 
@@ -44,7 +46,7 @@ std::ostream& operator<<(std::ostream& out, const SimpleFileModel& model)
 
 QDataStream &operator<<(QDataStream& out, const SimpleFileModel& model)
 {
-    out << (quint32) model.id() << model.name().toAscii() << model.type().toAscii() << (quint32) model.size();
+    out << (quint32) model.id() << model.name().toAscii() << model.type().toAscii() << (quint32) model.size() << model.hash().toAscii();
     return out;
 }
 

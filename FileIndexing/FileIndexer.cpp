@@ -121,6 +121,14 @@ QList<FileModel> FileIndexer::searchFiles(QString keyword)
     return _dao.searchFiles(kw, wildcard);
 }
 
+QMap<QString, SimpleFileModel> FileIndexer::fileMap()
+{
+    if (_fileMap.isEmpty()) {
+        getSharedFiles();
+    }
+    return _fileMap;
+}
+
 /*!
   * Index all files in dir and its subdirectories
   */
@@ -160,7 +168,9 @@ QList<SimpleFileModel> FileIndexer::getSharedFiles()
     QList<FileModel> list = getAllIndexedFiles();
     QList<SimpleFileModel> files;
     foreach (FileModel model, list) {
-        files << model.toSimpleFileModel();
+        SimpleFileModel simpleModel = model.toSimpleFileModel();
+        files << simpleModel;
+        _fileMap.insert(simpleModel.hash(), simpleModel);
     }
     return files;
 }

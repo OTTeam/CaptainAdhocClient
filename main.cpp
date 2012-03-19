@@ -1,14 +1,14 @@
 #include <QtGui/QApplication>
 #include "qmlapplicationviewer.h"
 
+#include "FileIndexing/FileIndexer.h"
 #include "SimsProtocole/GestionClients.h"
+#include "Wifi/WifiConnection.h"
 
 #include "filelistmodel.h"
 #include "availablefileslistmodel.h"
 #include "downloadfoldermodel.h"
 #include "sharedfolderslistmodel.h"
-
-#include "FileIndexing/FileIndexer.h"
 
 #include <QObject>
 #include <QDeclarativeContext>
@@ -24,9 +24,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //AvailableFilesListModel availableFiles;
 
 
+    // INIT WIFI
+    WifiConnection wifi;
+    wifi.Connect();
+
     // INIT PROTOCOL PART
     GestionClients gestionClient(0);
-
 
     // INIT INDEXING
     FileIndexer fileIndexer;
@@ -72,6 +75,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject::connect(&sharedFoldersList, SIGNAL(folderRemoved(QString)),
                      &fileIndexer, SLOT(removeDirectory(QString)));
+
+    // Gestion connexion/deconnexion
+    //
 
     return app->exec();
 }

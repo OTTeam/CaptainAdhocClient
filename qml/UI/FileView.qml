@@ -21,13 +21,11 @@ Item {
             anchors.fill: parent
             model: availableFilesList
             delegate: listDelegate
+
             focus: true
             clip: true
 
-            ScrollBar {
-                 flickable: listView
-                 vertical: true
-             }
+
         }
     }
 }

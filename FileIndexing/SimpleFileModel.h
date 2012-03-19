@@ -10,7 +10,7 @@ class SimpleFileModel
 {
 public:
     SimpleFileModel();
-    SimpleFileModel(int id, const QString& name, const QString& type, int size);
+    SimpleFileModel(int id, const QString& name, const QString& type, int size, const QString& hash);
 
     int id() const { return _id; }
     void setId(int id) { _id = id; }
@@ -24,6 +24,9 @@ public:
     int size() const { return _size; }
     void setSize(int size) { _size = size ; }
 
+    const QString& hash() const { return _hash; }
+    void setHash(const QString& hash) { _hash = hash; }
+
     QString toString() const;
 
     QDataStream& readFromStream(QDataStream& in);
@@ -33,6 +36,7 @@ private:
     QString _name;
     QString _type;
     int _size;
+    QString _hash;
 };
 
 std::ostream& operator<<(std::ostream& out, const SimpleFileModel& model);

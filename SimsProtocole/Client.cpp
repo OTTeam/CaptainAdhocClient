@@ -169,6 +169,12 @@ void Client::fileDownloadingComplete()
 
 void Client::receivedFileRequest(QByteArray packet)
 {
+    QDataStream in(&packet,QIODevice::ReadOnly);
+    // ici on a juste envoyé le filename, on le récupère donc
+    QString fileRequested;
+    quint64 fileSize;
+    in >> fileRequested;
+    in >> fileSize;
 
 }
 
@@ -369,13 +375,6 @@ void Client::receivedListData(QByteArray packet)
         FileReceivedModel* newFile = new FileReceivedModel(fileName,fileSize, fileHash);
         _availableFiles.push_back(newFile);
     }
-
-
-
-
-
-
-
 }
 
 
@@ -465,6 +464,11 @@ void Client::ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress 
     qDebug() << "FORWARDING to" << destAdd.toString() << " - packet size :" << (quint16) (packetToSend.size() - sizeof(quint16));
 
     _socketHandler->SendPacket(packetToSend); // On envoie le paquet
+}
+
+QList< FileReceivedModel * > Client::FileReceivedList()
+{
+    return _availableFiles;
 }
 
 QHostAddress Client::nextHopAdress()
