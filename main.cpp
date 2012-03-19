@@ -84,8 +84,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 //    QObject::connect(&wifi, SIGNAL(Connected()), &bouton, SLOT(Connected())); //Etat du bouton : 'Connexion'
 //    QObject::connect(&wifi, SIGNAL(Disconnected()), &bouton, SLOT(Disconnected())); //Etat du bouton : 'Deconnexion'
 //    QObject::connect(&wifi, SIGNAL(ConectionFail()), &bouton, SLOT(ConectionFail())); //Etat du bouton : 'Connexion'
-//    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &wifi, SLOT(Connect()));
-//    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &wifi, SLOT(Disconnect()));
+    QObject::connect(qmlRootObject, SIGNAL(requestConnection()), &wifi, SLOT(Connect()));
+    QObject::connect(qmlRootObject, SIGNAL(requestDisconnection()), &wifi, SLOT(Disconnect()));
 //    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &bouton, SLOT(Connecting())); //Etat du bouton : 'Connexion' grisé
 //    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &bouton, SLOT(Disconnecting())); //Etat du bouton : 'Deconnexion' grisé
 
