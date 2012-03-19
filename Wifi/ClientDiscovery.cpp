@@ -51,33 +51,17 @@ void ClientDiscovery::newDatagramAvailable()
             RoutesTableElt newElt;
 
             QString destAddrStr;
-            QString nextHopAddrStr;
             in >> destAddrStr;
-            in >> nextHopAddrStr;
             in >> newElt.hopNumber;
 
             newElt.destAddr = destAddrStr;
-            newElt.nextHopAddr = nextHopAddrStr;
 
             // on incrémente le hop number car on a la passerelle en plus
             newElt.hopNumber++;
-
-            //Si on nous donne une route pour se contacter nous même, on l'ignore
-            if (newElt.destAddr == _socket->localAddress() || hostInfo.addresses().contains(newElt.destAddr))
-            {
-                continue;
+            if (newElt.destAddr != _socket->localAddress() && !hostInfo.addresses().contains(newElt.destAddr))
+            {     routesReceived.push_back(newElt);
+//                qDebug() << "AddressStr :" << destAddrStr << "Address :" << newElt.destAddr << " -- Hop :" << newElt.hopNumber;
             }
-
-            //Si on nous donne une route dont le next hop est nous même
-            // on l'ignore aussi, pour ne pas créer de boucle de routage
-            if (newElt.nextHopAddr == _socket->localAddress() || hostInfo.addresses().contains(newElt.nextHopAddr))
-            {
-                qDebug () << "Ignoring route for " << newElt.destAddr.toString() << ", next hop was Self";
-                continue;
-            }
-
-            routesReceived.push_back(newElt);
-//          qDebug() << "AddressStr :" << destAddrStr << "Address :" << newElt.destAddr << " -- Hop :" << newElt.hopNumber;
 
         }
 
@@ -98,7 +82,7 @@ void ClientDiscovery::newDatagramAvailable()
 //        qDebug() << "***********************************";
 //        qDebug()<< ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" ;
 
-        if (localSent == false )
+        if (localSent == false)
             emit DatagramReceived(senderAddress,routesReceived);
 
     }
@@ -123,9 +107,8 @@ void ClientDiscovery::sendNewDatagram(QList<Client *> routesList )
 //    qDebug()<< "routesList Count : " << routesList.count();
     foreach(Client *client, routesList)
     {
-        out << client->peerAddress().toString();
-        out << client->nextHopAdress().toString();
-        out << client->HopNumber();
+        out << client->address().toString();
+        out << client->hopNumber();
 //        qDebug() << "Address :" << client->address().toString() << " -- hop :" << client->hopNumber();
     }
 //    qDebug()<< "---------------------------------------BS" ;

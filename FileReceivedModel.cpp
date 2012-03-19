@@ -20,3 +20,13 @@ FileReceivedModel::FileReceivedModel( FileStreamer const * fileStreamer )
     connect( fileStreamer, SIGNAL( progressUpdate( quint64,float ) ),
              this, SLOT( setSpeed( float ) ) );
 }
+
+FileReceivedModel::FileReceivedModel( QString name, quint64 size, HashType hash ) :
+    m_name( name ),
+    m_size( size ),
+    m_hash( hash ),
+    m_progress( 0 ),
+    m_speed( 0 )
+{
+    m_type = m_name.split( '.' )[ 1 ];
+}

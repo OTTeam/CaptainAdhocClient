@@ -3,24 +3,27 @@
 
 #include <QAbstractListModel>
 
-class FileStreamer;
-class FileReceivedModel;
+#include "SimsProtocole/utils.h"
+#include "FileReceivedModel.h"
 
-class DownloadListModel : public QAbstractListModel
+class FileStreamer;
+
+class FileListModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
 
-    enum DownloadRoles{
+    enum FileRole{
         Name = Qt::UserRole + 1,
+        Hash,
         Type,
         Size,
         Progress,
         Speed
     };
 
-    DownloadListModel( QObject * parent = 0 );
+    FileListModel( QObject * parent = 0 );
 
     int rowCount( QModelIndex const & parent = QModelIndex() ) const;
 
@@ -30,11 +33,22 @@ public:
 
 public slots:
 
-    void AddDownload( FileStreamer const * fileStreamer );
+    void AddFile( FileStreamer const * fileStreamer );
+    void RemoveFile( HashType hash );
+
+    void DownloadFile( HashType hash );
 
 private slots:
 
     void fileChanged();
+
+signals:
+
+    void DownloadRequested( /* arguments to be specified */ );
+
+private:
+
+    int hashToIndex( HashType hash );
 
 private:
 

@@ -11,6 +11,9 @@ public:
 
     DownloadFolderModel( QObject * ui );
 
+    void setFolderPath( QString const & newPath );
+    QString folderPath() const;
+
 public slots:
 
     void PickDownloadFolder();
@@ -21,6 +24,7 @@ signals:
 
 private:
 
+    QString m_folderPath;
     QObject * ui;
 };
 

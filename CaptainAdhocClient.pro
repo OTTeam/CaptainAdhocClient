@@ -44,10 +44,19 @@ SOURCES += main.cpp \
     FileIndexing/SimpleFileModel.cpp \
     FileIndexing/FolderDao.cpp \
     FileIndexing/FolderModel.cpp \
+    Wifi/ManagerNotificationSink.cpp \
+    Wifi/NetworkNotificationSink.cpp \
+    Wifi/SecuritySettings.cpp \
+    Wifi/WifiConnection.cpp \
+    Wifi/WifiInterface.cpp \
+    Wifi/WifiManager.cpp \
+    Wifi/WifiNetwork.cpp \
     FileReceivedModel.cpp \
-    downloadlistmodel.cpp \
     sharedfolderslistmodel.cpp \
-    downloadfoldermodel.cpp
+    downloadfoldermodel.cpp \
+    filelistmodel.cpp \
+    availablefileslistshandler.cpp
+    #availablefileslistmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -67,10 +76,28 @@ HEADERS += SimsProtocole/ServeurTCP.h \
     FileIndexing/SimpleFileModel.h \
     FileIndexing/FolderDao.h \
     FileIndexing/FolderModel.h \
+    Wifi/ManagerNotificationSink.h \
+    Wifi/NetworkNotificationSink.h \
+    Wifi/SecuritySettings.h \
+    Wifi/WifiConnection.h \
+    Wifi/WifiInterface.h \
+    Wifi/WifiManager.h \
+    Wifi/WifiNetwork.h \
     FileReceivedModel.h \
-    downloadlistmodel.h \
     sharedfolderslistmodel.h \
-    downloadfoldermodel.h
+    downloadfoldermodel.h \
+    filelistmodel.h \
+    availablefileslistshandler.h
+    #availablefileslistmodel.h
+
+win32: LIBS += -L"C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/" -lwlanapi
+win32: LIBS += -L"C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/" -lole32
+
+INCLUDEPATH += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Include"
+DEPENDPATH += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Include"
+
+win32: PRE_TARGETDEPS += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/wlanapi.lib"
+win32: PRE_TARGETDEPS += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/ole32.lib"
 
 QT += network sql
 

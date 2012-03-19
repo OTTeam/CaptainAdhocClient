@@ -22,7 +22,7 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     if (_type == UPLOAD_STREAMER)
     {
         _fileToStream->open(QIODevice::ReadOnly);
-        _fileToStream->size();
+        _fileSize = _fileToStream->size();
     }
     else
     {
@@ -34,9 +34,6 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
 
     _destAddr = destAddr;
     _senderAddr = senderAddr;
-
-    if (_fileToStream->atEnd())
-        emit EndOfFile();
 
     _fileName = fileInfo.fileName();
     // on génère un hash du nom du fichier afin de pouvoir le reconnaitre simplement par la suite.
@@ -50,6 +47,7 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
     _progressTimer = new QTimer(this);
     _progressTimer->setInterval(500);
     _progressTimer->start();
+    connect(_progressTimer,SIGNAL(timeout()),this,SLOT(timerProgressTimeout()));
 
 }
 
@@ -59,6 +57,10 @@ FileStreamer::~FileStreamer()
     if (_fileToStream!= NULL && _fileToStream->isOpen())
     {
         _fileToStream->close();
+        if (_type==DOWNLOAD_STREAMER && _bytesWritten< _fileSize)
+        {
+            _fileToStream->remove();
+        }
         delete _fileToStream;
         _fileToStream = NULL;
     }
@@ -85,15 +87,21 @@ QByteArray FileStreamer::nextPacket()
             out << (quint16) 0;
             out << _destAddr;
             out << _senderAddr;
-            out << (quint16) (sizeof(typePacket) + _id.size() + data.size());
+            qint64 headerPos = out.device()->pos();
+            out << (quint16) 0;
             out << typePacket;
             out << _id;
-            out << data;
+            out.writeRawData(data.data(),data.size());
 
             out.device()->seek(0);
             out << (quint16) (paquet.size() - sizeof(quint16));
 
-            qDebug() << "SENDING to" << _destAddr << "- packet size :" << (quint16) (paquet.size() - sizeof(quint16));
+            out.device()->seek(headerPos);
+            out << (quint16) (paquet.size() - headerPos - sizeof(quint16));
+
+
+            qDebug() << "SENDING to" << _destAddr << "- total size :" << (quint16) (paquet.size() - sizeof(quint16))
+                     << "data size" << paquet.size() - headerPos - sizeof(quint16);
 
         } else
         {
@@ -136,17 +144,19 @@ void FileStreamer::writeNext(QByteArray Packet)
 
 void FileStreamer::timerProgressTimeout()
 {
-    quint64 bytesDiff = (100* _bytesWritten)/_fileSize;
+    quint64 percCompletion = (100* _bytesWritten)/_fileSize;
 
-    float newSpeed = bytesDiff*_progressTimer->interval()*0.001;
+    quint64 bytesDiff = _bytesWritten - _PreviousBytesWritten;
 
-    emit progressUpdate(bytesDiff, newSpeed);
+    float newSpeed = (bytesDiff*1000.0)/_progressTimer->interval();
+
+    emit progressUpdate(percCompletion, newSpeed);
 
     _PreviousBytesWritten = _bytesWritten;
 }
 
 
-QByteArray FileStreamer::id()
+QString FileStreamer::id()
 {
     return _id;
 }

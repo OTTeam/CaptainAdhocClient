@@ -6,9 +6,9 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 
-typedef QString HashType;
-
 class Client;
+
+#define TRACE
 
 #define PORT_SERVEUR 50855
 #define DISCOVERY_PORT 50854
@@ -31,24 +31,22 @@ struct RemoteFiles
     Client *client;
 };
 
+struct SocketsHandlers
+{
+    QTcpSocket *socket;
+    quint16 paquetSize;
+};
 
 struct RoutesTableElt
 {
     QHostAddress destAddr;
-    QHostAddress nextHopAddr;
     quint8 hopNumber;
 };
 
-struct PendingConnectionStruct
-{
-    QTcpSocket *socket;
-    QList<RoutesTableElt> routes;
-};
 
+enum TYPE_PAQUET { FILE_REQUEST, FILE_REQUEST_INIT, FILE_DATA, FILE_REQUEST_ACK, LIST_REQUEST };
 
-enum TYPE_PAQUET { FILE_REQUEST, FILE_REQUEST_INIT, FILE_REQUEST_ACK, FILE_DATA, LIST_REQUEST, LIST_DATA };
+enum ETAT_CLIENT { IDLE, SENDING_FILE, WAITING_ACK };
 
-
-enum CLIENT_STATE { IDLE, SENDING_FILE, WAITING_ACK};
 
 #endif // UTILS_H

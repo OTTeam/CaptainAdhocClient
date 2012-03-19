@@ -1,5 +1,6 @@
 *.user
-SimsProtocole-build-desktop
+SimsProtocole-build*
+Wifi-build*
 qml/UI/*
 *-build*
 release/*

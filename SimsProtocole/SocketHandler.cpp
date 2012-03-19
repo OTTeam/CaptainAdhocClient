@@ -13,6 +13,8 @@ SocketHandler::SocketHandler(QTcpSocket *socket)
 
     _packetsInLine.clear();
 
+    _lastFS = NULL;
+
 
     connect(_socket, SIGNAL(readyRead()), this, SLOT(SocketReceivedData()));
     connect(_socket, SIGNAL(bytesWritten(qint64)), this, SLOT(SocketBytesWritten(qint64)));
@@ -23,11 +25,7 @@ SocketHandler::SocketHandler(QTcpSocket *socket)
 
 SocketHandler::~SocketHandler()
 {
-    while(!_filesInLine.isEmpty())
-    {
-        FileStreamer* fs = _filesInLine.takeFirst();
-        delete fs;
-    }
+    _socket->deleteLater();
 
 }
 
@@ -47,11 +45,17 @@ void SocketHandler::SendPacket(QByteArray packet)
 void SocketHandler::SendFile(FileStreamer *file)
 {
     _filesInLine.push_back(file);
+    connect(file,SIGNAL(EndOfFile()),this,SLOT(fileSendingComplete()));
     // on force le prochain envoi
     if (_socket->bytesToWrite() == 0)
     {
         SocketBytesWritten(0);
     }
+}
+
+void SocketHandler::stopSending(FileStreamer *file)
+{
+    _filesInLine.removeOne(file);
 }
 
 
@@ -97,7 +101,6 @@ void SocketHandler::SocketReceivedData()
         destAddr = destAddStr;
         senderAddr = senderAddStr;
 
-        qDebug() << "RECEIVED packet size" << _currentPacketSize << "from" << senderAddStr << "to" << destAddStr;
 
         //        qDebug() << destAddStr;
 
@@ -112,6 +115,8 @@ void SocketHandler::SocketReceivedData()
         QByteArray packet;
         packet.resize(dataSize);
         in.readRawData(packet.data(),dataSize);
+
+        qDebug() << "RECEIVED packet total size" << _currentPacketSize << "data size" << dataSize << "from" << senderAddStr << "to" << destAddStr;
 
 
         _currentPacketSize = 0;
@@ -139,10 +144,22 @@ void SocketHandler::SocketBytesWritten(qint64 bytesWritten)
 
         if ( !_filesInLine.isEmpty() )
         {
-            FileStreamer *fileStreamer = (FileStreamer*) _filesInLine.first();
+            FileStreamer *fileStreamer = NULL;
+            if (_lastFS ==NULL || _lastFS == _filesInLine.last() || !_filesInLine.contains(_lastFS))
+            {
+                fileStreamer = (FileStreamer*) _filesInLine.first();
+            }
+            else
+            {
+                fileStreamer = (FileStreamer*) _filesInLine.at(_filesInLine.indexOf(_lastFS)+1);
+            }
+
             QByteArray packet = fileStreamer->nextPacket();
+
             if (! packet.isEmpty())
                 _socket->write(packet);
+
+            _lastFS = fileStreamer;
         }
 
     }
@@ -153,4 +170,5 @@ void SocketHandler::fileSendingComplete()
     FileStreamer* filestreamer = (FileStreamer*) sender();
 
     _filesInLine.removeOne(filestreamer);
+    SocketBytesWritten(0);
 }
