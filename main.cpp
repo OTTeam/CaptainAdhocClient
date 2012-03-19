@@ -30,7 +30,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     WifiConnection wifi;
 
     // INIT INDEXING
-    FileIndexer fileIndexer;
+    FileIndexer fileIndexer(true);
 
     // INIT PROTOCOL PART
     GestionClients gestionClient(&fileIndexer);

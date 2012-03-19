@@ -18,6 +18,8 @@ public:
     FileIndexer(bool computeHash = false);
     FileIndexer(QSqlDatabase db, bool computeHash = false);
 
+    ~FileIndexer();
+
     qint32 indexDirectory(const QDir& dir);
 
     void deleteDirectory(const QDir& dir);
@@ -30,7 +32,7 @@ public:
 
     SimpleFileModel* getFile(const QString& hash);
 
-    QList<FileModel> searchFiles(QString keyword);
+    QList<FileModel> searchFiles(const QString& keyword);
 
     void setDatabase(QSqlDatabase db) { _dao.setDatabase(db); _folderDao.setDatabase(db); }
 
