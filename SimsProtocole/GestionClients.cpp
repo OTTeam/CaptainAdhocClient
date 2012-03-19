@@ -1,9 +1,14 @@
 #include "GestionClients.h"
 #include <QMessageBox>
 
-GestionClients::GestionClients(QObject *parent) :
-    QObject(parent)
+
+
+
+
+GestionClients::GestionClients(FileIndexer *fileIndexer):
+    _fileIndexer(fileIndexer)
 {
+
     _listeningServer = new TCPServer(this);
     connect(_listeningServer,SIGNAL(AjouterClient(QTcpSocket*)),this,SLOT(newConnectionDone(QTcpSocket*)));
     _clientDiscoveryModule = new ClientDiscovery(this);
@@ -15,8 +20,8 @@ GestionClients::GestionClients(QObject *parent) :
     _timerBroadcast->setInterval(BROADCAST_INTERVAL);
     _timerBroadcast->setSingleShot(false);
     connect(_timerBroadcast,SIGNAL(timeout()),this,SLOT(broadCastTrigger()));
-    _timerBroadcast->start();
-    broadCastTrigger();
+//    _timerBroadcast->start();
+//    broadCastTrigger();
 
     _clients.clear();
 }
@@ -299,6 +304,18 @@ void GestionClients::DownloadPathUpdate(QString newPath)
     {
         client->UpdateDownloadFolder(newPath);
     }
+}
+
+void GestionClients::StartBroadcast()
+{
+    _timerBroadcast->start();
+    // on broadcast exprès la première fois
+    broadCastTrigger();
+}
+
+void GestionClients::StopBroadcast()
+{
+    _timerBroadcast->stop();
 }
 
 

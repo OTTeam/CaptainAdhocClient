@@ -10,13 +10,14 @@
 #include "ServeurTCP.h"
 #include "ClientDiscovery.h"
 #include "SocketHandler.h"
+#include "../FileIndexing/FileIndexer.h"
 
 
 class GestionClients : public QObject
 {
     Q_OBJECT
 public:
-    explicit GestionClients(QObject *parent = 0);
+    GestionClients(FileIndexer *fileIndexer);
     ~GestionClients();
     void sendToAll();
 
@@ -36,6 +37,9 @@ signals:
 
 public slots:
     void DownloadPathUpdate(QString);
+
+    void StartBroadcast();
+    void StopBroadcast();
 
 private slots:
     void PacketReceived(QByteArray packet, QHostAddress destAddr, QHostAddress senderAddr, bool destJoined);
@@ -65,7 +69,7 @@ private:
     QList<LocalFiles> _localFiles;
     QList<RemoteFiles> _remoteFiles;
 
-
+    FileIndexer *_fileIndexer;
     QTimer *_timerBroadcast;
 };
 
