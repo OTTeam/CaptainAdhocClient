@@ -12,14 +12,12 @@ AvailableFilesListsHandler::AvailableFilesListsHandler
 {
     // init view with an empty list.
     uiRootContext->setContextProperty( propertyName,
-                                       QVariant::fromValue( QList< FileReceivedModel * >() ) );
+                                       QVariant::fromValue( completeList ) );
 }
 
 void AvailableFilesListsHandler::FileListUpdated( Client * client )
 {
     int clientIdx = clients.indexOf( client );
-
-    QList< FileReceivedModel * > filesFromClient = client->FileReceivedList();
 
     if( clientIdx == -1 )
     {
@@ -49,12 +47,17 @@ void AvailableFilesListsHandler::UpdateView()
     // concatene les listes des differents clients et les envoie à la vue pour
     // affichage
 
-    QList< FileReceivedModel * > completeList;
+    completeList.clear();
 
     for( int i = 0 ; i < clients.count() ; i++ )
     {
-        completeList += clients[ i ]->FileReceivedList();
+        QList< FileReceivedModel * > fileList = clients[ i ]->FileReceivedList();
+
+        for( int j = 0 ; j < fileList.count() ; j++ )
+        {
+            completeList.append( static_cast< QObject * >( fileList.at( j ) ) );
+        }
     }
 
-    uiRootContext->setContextProperty( propertyName, completeList );
+    uiRootContext->setContextProperty( propertyName, QVariant::fromValue( completeList ) );
 }

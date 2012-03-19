@@ -42,6 +42,8 @@ private:
     static const QString propertyName;
 
     QList< Client * > clients;
+
+    QList< QObject * > completeList;
 };
 
 #endif // AVAILABLEFILESLISTSHANDLER_H
