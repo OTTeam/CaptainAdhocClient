@@ -23,8 +23,9 @@ public slots:
     void Disconnect();
 
 signals:
-    void ConnectionStatusChanged(int);
-    void ConnectionFail(int);
+    void Connected();
+    void Disconnected();
+    void ConnectionFail();
 
 private slots:
     void onConnectionStatusChanged(int);
