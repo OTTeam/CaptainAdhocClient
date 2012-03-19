@@ -50,18 +50,17 @@ static void testIndexing(QCoreApplication& a)
     time.start();
 
     FileIndexer indexer(db, true);
-    indexer.addDirectory("E:/SIMS/git-repo/CaptainAdhoc");
-    indexer.addDirectory("E:/SIMS/git-repo/FileIndexing");
+    indexer.addDirectory("C:/Users/Gaetan/Pictures/Photos");
 
-//    QStringList nameFilters;
-//    nameFilters << "*.cpp" << "*.h";
-//    indexer.setNameFilters(nameFilters);
-//    qint32 count = indexer.updateDatabase();
 
-//    qDebug() << "Indexed " << count << " files in" << time.elapsed() << "ms";
 
     QList<FileModel> list = indexer.getAllIndexedFiles();
     qDebug() << "Total number of indexed files :" << list.size();
+
+    QList<SimpleFileModel*> list2 = indexer.getSharedFiles();
+    foreach (SimpleFileModel* m, list2) {
+        qDebug() << *m;
+    }
 
     FileIndexDao dao(db);
 
@@ -72,18 +71,18 @@ static void testIndexing(QCoreApplication& a)
         qDebug() << "file (simple) : " << file.toSimpleFileModel();
     }
 
-    list = indexer.searchFiles("fileindexer");
-    printFileNames(list);
+//    list = indexer.searchFiles("fileindexer");
+//    printFileNames(list);
 
-    printFileNames(indexer.searchFiles("*.cpp"));
+//    printFileNames(indexer.searchFiles("*.cpp"));
 
-    printFileNames(indexer.searchFiles("?ileindexer*"));
+//    printFileNames(indexer.searchFiles("?ileindexer*"));
 
-    printFileNames(indexer.searchFiles("?ndexer*"));
+//    printFileNames(indexer.searchFiles("?ndexer*"));
 
-    printFileNames(indexer.searchFiles("test_filesystem"));
+//    printFileNames(indexer.searchFiles("test_filesystem"));
 
-    printFileNames(indexer.searchFiles("*"));
+//    printFileNames(indexer.searchFiles("*"));
 
     db.close();
 }
@@ -96,7 +95,7 @@ static void testMd5Hash()
 
 static void testDataStream()
 {
-    SimpleFileModel model(1, "test.exe", "exe", 100);
+    SimpleFileModel model(1, "test.exe", "exe", 100, "");
     qDebug() << "before write : " << model;
     QFile file("testDataStream");
     file.open(QFile::WriteOnly);
@@ -114,9 +113,9 @@ static void testDataStream()
 
     //Test écriture liste
     FileIndexer indexer(QSqlDatabase::database("fileDb"), false);
-    QList<SimpleFileModel> files = indexer.getSharedFiles();
-    foreach (SimpleFileModel sfm, files) {
-        qDebug() << sfm;
+    QList<SimpleFileModel*> files = indexer.getSharedFiles();
+    foreach (SimpleFileModel* sfm, files) {
+        qDebug() << *sfm;
     }
     QFile testFileList("testFileList");
     testFileList.open(QFile::WriteOnly);
@@ -163,8 +162,8 @@ int main(int argc, char *argv[])
 
     testIndexing(a);
 //    testMd5Hash();
-//    testDataStream();
-    testFolderDao();
+    testDataStream();
+//    testFolderDao();
 
     qDebug("Execution time : %fs", time.elapsed() / 1000.);
 
