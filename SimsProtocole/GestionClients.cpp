@@ -286,17 +286,19 @@ void GestionClients::clientDisconnect()
 
 void GestionClients::sendToAll()
 {
-    foreach (Client *client, _clients)
-    {
-        client->SendMessage();
-    }
+//    foreach (Client *client, _clients)
+//    {
+//        client->SendFileRequestInit();
+//    }
 }
 
 
 void GestionClients::DownloadPathUpdate(QString newPath)
 {
-
-
+    foreach(Client* client, _clients)
+    {
+        client->UpdateDownloadFolder(newPath);
+    }
 }
 
 
