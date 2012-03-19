@@ -56,9 +56,9 @@ static void testIndexing(QCoreApplication& a)
 //    QStringList nameFilters;
 //    nameFilters << "*.cpp" << "*.h";
 //    indexer.setNameFilters(nameFilters);
-    qint32 count = indexer.updateDatabase();
+//    qint32 count = indexer.updateDatabase();
 
-    qDebug() << "Indexed " << count << " files in" << time.elapsed() << "ms";
+//    qDebug() << "Indexed " << count << " files in" << time.elapsed() << "ms";
 
     QList<FileModel> list = indexer.getAllIndexedFiles();
     qDebug() << "Total number of indexed files :" << list.size();

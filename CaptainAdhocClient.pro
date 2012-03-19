@@ -90,6 +90,15 @@ HEADERS += SimsProtocole/ServeurTCP.h \
     availablefileslistshandler.h
     #availablefileslistmodel.h
 
+win32: LIBS += -L"C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/" -lwlanapi
+win32: LIBS += -L"C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/" -lole32
+
+INCLUDEPATH += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Include"
+DEPENDPATH += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Include"
+
+win32: PRE_TARGETDEPS += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/wlanapi.lib"
+win32: PRE_TARGETDEPS += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/ole32.lib"
+
 QT += network sql
 
 TEMPLATE = app
