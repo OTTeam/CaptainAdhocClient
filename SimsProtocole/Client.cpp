@@ -372,7 +372,7 @@ void Client::receivedListData(QByteArray packet)
         in >> fileName;
         in >> fileSize;
         in >> fileHash;
-        FileReceivedModel* newFile = new FileReceivedModel(fileName,fileSize, fileHash);
+        FileReceivedModel* newFile = new FileReceivedModel(fileName,fileSize, fileHash, this);
         _availableFiles.push_back(newFile);
     }
     emit FileListUpdated(this);
