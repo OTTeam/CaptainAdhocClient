@@ -13,6 +13,8 @@
 #include "SocketHandler.h"
 #include "utils.h"
 
+// Gestion de la liste de fichiers partagée par ce client
+#include "../FileReceivedModel.h"
 
 
 
@@ -36,6 +38,8 @@ public:
     void SendMessage();
 
     void ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress senderAdd);
+
+    QList< FileReceivedModel *> * FileReceivedList();
 private:
     void configClient();
 
@@ -43,7 +47,8 @@ private:
     void receivedFileRequestInit(QByteArray packet); // réponse du serveur lors de la demande (confirmation nom, taille)
     void receivedFileRequestAck(QByteArray packet);  // confirmation du client
     void receivedFileData(QByteArray packet);        // réception d'un fichier par le client
-    void receivedFileList(QByteArray packet);
+    void receivedListRequest(QByteArray packet);        //
+    void receivedListData(QByteArray packet);
 
 signals:
     void NewData(int);
@@ -52,6 +57,10 @@ signals:
 
      void newFileToDownload(const FileStreamer*);
      void newFileToUpload(const FileStreamer*);
+
+
+     void FileListUpdated(Client *);
+     void FileListDeleted(Client *);
 
 public slots:
     void PacketReceived(QByteArray packet);
@@ -80,6 +89,7 @@ private:
 
     CLIENT_STATE _etat;
 
+    QList< FileReceivedModel *> _availableFiles;
 };
 
 #endif // CLIENT_H

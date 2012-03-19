@@ -30,14 +30,13 @@ signals:
 
     void ClientNumberChanged(int);
 
-
-
     void newFileToUpload(FileStreamer const * fs);
     void newFileToDownload(FileStreamer const * fs);
 
 
 public slots:
     void DownloadPathUpdate(QString);
+
 private slots:
     void PacketReceived(QByteArray packet, QHostAddress destAddr, QHostAddress senderAddr, bool destJoined);
 

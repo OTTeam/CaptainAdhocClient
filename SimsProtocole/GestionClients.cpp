@@ -18,7 +18,6 @@ GestionClients::GestionClients(QObject *parent) :
     _timerBroadcast->start();
     broadCastTrigger();
 
-
     _clients.clear();
 }
 

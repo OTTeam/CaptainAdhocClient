@@ -137,8 +137,11 @@ void Client::PacketReceived(QByteArray packet)
         break;
     case LIST_REQUEST:
         qDebug() << "PACKET is LIST_REQUEST";
-        receivedFileList(packetdata);
+        receivedListRequest(packetdata);
         break;
+    case LIST_DATA:
+        qDebug() << "PACKET is LIST_DATA";
+        receivedListRequest(packetdata);
     default:
         qDebug() << "Unknown packet type " << type;
         break;
@@ -282,7 +285,14 @@ void Client::receivedFileData(QByteArray packet)
 
 }
 
-void Client::receivedFileList(QByteArray packet)
+void Client::receivedListData(QByteArray packet)
+{
+
+
+}
+
+
+void Client::receivedListRequest(QByteArray packet)
 {
 
 
