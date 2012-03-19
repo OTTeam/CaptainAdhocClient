@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <QDeclarativeContext>
+#include <QList>
 
 #include "SimsProtocole/utils.h"
 #include "SimsProtocole/GestionClients.h"
+
+#include "FileReceivedModel.h"
 
 class AvailableFilesListsHandler : public QObject
 {
@@ -25,6 +28,8 @@ public slots:
     void FileListUpdated( Client * client );
     void FileListDeleted( Client * client );
 
+    void DownloadRequestedFromView( HashType fileHash );
+
 signals:
 
     void DownloadRequested( Client * fromClient, HashType fileHash );
@@ -32,7 +37,9 @@ signals:
 private:
 
     GestionClients * clientsManager;
+
     QDeclarativeContext * uiRootContext;
+    static const QString propertyName;
 
     QList< Client * > clients;
 };
