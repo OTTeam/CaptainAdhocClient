@@ -26,7 +26,9 @@ public:
 
     QList<FileModel> getAllIndexedFiles();
 
-    QList<SimpleFileModel> getSharedFiles();
+    QList<SimpleFileModel*> getSharedFiles();
+
+    SimpleFileModel* getFile(const QString& hash);
 
     QList<FileModel> searchFiles(QString keyword);
 
@@ -37,7 +39,7 @@ public:
     bool isComputeHash() const { return _computeHash; }
     void setComputeHash(bool computeHash) { _computeHash = computeHash; }
 
-    QMap<QString, SimpleFileModel> fileMap();
+    QMap<QString, SimpleFileModel*> * fileMap();
 
 public slots:
     void addDirectory(const QString& path);
@@ -52,6 +54,7 @@ private:
     QQueue<QDir> _pendingDeleteDirs;
     QDir _currentFolder;
     QStringList _nameFilters;
+    QList<FileModel> _indexedFiles;
 
     bool _computeHash;
 
@@ -65,7 +68,7 @@ private:
 
     bool _indexing;
 
-    QMap<QString, SimpleFileModel> _fileMap;
+    QMap<QString, SimpleFileModel*> _fileMap;
 
     bool indexFile(const QFileInfo& fileInfo, const QDir& dir);
 
