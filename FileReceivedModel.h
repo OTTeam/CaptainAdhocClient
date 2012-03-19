@@ -6,6 +6,7 @@
 #include "SimsProtocole/utils.h"
 
 class FileStreamer;
+class Client;
 
 class FileReceivedModel : public QObject
 {
@@ -16,10 +17,11 @@ class FileReceivedModel : public QObject
     Q_PROPERTY(int progress READ progress WRITE setProgress NOTIFY progressChanged)
     Q_PROPERTY(float speed READ speed WRITE setSpeed NOTIFY speedChanged)
     Q_PROPERTY(HashType hash READ hash)
+    Q_PROPERTY(Client* clientFather READ clientFather)
 
 public:
     FileReceivedModel( FileStreamer const * fileStreamer );
-    FileReceivedModel( QString name, quint64 size, HashType hash );
+    FileReceivedModel( QString name, quint64 size, HashType hash, Client * father );
 
     QString name() const { return m_name; }
     QString type() const { return m_type; }
@@ -27,6 +29,7 @@ public:
     int progress() const { return m_progress; }
     float speed() const { return m_speed; }
     HashType hash() const { return m_hash; }
+    Client * clientFather() const { return m_clientFather; }
 
 public slots:
     void setName( QString const & name )
@@ -64,6 +67,7 @@ private:
     float m_speed;
     HashType m_hash;
 
+    Client * m_clientFather;
 };
 
 #endif // FILEOBJECT_H

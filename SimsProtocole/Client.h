@@ -15,6 +15,7 @@
 
 // Gestion de la liste de fichiers partagée par ce client
 #include "../FileReceivedModel.h"
+#include "../FileIndexing/FileIndexer.h"
 
 
 
@@ -35,11 +36,15 @@ public:
     SocketHandler *socketHandler();
 
     void UpdateRoute(SocketHandler *s,QHostAddress nextHop, quint8 newHopNumber);
-    void SendMessage();
+    void SendFileRequestInit(QString hash);
 
     void ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress senderAdd);
 
     QList< FileReceivedModel * > FileReceivedList();
+
+    void RequestFile(HashType hash);
+    void UpdateDownloadFolder(QString newPath);
+    void setFileIndexer(FileIndexer *fileIndexer);
 private:
     void configClient();
 
@@ -78,10 +83,12 @@ private:
 
     QList<FileStreamer*> _filesUploading;
     QList<FileStreamer*> _filesDownloading;
+    QString _downloadFolder;
 
     CLIENT_STATE _etat;
 
     QList< FileReceivedModel *> _availableFiles;
+    FileIndexer *_fileIndexer;
 };
 
 #endif // CLIENT_H

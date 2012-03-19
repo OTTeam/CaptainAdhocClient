@@ -1,6 +1,7 @@
 #include "FileReceivedModel.h"
 
 #include "SimsProtocole/FileStreamer.h"
+#include "SimsProtocole/Client.h"
 
 #include <QStringList>
 
@@ -21,12 +22,13 @@ FileReceivedModel::FileReceivedModel( FileStreamer const * fileStreamer )
              this, SLOT( setSpeed( float ) ) );
 }
 
-FileReceivedModel::FileReceivedModel( QString name, quint64 size, HashType hash ) :
+FileReceivedModel::FileReceivedModel( QString name, quint64 size, HashType hash, Client * father ) :
     m_name( name ),
     m_size( size ),
     m_hash( hash ),
     m_progress( 0 ),
-    m_speed( 0 )
+    m_speed( 0 ),
+    m_clientFather( father ) // I'M YOUR FATHER ! - NOOOOOOOO !!!
 {
     m_type = m_name.split( '.' )[ 1 ];
 }

@@ -83,9 +83,8 @@ void WifiConnection::Connect()
             _network->RegisterNetworkNotifications();
         }
 
-        connect(_network, SIGNAL(ConnectionStatusChanged(int)), this, SIGNAL(ConnectionStatusChanged(int)));
         connect(_network, SIGNAL(ConnectionStatusChanged(int)), this, SLOT(onConnectionStatusChanged(int)));
-        connect(_network, SIGNAL(ConnectionFail(int)), this, SIGNAL(ConnectionFail(int)));
+        connect(_network, SIGNAL(ConnectionFail(int)), this, SIGNAL(ConnectionFail()));
     }
 }
 
@@ -105,12 +104,15 @@ void WifiConnection::onConnectionStatusChanged(int status)
     {
     case FORMED:
         _connected = true;
+        emit Connected();
         break;
     case CONNECTED:
         _connected = true;
+        emit Connected();
         break;
     case DISCONNECTED:
         _connected = false;
+        emit Disconnected();
         break;
     }
 }

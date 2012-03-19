@@ -1,9 +1,14 @@
 #include "GestionClients.h"
 #include <QMessageBox>
 
-GestionClients::GestionClients(QObject *parent) :
-    QObject(parent)
+
+
+
+
+GestionClients::GestionClients(FileIndexer *fileIndexer):
+    _fileIndexer(fileIndexer)
 {
+
     _listeningServer = new TCPServer(this);
     connect(_listeningServer,SIGNAL(AjouterClient(QTcpSocket*)),this,SLOT(newConnectionDone(QTcpSocket*)));
     _clientDiscoveryModule = new ClientDiscovery(this);
@@ -15,8 +20,8 @@ GestionClients::GestionClients(QObject *parent) :
     _timerBroadcast->setInterval(BROADCAST_INTERVAL);
     _timerBroadcast->setSingleShot(false);
     connect(_timerBroadcast,SIGNAL(timeout()),this,SLOT(broadCastTrigger()));
-    _timerBroadcast->start();
-    broadCastTrigger();
+//    _timerBroadcast->start();
+//    broadCastTrigger();
 
     _clients.clear();
 }
@@ -63,7 +68,6 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
     if (broadCasterExists == false)
     {
         qDebug() << "Client discovered - Broadcaster";
-        //broadcasterClient = new Client(broadcasterAddress);
         QTcpSocket *newClientSocket = new QTcpSocket(this);
         connect(newClientSocket, SIGNAL(connected()), this, SLOT(clientConnected()));
         connect(newClientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(clientConnectionFailed()));
@@ -224,6 +228,7 @@ void GestionClients::clientConnected()
 
 void GestionClients::NewClientConfig(Client *client)
 {
+    client->setFileIndexer(_fileIndexer);
     connect(client,     SIGNAL(Disconnected()),           this, SLOT(clientDisconnect()));
     connect(client,     SIGNAL(newFileToDownload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));
     connect(client,     SIGNAL(newFileToUpload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));
@@ -286,17 +291,31 @@ void GestionClients::clientDisconnect()
 
 void GestionClients::sendToAll()
 {
-    foreach (Client *client, _clients)
-    {
-        client->SendMessage();
-    }
+//    foreach (Client *client, _clients)
+//    {
+//        client->SendFileRequestInit();
+//    }
 }
 
 
 void GestionClients::DownloadPathUpdate(QString newPath)
 {
+    foreach(Client* client, _clients)
+    {
+        client->UpdateDownloadFolder(newPath);
+    }
+}
 
+void GestionClients::StartBroadcast()
+{
+    _timerBroadcast->start();
+    // on broadcast exprès la première fois
+    broadCastTrigger();
+}
 
+void GestionClients::StopBroadcast()
+{
+    _timerBroadcast->stop();
 }
 
 
