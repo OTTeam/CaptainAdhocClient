@@ -27,7 +27,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // INIT WIFI
     WifiConnection wifi;
-    wifi.Connect();
 
     // INIT INDEXING
     FileIndexer fileIndexer;
@@ -80,7 +79,19 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                      &fileIndexer, SLOT(removeDirectory(QString)));
 
     // Gestion connexion/deconnexion
-    //
+    QObject::connect(&wifi, SIGNAL(Connected()), &gestionClient, SLOT(StartBroadcast()));
+    QObject::connect(&wifi, SIGNAL(Disconnected()), &gestionClient, SLOT(StopBroadcast()));
+//    QObject::connect(&wifi, SIGNAL(Connected()), &bouton, SLOT(Connected()));
+//    QObject::connect(&wifi, SIGNAL(Disconnected()), &bouton, SLOT(Disconnected()));
+//    QObject::connect(&wifi, SIGNAL(ConectionFail()), &bouton, SLOT(ConectionFail()));
+//    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &wifi, SLOT(Connect()));
+//    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &wifi, SLOT(Disconnect()));
+//    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &bouton, SLOT(Connecting()));
+//    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &bouton, SLOT(Disconnecting()));
+
+
+    // Connexion au reseau WiFi AdHoc
+    wifi.Connect();
 
     return app->exec();
 }
