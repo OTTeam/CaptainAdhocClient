@@ -358,7 +358,7 @@ void Client::receivedListData(QByteArray packet)
     if (packetNumber == 1)      //si c'est le premier paquet d'une demande de liste, on vide la liste obsolète
     {
         _availableFiles.clear();
-        emit FileListDeleted();
+        emit FileListDeleted(this);
     }
 
     while (! in.atEnd())
