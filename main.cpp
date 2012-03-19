@@ -52,6 +52,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     AvailableFilesListsHandler availableFileLists( &gestionClient, rootContext );
 
     rootContext->setContextProperty( "downloadsList", &downloads );
+    rootContext->setContextProperty( "wifi", &wifi );
     //rootContext->setContextProperty( "availableFilesList", &availableFiles );
 
     // CONNECT ALL THE SIGNALS
@@ -81,11 +82,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Gestion connexion/deconnexion
     QObject::connect(&wifi, SIGNAL(Connected()), &gestionClient, SLOT(StartBroadcast()));
     QObject::connect(&wifi, SIGNAL(Disconnected()), &gestionClient, SLOT(StopBroadcast()));
-//    QObject::connect(&wifi, SIGNAL(Connected()), &bouton, SLOT(Connected())); //Etat du bouton : 'Connexion'
-//    QObject::connect(&wifi, SIGNAL(Disconnected()), &bouton, SLOT(Disconnected())); //Etat du bouton : 'Deconnexion'
-//    QObject::connect(&wifi, SIGNAL(ConectionFail()), &bouton, SLOT(ConectionFail())); //Etat du bouton : 'Connexion'
+
+    QObject::connect(&wifi, SIGNAL(Connected()), qmlRootObject, SLOT( connectionDone())); //Etat du bouton : 'Connexion'
+    QObject::connect(&wifi, SIGNAL(Disconnected()), qmlRootObject, SLOT(disconnectionDone())); //Etat du bouton : 'Deconnexion'
+    QObject::connect(&wifi, SIGNAL(ConectionFail()), qmlRootObject, SLOT(disconnectionDone())); //Etat du bouton : 'Connexion'
+
     QObject::connect(qmlRootObject, SIGNAL(requestConnection()), &wifi, SLOT(Connect()));
     QObject::connect(qmlRootObject, SIGNAL(requestDisconnection()), &wifi, SLOT(Disconnect()));
+
 //    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &bouton, SLOT(Connecting())); //Etat du bouton : 'Connexion' grisé
 //    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &bouton, SLOT(Disconnecting())); //Etat du bouton : 'Deconnexion' grisé
 
