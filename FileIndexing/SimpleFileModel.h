@@ -10,7 +10,7 @@ class SimpleFileModel
 {
 public:
     SimpleFileModel();
-    SimpleFileModel(int id, const QString& name, const QString& type, int size);
+    SimpleFileModel(int id, const QString& name, const QString& type, int size, const QString& hash);
 
     int id() const { return _id; }
     void setId(int id) { _id = id; }
