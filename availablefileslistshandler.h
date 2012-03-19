@@ -28,7 +28,7 @@ public slots:
     void FileListUpdated( Client * client );
     void FileListDeleted( Client * client );
 
-    void DownloadRequestedFromView( HashType fileHash );
+    void DownloadRequestedFromView( Client * client, HashType fileHash );
 
 signals:
 
@@ -42,6 +42,8 @@ private:
     static const QString propertyName;
 
     QList< Client * > clients;
+
+    QList< QObject * > completeList;
 };
 
 #endif // AVAILABLEFILESLISTSHANDLER_H
