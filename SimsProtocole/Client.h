@@ -43,12 +43,12 @@ public:
 private:
     void configClient();
 
-    void receivedFileRequest(QByteArray packet);     // demande de fichier de la part du client
-    void receivedFileRequestInit(QByteArray packet); // réponse du serveur lors de la demande (confirmation nom, taille)
-    void receivedFileRequestAck(QByteArray packet);  // confirmation du client
-    void receivedFileData(QByteArray packet);        // réception d'un fichier par le client
-    void receivedListRequest(QByteArray packet);        //
-    void receivedListData(QByteArray packet);
+    void receivedFileRequest(QByteArray packet);     // Demande de fichier de la part du client
+    void receivedFileRequestInit(QByteArray packet); // Réponse du serveur lors de la demande (confirmation nom, taille)
+    void receivedFileRequestAck(QByteArray packet);  // Confirmation du client
+    void receivedFileData(QByteArray packet);        // Réception d'un fichier par le client
+    void receivedListRequest(QByteArray packet);     // Demande de Liste de fichiers
+    void receivedListData(QByteArray packet);        // Liste
 
 signals:
     void NewData(int);
@@ -57,7 +57,6 @@ signals:
 
      void newFileToDownload(const FileStreamer*);
      void newFileToUpload(const FileStreamer*);
-
 
      void FileListUpdated(Client *);
      void FileListDeleted(Client *);
@@ -77,15 +76,8 @@ private:
     QHostAddress _peerAddr;
     QHostAddress _nextHop;
 
-
     QList<FileStreamer*> _filesUploading;
     QList<FileStreamer*> _filesDownloading;
-
-    quint64 _bytesReceived;
-    quint64 _previousBytesReceived;
-
-    quint64 _bytesSent;
-    quint64 _previousBytesSent;
 
     CLIENT_STATE _etat;
 
