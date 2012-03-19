@@ -39,7 +39,7 @@ public:
 
     void ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress senderAdd);
 
-    QList< FileReceivedModel *> * FileReceivedList();
+    QList< FileReceivedModel * > FileReceivedList();
 private:
     void configClient();
 
