@@ -28,11 +28,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     WifiConnection wifi;
     wifi.Connect();
 
-    // INIT PROTOCOL PART
-    GestionClients gestionClient(0);
-
     // INIT INDEXING
     FileIndexer fileIndexer;
+
+    // INIT PROTOCOL PART
+    GestionClients gestionClient(&fileIndexer);
 
     // INIT QML PART
     QmlApplicationViewer viewer;
