@@ -21,7 +21,7 @@ QString FileModel::toString() const
 
 SimpleFileModel FileModel::toSimpleFileModel() const
 {
-    return SimpleFileModel(_id, _name, _type, _size, _hash);
+    return SimpleFileModel(_id, _name, _path, _type, _size, _hash);
 }
 
 QDebug operator<<(QDebug dbg, const FileModel& model)

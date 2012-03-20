@@ -48,12 +48,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     gestionClient.DownloadPathUpdate( downloadFolder.folderPath() );
 
     SharedFoldersListModel sharedFoldersList( rootContext );
-    sharedFoldersList.AddFolder( "C:\\" ); // as default. Should be read from saved settings.
 
     AvailableFilesListsHandler availableFileLists( &gestionClient, rootContext );
 
     rootContext->setContextProperty( "downloadsList", &downloads );
-    rootContext->setContextProperty( "wifi", &wifi );
     //rootContext->setContextProperty( "availableFilesList", &availableFiles );
 
     // CONNECT ALL THE SIGNALS
@@ -94,6 +92,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 //    QObject::connect(&bouton, SIGNAL(ConnectClicked()), &bouton, SLOT(Connecting())); //Etat du bouton : 'Connexion' grisé
 //    QObject::connect(&bouton, SIGNAL(DisconnectClicked()), &bouton, SLOT(Disconnecting())); //Etat du bouton : 'Deconnexion' grisé
 
+
+    // Initialisation du dossier partage
+    sharedFoldersList.AddFolder( "C:\Users\Public\Music" ); // as default. Should be read from saved settings.
 
     // Connexion au reseau WiFi AdHoc
     wifi.Connect();
