@@ -182,7 +182,7 @@ Rectangle {
             bottom: taskbar.top
         }
 
-        current: 0
+        current: 1
 
         // configuration slide
         Rectangle{
