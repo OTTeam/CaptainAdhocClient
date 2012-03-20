@@ -75,7 +75,7 @@ Component {
                 Column {
 
                             Text {
-                                    text: '<b>File Name:</b> ' + model.modelData.name
+                                    text: '<b>File Name:</b> ' + name
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -84,7 +84,7 @@ Component {
                                     wrapMode: Text.WordWrap
                             }
                             Text {
-                                    text: '<b>Author :</b> ' + authorName
+                                text: '<b>Author :</b> ' + "pas d'auteur"
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -93,7 +93,7 @@ Component {
                                     wrapMode: Text.WordWrap
                             }
                             Text {
-                                    text: '<b>Size :</b> ' + model.modelData.size
+                                    text: '<b>Size :</b> ' + size
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -102,7 +102,7 @@ Component {
                                     wrapMode: Text.WordWrap
                             }
                             Text {
-                                    text: '<b>Type :</b> ' + model.modelData.type
+                                    text: '<b>Type :</b> ' + type
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -115,7 +115,7 @@ Component {
 
             Item{
                 id : status
-                visible: ( model.modelData.progress >= 0 && model.modelData.progress <= 100 )
+                visible: ( progress >= 0 && progress <= 100 )
                 ProgressBar{
                     id: downBar
                     x: 300
