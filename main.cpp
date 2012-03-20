@@ -55,6 +55,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //rootContext->setContextProperty( "availableFilesList", &availableFiles );
 
     // CONNECT ALL THE SIGNALS
+    QObject::connect( &gestionClient, SIGNAL( ClientNumberChanged( QVariant ) ),
+                      qmlRootObject, SLOT( updateHostsNumber( QVariant ) ) );
+
     QObject::connect( &gestionClient, SIGNAL( newFileToDownload( FileStreamer const * ) ),
                       &downloads, SLOT( AddFile( const FileStreamer*) ) );
 
@@ -84,7 +87,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject::connect(&wifi, SIGNAL(Connected()), qmlRootObject, SLOT( connectionDone())); //Etat du bouton : 'Connexion'
     QObject::connect(&wifi, SIGNAL(Disconnected()), qmlRootObject, SLOT(disconnectionDone())); //Etat du bouton : 'Deconnexion'
-    QObject::connect(&wifi, SIGNAL(ConectionFail()), qmlRootObject, SLOT(disconnectionDone())); //Etat du bouton : 'Connexion'
+    QObject::connect(&wifi, SIGNAL(ConnectionFail()), qmlRootObject, SLOT(disconnectionDone())); //Etat du bouton : 'Connexion'
 
     QObject::connect(qmlRootObject, SIGNAL(requestConnection()), &wifi, SLOT(Connect()));
     QObject::connect(qmlRootObject, SIGNAL(requestDisconnection()), &wifi, SLOT(Disconnect()));

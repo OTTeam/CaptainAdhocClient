@@ -25,12 +25,8 @@ Rectangle {
         deconnexion.text = "Connection"
     }
 
-    function updateDownSpeed( newSpeed){
-        vitesse.downSpeed = newSpeed;
-    }
-
-    function updateUpSpeed( newSpeed ){
-        vitesse.upSpeed = newSpeed;
+    function updateHostsNumber( newNumber ){
+        hostsNumber.hosts = newNumber;
     }
 
     width: 640
@@ -94,27 +90,19 @@ Rectangle {
 
 
         Item {
-            id: vitesse
-            property int downSpeed: 0
-            property int upSpeed: 0
-            Column {
-                Text {
-                    text: " Download : " + vitesse.downSpeed + " Kb/s "
+            id: hostsNumber
+            property int hosts: 0
+            Text {
+                    text: " Connected users : " + hostsNumber.hosts
                     color: "#999999";
                     style: Text.Raised;
                     styleColor: "black";
-                }
-                Text {
-                    text: " Upload : " + vitesse.upSpeed + " Kb/s "
-                    color: "#999999";
-                    style: Text.Raised;
-                    styleColor: "black";
-                }
+                    font.pointSize: 11
+                    anchors.verticalCenter: parent.verticalCenter
             }
-            height: 30
             anchors{
                 left: parent.left
-                bottom: parent.bottom
+                verticalCenter: parent.verticalCenter
             }
         }
 
