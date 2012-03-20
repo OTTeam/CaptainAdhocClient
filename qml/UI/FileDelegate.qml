@@ -84,7 +84,7 @@ Component {
                                     wrapMode: Text.WordWrap
                             }
                             Text {
-                                    text: '<b>Author :</b> ' + authorName
+                                    text: '<b>Author :</b> ' + "pas de nom d'auteur"
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
@@ -113,29 +113,9 @@ Component {
                 }
             }
 
-//            Item{
-//                id : status
-//                x: 350
-//                y: 28
-//                Text {  text:
-//                            if ( completion === 100)
-//                                return "COMPLETED"
-//                            else
-//                                return completion + "%"
-//                        textFormat: Qt.RichText
-//                        font.pointSize: 10
-//                        color: "#cccccc";
-//                        style: Text.Raised;
-//                        styleColor: "black";
-//                }
-//            }
-
-
-
             Image {
                 id: imDownload;
                 x: 600
-                //visible: ( completion >= 0 && completion < 100 )
                 source: {
                         return "images/down_arrow.png"
                 }
@@ -151,6 +131,10 @@ Component {
 
                     onEntered: { parent.source = "images/down_arrow_clicked.png" }
                     onExited: { parent.source = "images/down_arrow.png"}
+                    onClicked: {
+                        console.log( "File " + model.modelData.name + " selected for download" );
+                        mainUI.pickFileToDownload( model.modelData.clientFather, model.modelData.hash );
+                    }
                 }
             }
         }

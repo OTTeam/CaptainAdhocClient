@@ -29,7 +29,7 @@ signals:
     void ClientUploadSpeedUpdate(Client *,int);
     void ClientDownloadSpeedUpdate(Client *,int);
 
-    void ClientNumberChanged(int);
+    void ClientNumberChanged(QVariant);
 
     void newFileToUpload(FileStreamer const * fs);
     void newFileToDownload(FileStreamer const * fs);

@@ -1,7 +1,6 @@
 *.user
 SimsProtocole-build*
 Wifi-build*
-qml/UI/*
 *-build*
 release/*
 debug/*

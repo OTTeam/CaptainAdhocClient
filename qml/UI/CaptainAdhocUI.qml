@@ -4,18 +4,29 @@ Rectangle {
     id: mainUI
 
     property string downloadFolder: "/C/Users/Public/Downloads"
+    property bool connected : true;
 
     signal pickDownloadFolder()
     signal pickSharedDir()
     signal delSharedDir( int index )
-    signal pickFileToDownload( int index )
+    signal pickFileToDownload( int pointer, string fileHash )
+    signal requestConnection()
+    signal requestDisconnection()
 
-    function updateDownSpeed( newSpeed){
-        vitesse.downSpeed = newSpeed;
+    function connectionDone(){
+        deconnexion.enabled = true;
+        deconnexion.text = "Disconnection";
+        connected = true;
     }
 
-    function updateUpSpeed( newSpeed ){
-        vitesse.upSpeed = newSpeed;
+    function disconnectionDone(){
+        connected = false
+        deconnexion.enabled = true;
+        deconnexion.text = "Connection"
+    }
+
+    function updateHostsNumber( newNumber ){
+        hostsNumber.hosts = newNumber;
     }
 
     width: 640
@@ -37,6 +48,17 @@ Rectangle {
         Image { source: "images/bg.png";
                 height: 90
                 width: 640
+        }
+
+        SearchBox {
+            id: search;
+            focus: true
+
+            anchors {
+                bottom: parent.bottom;
+                horizontalCenter: parent.horizontalCenter
+                bottomMargin: 5
+            }
         }
 
         height: ribbonHeight
@@ -68,27 +90,19 @@ Rectangle {
 
 
         Item {
-            id: vitesse
-            property int downSpeed: 0
-            property int upSpeed: 0
-            Column {
-                Text {
-                    text: " Download : " + vitesse.downSpeed + " Kb/s "
+            id: hostsNumber
+            property int hosts: 0
+            Text {
+                    text: " Connected users : " + hostsNumber.hosts
                     color: "#999999";
                     style: Text.Raised;
                     styleColor: "black";
-                }
-                Text {
-                    text: " Upload : " + vitesse.upSpeed + " Kb/s "
-                    color: "#999999";
-                    style: Text.Raised;
-                    styleColor: "black";
-                }
+                    font.pointSize: 11
+                    anchors.verticalCenter: parent.verticalCenter
             }
-            height: 30
             anchors{
                 left: parent.left
-                bottom: parent.bottom
+                verticalCenter: parent.verticalCenter
             }
         }
 
@@ -112,12 +126,24 @@ Rectangle {
 
         Button{
             id : deconnexion
-            text: "Deconnexion"
+            text: "Disconnection"
             width: 100
             height: 30
             anchors{
                 right: parent.right
                 bottom: parent.bottom
+            }
+            onClicked: {
+                if( connected ){
+                    mainUI.requestDisconnection();
+                    text = "Disconnecting...";
+                }
+                else
+                {
+                    mainUI.requestConnection();
+                    text = "Connecting..."
+                }
+                enabled = false
             }
         }
     }
