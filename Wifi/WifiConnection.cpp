@@ -38,7 +38,7 @@ void WifiConnection::Connect()
         foreach (WifiInterface * intface,*interfaceList)
         {
             qDebug() << "Interface :" << intface->GetName();
-            qDebug() << "Radio :" << ((intface->IsRadioOn())?"ON" : "OFF");
+            qDebug() << "Radio :" << ((intface->IsRadioOn()) ? "ON" : "OFF");
             switch(intface->GetStatus())
             {
             case CONNECTED:
@@ -58,6 +58,7 @@ void WifiConnection::Connect()
 
         if(nbWifiOn == 0) //Si pas de carte WiFi disponible
         {
+            qDebug() << "Echec de la connexion : Pas de carte WiFi disponible";
             emit ConnectionFail();
         }
         else
