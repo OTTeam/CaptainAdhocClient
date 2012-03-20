@@ -93,7 +93,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 
     // Initialisation du dossier partage
-    sharedFoldersList.AddFolder( "C:\Users\Public\Music" ); // as default. Should be read from saved settings.
+    sharedFoldersList.AddFolder( "C:\\Users\\Public\\Music" ); // as default. Should be read from saved settings.
 
     // Connexion au reseau WiFi AdHoc
     wifi.Connect();
