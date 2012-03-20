@@ -70,7 +70,9 @@ Item {
     MouseArea {
         id: mouseRegion
         anchors.fill: buttonImage
-        onClicked: container.state == 'clicked' ? container.state = "" : container.state = 'clicked';
+        onClicked: {
+            container.clicked();
+        }
     }
 
     Text {

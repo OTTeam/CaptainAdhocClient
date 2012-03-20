@@ -14,12 +14,14 @@ Rectangle {
     signal requestDisconnection()
 
     function connectionDone(){
+        console.log( "[UI] RECEIVED connectionDone signal" )
         deconnexion.enabled = true;
         deconnexion.text = "Disconnection";
         connected = true;
     }
 
     function disconnectionDone(){
+        console.log( "[UI] RECEIVED disconnectionDone signal" )
         connected = false
         deconnexion.enabled = true;
         deconnexion.text = "Connection"
@@ -134,12 +136,15 @@ Rectangle {
                 bottom: parent.bottom
             }
             onClicked: {
+                console.log( "Button clicked with 'connected' being " + connected );
                 if( connected ){
+                    console.log( "[UI] requesting disconnection" );
                     mainUI.requestDisconnection();
                     text = "Disconnecting...";
                 }
                 else
                 {
+                    console.log( "[UI] requesting connection" );
                     mainUI.requestConnection();
                     text = "Connecting..."
                 }
