@@ -77,6 +77,7 @@ void Client::configClient()
 Client::~Client()
 {
 
+    emit FileListDeleted(this);
     while (!_filesUploading.isEmpty())
     {
         FileStreamer* fs = _filesUploading.takeFirst();
