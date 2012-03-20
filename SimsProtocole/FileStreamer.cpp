@@ -46,9 +46,8 @@ FileStreamer::FileStreamer(QString filePath, QString destAddr, QString senderAdd
 
     _progressTimer = new QTimer(this);
     _progressTimer->setInterval(500);
-    _progressTimer->start();
     connect(_progressTimer,SIGNAL(timeout()),this,SLOT(timerProgressTimeout()));
-
+    _progressTimer->start();
 }
 
 
@@ -144,13 +143,14 @@ void FileStreamer::writeNext(QByteArray Packet)
 
 void FileStreamer::timerProgressTimeout()
 {
-    quint64 percCompletion = (100* _bytesWritten)/_fileSize;
+
+    //quint64 percCompletion = (100* _bytesWritten)/_fileSize;
 
     quint64 bytesDiff = _bytesWritten - _PreviousBytesWritten;
 
     float newSpeed = (bytesDiff*1000.0)/_progressTimer->interval();
 
-    emit progressUpdate(percCompletion, newSpeed);
+    emit progressUpdate(_bytesWritten, newSpeed);
 
     _PreviousBytesWritten = _bytesWritten;
 }
