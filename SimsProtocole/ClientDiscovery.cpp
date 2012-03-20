@@ -10,6 +10,7 @@ ClientDiscovery::ClientDiscovery(QObject *parent) :
     _socket = new QUdpSocket(this);
     _socket->bind(DISCOVERY_PORT,QUdpSocket::ShareAddress);
     connect(_socket,SIGNAL(readyRead()),this,SLOT(newDatagramAvailable()));
+    qsrand(5000);
 }
 
 
@@ -38,6 +39,17 @@ void ClientDiscovery::newDatagramAvailable()
 //        qDebug() << ">>>>> senderAddress" << senderAddress.toString() << ">>>>>>";
 
         qint16 RouteListSize = 0;
+
+        quint64 packetAlea;
+        in >> packetAlea;
+
+
+        // on est le sender
+        if (packetAlea == _lastPacketAlea)
+            return;
+
+
+
         in >> RouteListSize;
 //        qDebug() << "RouteList size : " << RouteListSize;
         // on place les adresses reçues dans une liste
@@ -123,6 +135,10 @@ void ClientDiscovery::sendNewDatagram(QList<Client *> routesList )
 //    qDebug()<< "BS---------------------------------------" ;
 //    qDebug()<< "BROADCAST SEND" ;
     qDebug() << "BROADCASTING...";
+
+    _lastPacketAlea = qrand();
+
+    out << _lastPacketAlea;
     out << (quint16) routesList.size();
 //    qDebug()<< "routesList Count : " << routesList.count();
     foreach(Client *client, routesList)

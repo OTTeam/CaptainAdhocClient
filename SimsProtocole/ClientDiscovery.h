@@ -25,6 +25,7 @@ private slots:
 
 private:
     QUdpSocket *_socket;
+    quint64 _lastPacketAlea;
     
 };
 
