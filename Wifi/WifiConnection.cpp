@@ -32,34 +32,36 @@ void WifiConnection::Connect()
         _manager->RegisterNotifications();
         QList<WifiInterface*> * interfaceList;
         interfaceList = _manager->GetInterfaces();
-        int nbInterfaces = interfaceList->count();
-        qDebug() << "Got" << nbInterfaces << "interface(s) :";
+        qDebug() << "Got" << interfaceList->count() << "interface(s) :";
 
-        if(nbInterfaces == 0) //Pas de carte WiFi (forcement c'est pas pratique pour notre programme...)
+        int nbWifiOn = 0;
+        foreach (WifiInterface * intface,*interfaceList)
+        {
+            qDebug() << "Interface :" << intface->GetName();
+            qDebug() << "Radio :" << ((intface->IsRadioOn())?"ON" : "OFF");
+            switch(intface->GetStatus())
+            {
+            case CONNECTED:
+                qDebug() << "Status : Connecté";
+                intface->DisconnectWifi();
+                nbWifiOn++;
+                break;
+            case FORMED:
+                qDebug() << "Status : En attente";
+                nbWifiOn++;
+                break;
+            case DISCONNECTED:
+                qDebug() << "Status : Déconnecté";
+                break;
+            }
+        }
+
+        if(nbWifiOn == 0) //Si pas de carte WiFi disponible
         {
             emit ConnectionFail();
         }
         else
         {
-            foreach (WifiInterface * intface,*interfaceList)
-            {
-                qDebug() << "Interface :" << intface->GetName();
-                qDebug() << "Radio :" << ((intface->IsRadioOn())?"ON" : "OFF");
-                switch(intface->GetStatus())
-                {
-                case CONNECTED:
-                    qDebug() << "Status : Connecté";
-                    intface->DisconnectWifi();
-                    break;
-                case FORMED:
-                    qDebug() << "Status : En attente";
-                    break;
-                case DISCONNECTED:
-                    qDebug() << "Status : Déconnecté";
-                    break;
-                }
-            }
-
             _manager->DeleteInterfaceList(interfaceList);
 
             QList<WifiNetwork*> * netList;
