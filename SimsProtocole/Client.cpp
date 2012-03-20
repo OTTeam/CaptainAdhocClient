@@ -335,7 +335,7 @@ void Client::receivedListRequest(QByteArray packet)
             ++fileNumber;
             SimpleFileModel *model = *it++;
             out << model->name();
-            out << model->size();
+            out << (quint64) model->size();
             out << model->hash();
         }
 
