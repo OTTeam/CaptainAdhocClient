@@ -23,8 +23,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // VARIABLES
     FileListModel downloads;
-    //AvailableFilesListModel availableFiles;
-
 
     // INIT WIFI
     WifiConnection wifi;
@@ -52,7 +50,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     AvailableFilesListsHandler availableFileLists( &gestionClient, rootContext );
 
     rootContext->setContextProperty( "downloadsList", &downloads );
-    //rootContext->setContextProperty( "availableFilesList", &availableFiles );
 
     // CONNECT ALL THE SIGNALS
     QObject::connect( &gestionClient, SIGNAL( ClientNumberChanged( QVariant ) ),
