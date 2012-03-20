@@ -16,6 +16,7 @@
 #include <QGraphicsObject>
 #include <QList>
 #include <QSplashScreen>
+#include <QSettings>
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -33,6 +34,20 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // INIT PROTOCOL PART
     GestionClients gestionClient(&fileIndexer);
 
+    // Loading Registry entries :
+    QSettings settings("CaptainAdHocTeam", "CaptainAdHoc");
+
+    QString DownloadFolderPath = settings.value("DownloadFolderPath").toString();
+    qDebug()<< "DownloadFolderPath :" << DownloadFolderPath;
+
+    if (DownloadFolderPath == "")
+    {
+        DownloadFolderPath = "C:\\Users\\Public\\Downloads";
+        settings.setValue("DownloadFolderPath",DownloadFolderPath);
+    }
+
+
+
     // INIT QML PART
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
@@ -43,7 +58,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject * qmlRootObject = viewer.rootObject();
 
     DownloadFolderModel downloadFolder( qmlRootObject );
-    downloadFolder.setFolderPath( "C:\\Users\\Public\\Downloads");
+    downloadFolder.setFolderPath( DownloadFolderPath );
     gestionClient.DownloadPathUpdate( downloadFolder.folderPath() );
 
     SharedFoldersListModel sharedFoldersList( rootContext );
