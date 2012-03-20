@@ -69,6 +69,7 @@ void Client::configClient()
     connect(_socketHandler, SIGNAL(Disconnected()),      this, SIGNAL(Disconnected()));
 
     _etat = IDLE;
+    RequestList();
 
 }
 
