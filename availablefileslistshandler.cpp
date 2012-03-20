@@ -13,10 +13,17 @@ AvailableFilesListsHandler::AvailableFilesListsHandler
     // init view with an empty list.
     uiRootContext->setContextProperty( propertyName,
                                        QVariant::fromValue( completeList ) );
+
+    connect( clientsManager, SIGNAL( ClientFileListUpdated( Client * ) ),
+             this, SLOT( FileListUpdated( Client* ) ) );
+    connect( clientsManager, SIGNAL( ClientFileListDeleted( Client * ) ),
+             this, SLOT( FileListDeleted( Client* ) ) );
 }
 
 void AvailableFilesListsHandler::FileListUpdated( Client * client )
 {
+    qDebug() << "[AvailableFileListsHandler] Receveid update for list for client " << client->peerAddress().toString();
+
     int clientIdx = clients.indexOf( client );
 
     if( clientIdx == -1 )
