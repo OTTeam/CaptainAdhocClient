@@ -486,6 +486,7 @@ void Client::ForwardMessage(QByteArray data, QHostAddress destAdd, QHostAddress 
 
 QList< FileReceivedModel * > Client::FileReceivedList()
 {
+    qDebug() << "FileReceivedList" << _availableFiles.size();
     return _availableFiles;
 }
 
