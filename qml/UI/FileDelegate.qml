@@ -75,7 +75,7 @@ Component {
                 Column {
 
                             Text {
-                                    text: '<b>File Name:</b> ' + fileName
+                                    text: '<b>File Name:</b> ' + name
                                     textFormat: Qt.RichText
                                     font.pointSize: 9
                                     color: "#cccccc";
