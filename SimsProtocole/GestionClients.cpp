@@ -231,6 +231,8 @@ void GestionClients::NewClientConfig(Client *client)
     connect(client,     SIGNAL(Disconnected()),           this, SLOT(clientDisconnect()));
     connect(client,     SIGNAL(newFileToDownload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));
     connect(client,     SIGNAL(newFileToUpload(const FileStreamer *)),           this, SIGNAL(newFileToDownload(FileStreamer const *)));
+    connect(client,     SIGNAL(FileListDeleted(Client*)), this, SIGNAL(ClientFileListDeleted(Client*)));
+    connect(client,     SIGNAL(FileListUpdated(Client*)), this, SIGNAL(ClientFileListUpdated(Client*)));
     _clients.push_back(client);
 
 

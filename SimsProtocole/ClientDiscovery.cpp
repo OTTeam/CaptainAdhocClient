@@ -102,7 +102,7 @@ void ClientDiscovery::newDatagramAvailable()
 //        qDebug() << "***********************************";
 //        qDebug()<< ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" ;
 
-        if (localSent == false )
+        if (localSent == false  && _socket->localAddress() != QHostAddress::Null)
             emit DatagramReceived(senderAddress,routesReceived);
 
     }

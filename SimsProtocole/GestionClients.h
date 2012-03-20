@@ -34,7 +34,8 @@ signals:
     void newFileToUpload(FileStreamer const * fs);
     void newFileToDownload(FileStreamer const * fs);
 
-
+    void ClientFileListUpdated(Client *);
+    void ClientFileListDeleted(Client *);
 public slots:
     void DownloadPathUpdate(QString);
 
