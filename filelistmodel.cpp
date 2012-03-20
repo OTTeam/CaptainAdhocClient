@@ -89,11 +89,13 @@ QVariant FileListModel::data(const QModelIndex & index, int role) const
 
 void FileListModel::fileChanged()
 {
+    qDebug() << "[FILELIST] File changed";
+
     // retrieve signal sender
     // send dataChanged for this file only
 
     // for now : redraw everything (dirty)
-    reset();
+    emit dataChanged( QModelIndex(), QModelIndex() );
 }
 
 int FileListModel::hashToIndex( HashType hash )
