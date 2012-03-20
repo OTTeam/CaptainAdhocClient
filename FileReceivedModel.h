@@ -15,6 +15,7 @@ class FileReceivedModel : public QObject
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(int progress READ progress WRITE setProgress NOTIFY progressChanged)
+    Q_PROPERTY(int size READ size)
     Q_PROPERTY(float speed READ speed WRITE setSpeed NOTIFY speedChanged)
 
 public:
@@ -23,7 +24,7 @@ public:
 
     QString name() const { return m_name; }
     QString type() const { return m_type; }
-    quint64 size() const { return m_size; }
+    int size() const { return m_size; }
     int progress() const { return m_progress; }
     float speed() const { return m_speed; }
     HashType hash() const { return m_hash; }
