@@ -403,7 +403,7 @@ void Client::SendFileRequestInit(HashType hash)
     SimpleFileModel*fileModel = _fileIndexer->getFile(hash);
 
 
-    QString filePath = "C:\\test\\" + fileModel->name();
+    QString filePath = fileModel->path();
     qDebug() << "filepath" << filePath;
     // création du filestreamer pour l'envoi du fichier (celui ci sera supprimé si le ack n'arrive pas)
     FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);
