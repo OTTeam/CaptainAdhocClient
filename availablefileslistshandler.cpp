@@ -51,7 +51,7 @@ void AvailableFilesListsHandler::UpdateView()
 
     for( int i = 0 ; i < clients.count() ; i++ )
     {
-        QList< FileReceivedModel * > fileList = clients[ i ]->FileReceivedList();
+        QList< FileReceivedModel * > fileList = clients.at( i )->FileReceivedList();
 
         for( int j = 0 ; j < fileList.count() ; j++ )
         {
