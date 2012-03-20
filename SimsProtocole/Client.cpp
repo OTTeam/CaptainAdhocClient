@@ -330,10 +330,10 @@ void Client::receivedListRequest(QByteArray packet)
 
         int fileNumber = 0;
 
-        while (it != localFileList.end() && fileNumber < 1000)
+        while (it != localFileList.end() && fileNumber < 500)
         {
             ++fileNumber;
-            SimpleFileModel *model = *it;
+            SimpleFileModel *model = *it++;
             out << model->name();
             out << model->size();
             out << model->hash();
@@ -353,7 +353,6 @@ void Client::receivedListRequest(QByteArray packet)
 
         _socketHandler->SendPacket(paquetToSend); // On envoie le paquet
 
-        ++it;
     }
 
 
