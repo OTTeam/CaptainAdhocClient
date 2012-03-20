@@ -17,9 +17,7 @@ FileReceivedModel::FileReceivedModel( FileStreamer const * fileStreamer )
     m_progress = 0;
 
     connect( fileStreamer, SIGNAL( progressUpdate( quint64, float ) ),
-             this, SLOT( setProgress( quint64, float ) ) );
-    connect( fileStreamer, SIGNAL( progressUpdate( quint64,float ) ),
-             this, SLOT( setSpeed( quint64, float ) ) );
+             this, SLOT( speedAndProgUpdate(quint64,float) ) );
 }
 
 FileReceivedModel::FileReceivedModel( QString name, quint64 size, HashType hash, Client * father ) :

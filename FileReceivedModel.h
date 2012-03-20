@@ -40,18 +40,22 @@ public slots:
         m_type = type;
         emit nameChanged();
     }
-    void setProgress( quint64 curSize, float dummy )
+    void setProgress( quint64 curSize )
     {
-        (dummy);
         qDebug() << "[FILEMODEL] Received progress update";
         m_progress = curSize / m_size;
         emit progressChanged();
     }
-    void setSpeed( quint64 dummy, float speed )
+    void setSpeed( float speed )
     {
-        (dummy);
         m_speed = speed;
         emit speedChanged();
+    }
+
+    void speedAndProgUpdate( quint64 size, float speed )
+    {
+        setProgress( size );
+        setSpeed( speed );
     }
 
     Q_INVOKABLE void requestDownloadFromView()
