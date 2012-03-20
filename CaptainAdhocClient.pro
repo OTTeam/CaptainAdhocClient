@@ -105,3 +105,5 @@ TEMPLATE = app
 
 RESOURCES += \
     ImgRes.qrc
+
+RC_FILE = captainAdHocClient.rc

@@ -300,8 +300,8 @@ void Client::receivedListRequest(QByteArray packet)
     // puis on l'envoie par tranche de 1000 fichiers
     // on envoie alors le Ack pour confirmer au serveur l'envoi du fichier
 
-    QList< FileModel > localFileList =  _fileIndexer->getAllIndexedFiles();
-    QList< FileModel >::const_iterator it = localFileList.begin();
+    QList< SimpleFileModel *> localFileList =  _fileIndexer->getSharedFiles();
+    QList< SimpleFileModel *>::const_iterator it = localFileList.begin();
 
     quint16 packetNumber = 0;
     while(it != localFileList.end())
@@ -325,7 +325,7 @@ void Client::receivedListRequest(QByteArray packet)
 
         while (it != localFileList.end() && fileNumber < 1000)
         {
-            const FileModel *model = *it;
+            SimpleFileModel *model = *it;
             out << model->name();
             out << model->size();
             out << model->hash();
@@ -397,12 +397,14 @@ void Client::SendFileRequestInit(HashType hash)
 
     // Récupération du fichier en fonction du hash
 
-    QString filePath;
+
 
     // Trouver le fichier en fonction du Hash
-    SimpleFileModel* getFile(const QString& hash);
+    SimpleFileModel*fileModel = _fileIndexer->getFile(hash);
 
 
+    QString filePath = "C:\\test\\" + fileModel->name();
+    qDebug() << "filepath" << filePath;
     // création du filestreamer pour l'envoi du fichier (celui ci sera supprimé si le ack n'arrive pas)
     FileStreamer* fileStreamer = new FileStreamer(filePath, _peerAddr.toString(), _socketHandler->localAddress().toString(), 0, UPLOAD_STREAMER);
 

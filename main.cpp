@@ -106,6 +106,5 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 //    splashScreen.show();
 //    splashScreen.showMessage("test");
 
-
     return app->exec();
 }
