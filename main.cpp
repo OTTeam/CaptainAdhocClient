@@ -43,7 +43,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject * qmlRootObject = viewer.rootObject();
 
     DownloadFolderModel downloadFolder( qmlRootObject );
-    gestionClient.DownloadPathUpdate( downloadFolder.folderPath() );
+    downloadFolder.setFolderPath( "C:\\Users\\Public\\Downloads");
 
     SharedFoldersListModel sharedFoldersList( rootContext );
 
