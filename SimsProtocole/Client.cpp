@@ -131,6 +131,9 @@ void Client::PacketReceived(QByteArray packet)
         qDebug() << "PACKET is FILE_REQUEST_INIT";
         receivedFileRequestInit(packetdata);
         break;
+    case FILE_REQUEST:
+        qDebug() << "PACKET is FILE_REQUEST";
+        receivedFileRequest(packetdata);
     case FILE_DATA:
         receivedFileData(packetdata);
         break;

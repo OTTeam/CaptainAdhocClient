@@ -234,7 +234,7 @@ void GestionClients::NewClientConfig(Client *client)
     connect(client,     SIGNAL(FileListDeleted(Client*)), this, SIGNAL(ClientFileListDeleted(Client*)));
     connect(client,     SIGNAL(FileListUpdated(Client*)), this, SIGNAL(ClientFileListUpdated(Client*)));
     _clients.push_back(client);
-
+    client->UpdateDownloadFolder(_downloadPath);
 
     emit ClientNumberChanged(_clients.size());
 }
@@ -301,6 +301,7 @@ void GestionClients::sendToAll()
 
 void GestionClients::DownloadPathUpdate(QString newPath)
 {
+    _downloadPath = newPath;
     foreach(Client* client, _clients)
     {
         client->UpdateDownloadFolder(newPath);
