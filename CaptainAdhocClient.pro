@@ -102,3 +102,8 @@ win32: PRE_TARGETDEPS += "C:/Program Files/Microsoft SDKs/Windows/v7.1/Lib/ole32
 QT += network sql
 
 TEMPLATE = app
+
+RESOURCES += \
+    ImgRes.qrc
+
+RC_FILE = captainAdHocClient.rc
