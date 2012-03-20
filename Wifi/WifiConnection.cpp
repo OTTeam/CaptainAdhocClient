@@ -56,7 +56,11 @@ void WifiConnection::Connect()
             }
         }
 
-        if(nbWifiOn > 0)
+        if(nbWifiOn == 0) //Si pas de carte WiFi disponible
+        {
+            emit ConnectionFail();
+        }
+        else
         {
             _manager->DeleteInterfaceList(interfaceList);
 
