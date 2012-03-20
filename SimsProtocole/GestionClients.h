@@ -72,6 +72,8 @@ private:
 
     FileIndexer *_fileIndexer;
     QTimer *_timerBroadcast;
+
+    QString _downloadPath;
 };
 
 
