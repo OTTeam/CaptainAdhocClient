@@ -96,7 +96,6 @@ void GestionClients::newConnectionRequest(QHostAddress broadcasterAddress,QList<
         }
     }
 
-    emit ClientNumberChanged(_clients.size());
 
 
     //La liste contient les clients qui n'ont pas été rebroadcastés
