@@ -353,6 +353,7 @@ void Client::receivedListRequest(QByteArray packet)
 
         _socketHandler->SendPacket(paquetToSend); // On envoie le paquet
 
+        ++it;
     }
 
 
