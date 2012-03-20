@@ -17,9 +17,9 @@ FileReceivedModel::FileReceivedModel( FileStreamer const * fileStreamer )
     m_progress = 0;
 
     connect( fileStreamer, SIGNAL( progressUpdate( quint64, float ) ),
-             this,   SLOT( setProgress( quint64 ) ) );
+             this, SLOT( setProgress( quint64, float ) ) );
     connect( fileStreamer, SIGNAL( progressUpdate( quint64,float ) ),
-             this, SLOT( setSpeed( float ) ) );
+             this, SLOT( setSpeed( quint64, float ) ) );
 }
 
 FileReceivedModel::FileReceivedModel( QString name, quint64 size, HashType hash, Client * father ) :
@@ -29,7 +29,7 @@ FileReceivedModel::FileReceivedModel( QString name, quint64 size, HashType hash,
     m_progress( 0 ),
     m_speed( 0 )
 {
-    m_type = m_name.split( '.' )[ 1 ];
+    m_type = m_name.split( '.' ).last();
 
     connect( this, SIGNAL( downloadRequested( HashType ) ),
              father, SLOT( RequestFile( HashType ) ) );
