@@ -48,17 +48,17 @@ Component {
                 id: imageTypeFile;
                 x:10
                 source: {
-                    if (model.modelData.type === "avi")
+                    if (type === "avi")
                         return "images/film.png";
-                    else if (model.modelData.type === "doc" || model.modelData.type === "docx")
+                    else if (type === "doc" || type === "docx")
                         return "images/doc.png"
-                    else if (model.modelData.type === "pdf")
+                    else if (type === "pdf")
                         return "images/pdf.png"
-                    else if (model.modelData.type === "jpg" || model.modelData.type === "jpeg" || model.modelData.type === "png")
+                    else if (type === "jpg" || type === "jpeg" || type === "png")
                         return "images/photo.png"
-                    else if (model.modelData.type === "mp3")
+                    else if (type === "mp3")
                         return "images/music.png"
-                    else if (model.modelData.type === "rar")
+                    else if (type === "rar")
                         return "images/rar.png"
                     else
                         return "images/incon.png"
@@ -120,7 +120,7 @@ Component {
                     id: downBar
                     x: 300
                     y: 28
-                    value: model.modelData.progress
+                    value: progress
                 }
             }
 
@@ -128,7 +128,7 @@ Component {
             ImageButton{
                 id: delButton
 
-                visible: ( model.modelData.progress >= 0 && model.modelData.progress <= 100 )
+                visible: ( progress >= 0 && progress <= 100 )
 
                 imgSource: "images/delete.png"
                 imgHooverSource: "images/delete_hover.png"
