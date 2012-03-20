@@ -27,8 +27,10 @@ FileReceivedModel::FileReceivedModel( QString name, quint64 size, HashType hash,
     m_size( size ),
     m_hash( hash ),
     m_progress( 0 ),
-    m_speed( 0 ),
-    m_clientFather( father ) // I'M YOUR FATHER ! - NOOOOOOOO !!!
+    m_speed( 0 )
 {
     m_type = m_name.split( '.' )[ 1 ];
+
+    connect( this, SIGNAL( downloadRequested( HashType ) ),
+             father, SLOT( RequestFile( HashType ) ) );
 }
