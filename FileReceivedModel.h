@@ -16,8 +16,6 @@ class FileReceivedModel : public QObject
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(int progress READ progress WRITE setProgress NOTIFY progressChanged)
     Q_PROPERTY(float speed READ speed WRITE setSpeed NOTIFY speedChanged)
-    Q_PROPERTY(HashType hash READ hash)
-    Q_PROPERTY(Client* clientFather READ clientFather)
 
 public:
     FileReceivedModel( FileStreamer const * fileStreamer );
@@ -29,7 +27,6 @@ public:
     int progress() const { return m_progress; }
     float speed() const { return m_speed; }
     HashType hash() const { return m_hash; }
-    Client * clientFather() const { return m_clientFather; }
 
 public slots:
     void setName( QString const & name )
@@ -53,11 +50,17 @@ public slots:
         emit speedChanged();
     }
 
+    Q_INVOKABLE void requestDownloadFromView()
+    {
+        emit downloadRequested( m_hash );
+    }
+
 signals:
     void nameChanged();
     void typeChanged();
     void progressChanged();
     void speedChanged();
+    void downloadRequested( HashType hash );
 
 private:
     QString m_name;
@@ -66,8 +69,6 @@ private:
     int m_progress;
     float m_speed;
     HashType m_hash;
-
-    Client * m_clientFather;
 };
 
 #endif // FILEOBJECT_H

@@ -133,7 +133,7 @@ Component {
                     onExited: { parent.source = "images/down_arrow.png"}
                     onClicked: {
                         console.log( "File " + model.modelData.name + " selected for download" );
-                        mainUI.pickFileToDownload( model.modelData.clientFather, model.modelData.hash );
+                        requestDownloadFromView();
                     }
                 }
             }

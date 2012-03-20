@@ -43,7 +43,7 @@ public:
     QList< FileReceivedModel * > FileReceivedList();
 
     void RequestList();
-    void RequestFile(HashType hash);
+
     void UpdateDownloadFolder(QString newPath);
     void setFileIndexer(FileIndexer *fileIndexer);
 private:
@@ -70,7 +70,7 @@ signals:
 public slots:
     void PacketReceived(QByteArray packet);
 
-
+    void RequestFile(HashType hash);
 private slots:
     void fileUploadingComplete();
     void fileDownloadingComplete();

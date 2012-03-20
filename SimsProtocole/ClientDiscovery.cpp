@@ -84,14 +84,18 @@ void ClientDiscovery::newDatagramAvailable()
 
         bool localSent = false;
 //        qDebug() << "************* Local ***************";
-        foreach (QHostAddress add, hostInfo.addresses())
+        if (hostInfo.addresses().contains(senderAddress))
         {
-//            qDebug() << add.toString();
-            if (senderAddress == add)
-            {
-                localSent = true;
-            }
+            localSent = true;
         }
+//        foreach (QHostAddress add, hostInfo.addresses())
+//        {
+////            qDebug() << add.toString();
+//            if (senderAddress == add)
+//            {
+//                localSent = true;
+//            }
+//        }
         if (senderAddress == _socket->localAddress())
             localSent = true;
 //        qDebug() << _socket->localAddress().toString();

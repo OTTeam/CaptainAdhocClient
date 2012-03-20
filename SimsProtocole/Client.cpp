@@ -143,7 +143,8 @@ void Client::PacketReceived(QByteArray packet)
         break;
     case LIST_DATA:
         qDebug() << "PACKET is LIST_DATA";
-        receivedListRequest(packetdata);
+        receivedListData(packetdata);
+        break;
     default:
         qDebug() << "Unknown packet type " << type;
         break;
@@ -223,6 +224,7 @@ void Client::receivedFileRequestInit(QByteArray packet)
     out << type;                                        // typePaquet
     out << fileStreamer->id();
     qDebug() << fileStreamer->id();
+
     out.device()->seek(headerPos);
     out << (quint16) (paquetToSend.size() - headerPos - sizeof(quint16));
 
@@ -305,6 +307,8 @@ void Client::receivedListRequest(QByteArray packet)
     QList< SimpleFileModel *> localFileList =  _fileIndexer->getSharedFiles();
     QList< SimpleFileModel *>::const_iterator it = localFileList.begin();
 
+
+    qDebug() << "SHARED FILES : " << localFileList.size();
     quint16 packetNumber = 0;
     while(it != localFileList.end())
     {
@@ -315,10 +319,11 @@ void Client::receivedListRequest(QByteArray packet)
 
         // On prépare le paquet à envoyer
         quint16 type = LIST_DATA;
+
         out << (quint16) 0;                                 // taillePaquet globale que l'on changera après écriture du paquet
         out << _peerAddr.toString();                        //la destination du paquet
         out << _socketHandler->localAddress().toString();   // l'expéditeur du paquet (nous même)
-        qint64 headerPos = out.device()->pos();
+        qint16 headerPos = out.device()->pos();
         out << (quint16) 0; // taille du data, ici c'est juste type, du coup pas de traitement
         out << type;                                        // typePaquet
         out << ++packetNumber;
@@ -327,6 +332,7 @@ void Client::receivedListRequest(QByteArray packet)
 
         while (it != localFileList.end() && fileNumber < 1000)
         {
+            ++fileNumber;
             SimpleFileModel *model = *it;
             out << model->name();
             out << model->size();
@@ -342,7 +348,7 @@ void Client::receivedListRequest(QByteArray packet)
 
 
 
-        qDebug() << "SENDING ACK to" << _peerAddr.toString() << "from" <<  _socketHandler->localAddress().toString() << "- packet size :" << (quint16) (paquetToSend.size() - sizeof(quint16));
+        qDebug() << "SENDING LIST to" << _peerAddr.toString() << "from" <<  _socketHandler->localAddress().toString() << "- packet size :" << (quint16) (paquetToSend.size() - sizeof(quint16));
 
 
         _socketHandler->SendPacket(paquetToSend); // On envoie le paquet
@@ -361,13 +367,16 @@ void Client::receivedListData(QByteArray packet)
     quint64 fileSize;
     QString fileHash;
 
+    qDebug()<< "RECEIVED LIST DATA" << packet.size();
     quint16 packetNumber;
     in >> packetNumber;
+    qDebug() << "PACKET NUMBER" << packetNumber;
     if (packetNumber == 1)      //si c'est le premier paquet d'une demande de liste, on vide la liste obsolète
     {
         _availableFiles.clear();
         emit FileListDeleted(this);
     }
+
 
     while (! in.atEnd())
     {
@@ -491,7 +500,7 @@ void Client::RequestList()
     out << (quint16) 0;
     out << _peerAddr.toString();
     out << _socketHandler->localAddress().toString();
-    out << sizeof(quint16);
+    out << (quint16) sizeof(quint16);
     out << type;
 
     out.device()->seek(0);

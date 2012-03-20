@@ -25,6 +25,7 @@ Rectangle {
         connected = false
         deconnexion.enabled = true;
         deconnexion.text = "Connection"
+        hostsNumber.hosts = 0;
     }
 
     function updateHostsNumber( newNumber ){
