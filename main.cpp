@@ -61,6 +61,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     downloadFolder.setFolderPath( DownloadFolderPath );
     gestionClient.DownloadPathUpdate( downloadFolder.folderPath() );
 
+    qDebug() << "downloadFolder.folderPath() :"<<downloadFolder.folderPath();
     SharedFoldersListModel sharedFoldersList( rootContext );
 
     AvailableFilesListsHandler availableFileLists( &gestionClient, rootContext );
