@@ -51,15 +51,15 @@ Client::Client(SocketHandler *s, QHostAddress dest, QHostAddress nextHop, quint8
 Client::Client(QHostAddress address)
 {
     _socketHandler = new SocketHandler(this);
-    configClient();
+
     _nextHop = address;
     _peerAddr = address;
 
-
     qDebug() << "New client - Dest :" << _peerAddr.toString() << "- nextHop :" << _nextHop.toString();
 
-
     _hopNumber = 1;
+    configClient();
+
     //_socket->connectToHost(address,PORT_SERVEUR);
 }
 
@@ -69,6 +69,8 @@ void Client::configClient()
     connect(_socketHandler, SIGNAL(Disconnected()),      this, SIGNAL(Disconnected()));
 
     _etat = IDLE;
+    RequestList();
+
 }
 
 
@@ -478,9 +480,62 @@ QList< FileReceivedModel * > Client::FileReceivedList()
     return _availableFiles;
 }
 
+
+void Client::RequestList()
+{
+    QByteArray packetToSend;
+    QDataStream out(&packetToSend,QIODevice::WriteOnly );
+
+    quint16 type = LIST_REQUEST;
+
+    out << (quint16) 0;
+    out << _peerAddr.toString();
+    out << _socketHandler->localAddress().toString();
+    out << sizeof(quint16);
+    out << type;
+
+    out.device()->seek(0);
+    out << (quint16) (packetToSend.size() - sizeof(quint16));
+
+    qDebug() << "REQUESTING LIST to" << _peerAddr.toString() << " - packet size :" << (quint16) (packetToSend.size() - sizeof(quint16));
+
+
+    _socketHandler->SendPacket(packetToSend); // On envoie le paquet
+
+
+
+}
+
 void Client::RequestFile(HashType hash)
 {
-    //
+    //on demande le fichier au client :
+    QByteArray packetToSend;
+    QDataStream out(&packetToSend,QIODevice::WriteOnly );
+
+    quint16 type = FILE_REQUEST;
+
+    out << (quint16) 0;
+    out << _peerAddr.toString();
+    out << _socketHandler->localAddress().toString();
+
+    quint16 posData = packetToSend.size();
+    out << (quint16) 0;    // taillePaquet que l'on changera après écriture du paquet
+    quint16 headerSize = packetToSend.size();
+    out << type;
+    out << hash;
+
+    out.device()->seek(0);
+    out << (quint16) (packetToSend.size() - sizeof(quint16));
+
+    out.device()->seek(posData);
+    out << (quint16) (packetToSend.size() - headerSize);
+
+
+    qDebug() << "REQUESTING FILE to" <<_peerAddr.toString() << " - packet size :" << (quint16) (packetToSend.size() - sizeof(quint16));
+
+
+    _socketHandler->SendPacket(packetToSend); // On envoie le paquet
+
 
 }
 

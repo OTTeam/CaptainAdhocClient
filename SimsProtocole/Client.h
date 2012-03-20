@@ -42,6 +42,7 @@ public:
 
     QList< FileReceivedModel * > FileReceivedList();
 
+    void RequestList();
     void RequestFile(HashType hash);
     void UpdateDownloadFolder(QString newPath);
     void setFileIndexer(FileIndexer *fileIndexer);
