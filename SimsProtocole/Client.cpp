@@ -205,7 +205,7 @@ void Client::receivedFileRequestInit(QByteArray packet)
 
     //QString path = QFileDialog::getExistingDirectory(0,"Enregistrer le fichier sous...");
     QString path = _downloadFolder + fileRequested;
-
+    qDebug() << "SAVING FILE IN :" << path;
     // création du fileStreamer
     FileStreamer *fileStreamer = new FileStreamer(path,_peerAddr.toString(), _socketHandler->localAddress().toString(), fileSize, DOWNLOAD_STREAMER);
     connect(fileStreamer, SIGNAL(EndOfFile()), this, SLOT(fileDownloadingComplete()));
@@ -459,7 +459,7 @@ void Client::SendFileRequestInit(HashType hash)
     out << (quint16) (paquet.size() - headerSize);
 
 
-    QMessageBox::information(0,"sending", SendFilename);
+//    QMessageBox::information(0,"sending", SendFilename);
     _socketHandler->SendPacket(paquet); // On envoie le paquet
 }
 
